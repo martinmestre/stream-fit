@@ -13,22 +13,7 @@ from scipy.optimize import least_squares
 
 # Model definition
 #-----------------
-def constants():  #not global inside function
-    pi = np.pi
-    c = 2.99792458e+10
-    G = 6.67430e-8
-    h = 6.6260755e-27
-    g = 2.0
-    m_e = 9.1093837015e-28  # cgs
-    ener_e = 510.99895 # keV
-    ener_f = 48.0 # keV
-    m = (ener_f/ener_e)*m_e   # cgs
-    rho_rel = (g*m**4/h**3)*(pi*c*c)**1.5
-    R = c/ np.sqrt(8.0*pi*G*rho_rel)
-    M = 4.0*pi*R**3*rho_rel
-    a = 4.0*rho_rel/np.sqrt(pi)
-    b = a*c*c
-    return
+
 
 def fermi(eps,alpha_r,beta_r,eps_r):                # it also depends on alpha(r), beta(r) and eps(r).
                            # no explicit dependence on r.
@@ -106,7 +91,7 @@ def model(param):
     b = a*c*c
     n_eos = 10**4
     n_tov =  10**6
-    tau = 1.0e-15
+    tau = 1.0e-16
 
 
     # Set initial conditions
@@ -124,6 +109,11 @@ def model(param):
     t_0 = np.log(np.sqrt(6.0*tau*rho_0/rho_rel))   
     t_f = np.log(1.0e+11)
     t_eval = np.linspace(t_0,t_f,n_tov) 
+
+    print('r_0=', np.exp(t_0)*R*cm2kpc)
+    print('r_f=', np.exp(t_f)*R*cm2kpc)
+    print('t_0=',t_0)
+    print('R=',R)
 
     print(theta_0,W_0,beta_0)
   
