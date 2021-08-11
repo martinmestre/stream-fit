@@ -2,10 +2,39 @@
 # Optimization to find best fit orbit.
 
 
-# This cell contains additional computations outside the main objective of this notebook.
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+import astropy.coordinates as coord
+from scipy.integrate import solve_ivp
+from astropy.io import ascii
+from scipy import optimize
+from scipy import interpolate
+import numpy as np
+from scipy.interpolate import InterpolatedUnivariateSpline
+from scipy.interpolate import interp1d
+import matplotlib.pyplot as plt
+import config as cfg
+import accelerations_combine as acco
+import GD1Koposov10_class as GD1_class
+
+
+# Load Koposov data
+exec(open("./stream_Koposov_data.py").read()) 
+
+# Symplectic gradient
+def symp_grad_mw(t, w):
+    x=w[0]
+    y=w[1]
+    z=w[2]
+    px=w[3]
+    py=w[4]
+    pz=w[5]
+    r=np.sqrt(x*x+y*y+z*z)
+    return [px,py,pz, acco.accel_mw(x,y,z)[0], acco.accel_mw(x,y,z)[1], acco.accel_mw(x,y,z)[2]]
+
+
 # The orbit_model here defined works with cartesian coordinates both in the input and output.
 
-exec(open("./stream_Koposov_data.py").read()) 
 
 # Orbit model definition
 #-------------------------------------
@@ -24,9 +53,8 @@ def orbit_model(w_0):
     
     t = np.concatenate([sol_back.t,sol_forw.t])
     y = np.concatenate([sol_back.y, sol_forw.y],axis=1)
-    #print(np.shape(y))
     y = np.delete(y,0,axis=1) #Remove duplicated column
-    #print(np.shape(y))
+
     
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     galcen_distance = 8.5*u.kpc
@@ -35,7 +63,7 @@ def orbit_model(w_0):
     galac_coord=coord.Galactocentric(x=y[0]*u.kpc,y=y[1]*u.kpc,z=y[2]*u.kpc,
                                      v_x=y[3]*u.km/u.s,v_y=y[4]*u.km/u.s,v_z=y[5]*u.km/u.s,
                            galcen_distance=galcen_distance,galcen_v_sun=v_sun,z_sun=z_sun) 
-    gd1_coord = galac_coord.transform_to(GD1Koposov10)
+    gd1_coord = galac_coord.transform_to(GD1_class.GD1Koposov10)
     phi_1 = gd1_coord.phi1
     phi_2 = gd1_coord.phi2
     d_hel = gd1_coord.distance
@@ -47,8 +75,12 @@ def orbit_model(w_0):
 
 # Test call:
 #------------------
-w_0=np.array([-3.41, 13.0, 9.58, -200.4, -162.6, 13.9])
-#w_0=np.array([-1.716384450138328077e+00, 1.401126977875537705e+01, 9.227965941367614278e+00,-2.031152426286328421e+02, -1.368983530061972260e+02, 3.428826606652827280e+01])
+#w_0=np.array([-3.41, 13.0, 9.58, -200.4, -162.6, 13.9])
+#w_0=np.array([-1.716384450138328077e+00, 1.401126977875537705e+01, 9.227965941367614278e+00,
+#              -2.031152426286328421e+02, -1.368983530061972260e+02, 3.428826606652827280e+01])
+w_0=np.array([-2.996988867007201574e+00, 1.309889922825600728e+01, 9.408043877712211511e+00,
+              -2.006738213850691466e+02,-1.509052782505346215e+02, 2.239535561062263369e+01]) #Last fit
+
 phi_1,phi_2,d_hel,v_hel,mu_1,mu_2,x,y,z = orbit_model(w_0) 
     
 
@@ -60,17 +92,22 @@ plt.scatter(x,y,s=0.1,marker='o',color='red')
 plt.scatter(x,z,s=0.1,marker='o',color='blue')
 plt.xlim(-15,10)
 plt.ylim(-15,20)
-
+plt.grid()
+#plt.legend(fontsize='huge', handlelength=0.3)
+plt.tight_layout()
+plt.show()
+fig.savefig("plots/orbit_xz_fit_my_w0.png")
 
 # Plots in the sky using the GD-1 frame
 #------------------------------------------------------
 
 
 # sky position
-#plt.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red')
-#plt.scatter(phi_1,phi_2,s=0.1,marker='o', color='violet')
-#plt.errorbar(kop_sky['phi1'], kop_sky['phi2'], yerr=kop_sky['err'], fmt='o', color='cyan', label='Stream\n(Koposov+2010)')
-#plt.ylim(-4,2)
+fig=plt.figure(figsize=(10,7))
+plt.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red')
+plt.scatter(phi_1,phi_2,s=0.1,marker='o', color='violet')
+plt.errorbar(kop_sky['phi1'], kop_sky['phi2'], yerr=kop_sky['err'], fmt='o', color='cyan', label='Stream\n(Koposov+2010)')
+plt.ylim(-4,2)
 
 # heliocentric radial velocity 
 #plt.scatter(phi_1.wrap_at(180*u.deg),v_hel,s=0.1,marker='o', color='red')
@@ -90,46 +127,52 @@ plt.ylim(-15,20)
 
 #plt.xlim(-80,20)
 plt.grid()
-plt.legend(fontsize='small', handlelength=0.3)
-
+#plt.legend(fontsize='big', handlelength=0.3)
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/orbit_xz_fit_my_w0.png")
+fig.savefig("plots/sky_fit_my_w0.png")
 
 # Optimization
 #-------------------------------------
 
 def chi2(w_0):
+    import wrap
+    
     phi_1,phi_2,d_hel,v_hel,mu_1,mu_2,x,y,z = orbit_model(w_0) 
-    phi_2_spl = interp1d(phi_1,phi_2,kind='cubic')
-    d_hel_spl = interp1d(phi_1,d_hel,kind='cubic')
-    v_hel_spl = interp1d(phi_1,v_hel,kind='cubic')
-    mu_1_spl  = interp1d(phi_1,mu_1,kind='cubic')
-    mu_2_spl  = interp1d(phi_1,mu_2,kind='cubic')
+    cfg.phi_2_spl = interp1d(phi_1,phi_2,kind='cubic')
+    cfg.d_hel_spl = interp1d(phi_1,d_hel,kind='cubic')
+    cfg.v_hel_spl = interp1d(phi_1,v_hel,kind='cubic')
+    cfg.mu_1_spl  = interp1d(phi_1,mu_1,kind='cubic')
+    cfg.mu_2_spl  = interp1d(phi_1,mu_2,kind='cubic')
 
+
+    cfg.phi_1_min = np.amin(phi_1.value)
+    cfg.phi_1_max = np.amax(phi_1.value)
+
+    
     sum=np.zeros(5)
 
-    y_mod = phi_2_spl(kop_sky['phi1'])
+    y_mod = wrap.phi_2_wrap(kop_sky['phi1'])
     y_dat = kop_sky['phi2']
     sigma2 = kop_sky['err']**2
     sum[0] = np.sum( (y_dat-y_mod)**2 / sigma2 )
 
-    y_mod = v_hel_spl(kop_rv['phi1'])
+    y_mod = wrap.v_hel_wrap(kop_rv['phi1'])
     y_dat = kop_rv['vr']
     sigma2 = kop_rv['err']**2
     sum[1] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-    
-    y_mod = d_hel_spl(kop_dist['phi1'])
+
+    y_mod = wrap.d_hel_wrap(kop_dist['phi1'])
     y_dat = kop_dist['dist']
     sigma2 = kop_dist['err']**2
     sum[2] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-    
-    y_mod = mu_1_spl(kop_pm['phi1'])
+
+    y_mod = wrap.mu_1_wrap(kop_pm['phi1'])
     y_dat = kop_pm['mu_phi1']
     sigma2 = kop_pm['err']**2
     sum[3] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-    
-    y_mod = mu_2_spl(kop_pm['phi1'])
+
+    y_mod = wrap.mu_2_wrap(kop_pm['phi1'])
     y_dat = kop_pm['mu_phi2']
     sigma2 = kop_pm['err']**2
     sum[4] = np.sum( (y_dat-y_mod)**2 / sigma2 )
@@ -140,14 +183,14 @@ def chi2(w_0):
 print(chi2(w_0))
 
 
-dx = 5.0
-dv = 30.0
+dx = 10.0
+dv = 40.0
 w_0=np.array([-3.41, 13.0, 9.58, -200.4, -162.6, 13.9]) 
 bounds=((w_0[0]-dx,w_0[0]+dx), (w_0[1]-dx,w_0[1]+dx), (w_0[2]-dx,w_0[2]+dx),
         (w_0[3]-dv,w_0[3]+dv), (w_0[4]-dv,w_0[4]+dv), (w_0[5]-dv,w_0[5]+dv))
 
-#opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=20,popsize=20,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
+opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=20,popsize=20,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
 
-#param_fitted = opt.x
+param_fitted = opt.x
 
-#np.savetxt('param_fitted_Koposov10.txt', param_fitted, delimiter=',')  
+np.savetxt('param_fit_Kop10_test.txt', param_fitted, delimiter=',')  
