@@ -137,11 +137,11 @@ z_grid = np.logspace(-10,1.7,1000)
 #np.savetxt('mesh_z.txt', mesh_z)
 
 # Read
-#mesh_R = np.loadtxt('mesh_R.txt')
-#mesh_z = np.loadtxt('mesh_z.txt')
+mesh_R = np.loadtxt('mesh_R.txt')
+mesh_z = np.loadtxt('mesh_z.txt')
 
-#dPhi_dR_spline = interpolate.RectBivariateSpline(R_grid, z_grid, mesh_R,kx=3,ky=3)
-#dPhi_dz_spline = interpolate.RectBivariateSpline(R_grid, z_grid, mesh_z,kx=3,ky=3)
+dPhi_dR_spline = interpolate.RectBivariateSpline(R_grid, z_grid, mesh_R,kx=3,ky=3)
+dPhi_dz_spline = interpolate.RectBivariateSpline(R_grid, z_grid, mesh_z,kx=3,ky=3)
 
 
 def accel_expon_flat_disk_spline(x,y,z):

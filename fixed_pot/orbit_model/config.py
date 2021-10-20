@@ -1,16 +1,23 @@
 import numpy as np
 
-# Splines
+# Numerical constants
+deg2rad = np.pi/180.0
 
-r_max_mw=0
-mass_spline=0
-phi_1_min=0
-phi_1_max=0
+# Splines
+r_max_mw = 0
+mass_spline = 0
+phi_1_min = 0
+phi_1_max = 0
 phi_2_spl = 0
 d_hel_spl = 0
 v_hel_spl = 0
 mu_1_spl  = 0
 mu_2_spl  = 0
+mu_ra_spl = 0
+mu_dec_spl = 0
+ra_min = 0
+ra_max = 0
+dec_spl = 0
 
 # Model parameters
 g =  4.300923924e-6
@@ -45,7 +52,7 @@ a_exps_ma=0.12
 rho_exps_ma=1.9e11
 
 # Exponential flat disk (disk)
-a_efd=3.0 #*0.93   
-m_efd=4.4e10 #*1.2
+a_efd=3.0*0.93   
+m_efd=4.4e10*1.2
 sigma_efd=m_efd/(2.0*np.pi*a_efd*a_efd)
 

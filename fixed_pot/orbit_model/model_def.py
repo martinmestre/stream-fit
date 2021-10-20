@@ -90,7 +90,7 @@ def model(param):
     a = 4.0*rho_rel/np.sqrt(pi)
     b = a*c*c
     n_eos = 10**4
-    n_tov =  10**6
+    n_tov =  10**4
     tau = 1.0e-16
 
 
@@ -127,7 +127,7 @@ def model(param):
 
     psi=np.exp(z)
     mass= psi*M/R*r
-    exponential = np.exp(nu-nu_0)
+    exponential = np.exp(-0.5*(nu-nu_0))
     alpha = alpha_0*exponential
     beta = beta_0*exponential
     eps = eps_0*exponential

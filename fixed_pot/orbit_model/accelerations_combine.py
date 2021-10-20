@@ -20,8 +20,8 @@ def accel_bulge_main(x,y,z):
 # Disk                    
 
 def accel_disk(x,y,z):
-	#return ac.accel_expon_flat_disk_spline(x,y,z)
-	return ac.accel_expon_flat_disk(cfg.sigma_efd,cfg.a_efd,x,y,z)
+	return ac.accel_expon_flat_disk_spline(x,y,z)
+	#return ac.accel_expon_flat_disk(cfg.sigma_efd,cfg.a_efd,x,y,z)
 
 # Dark matter halo
 
@@ -31,7 +31,7 @@ def accel_halo_dm(x,y,z):
 # Total contribution
 
 def accel_mw(x,y,z):
-	#return accel_bulge_inner(x,y,z)+ accel_bulge_main(x,y,z)+ accel_disk(x,y,z) + accel_halo_dm(x,y,z)
-	return ac.accel_logarithmic(x,y,z)
+	return accel_bulge_inner(x,y,z)+ accel_bulge_main(x,y,z)+ accel_disk(x,y,z) + accel_halo_dm(x,y,z)
+	#return ac.accel_logarithmic(x,y,z)
 	#return accel_halo_dm(x,y,z)
 	#return accel_disk(x,y,z)

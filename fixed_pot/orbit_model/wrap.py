@@ -47,3 +47,21 @@ def mu_2_wrap(x):
         else:
             array[i]= np.Inf
     return array
+
+def mu_ra_wrap(x):
+    array = np.zeros(len(x))
+    for i in range(0,len(x)):
+        if(x[i]>cfg.phi_1_min and x[i]<cfg.phi_1_max ):
+            array[i]= cfg.mu_ra_spl(x[i])
+        else:
+            array[i]= np.Inf
+    return array
+
+def mu_dec_wrap(x):
+    array = np.zeros(len(x))
+    for i in range(0,len(x)):
+        if(x[i]>cfg.phi_1_min and x[i]<cfg.phi_1_max ):
+            array[i]= cfg.mu_dec_spl(x[i])
+        else:
+            array[i]= np.Inf
+    return array
