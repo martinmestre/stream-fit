@@ -1,9 +1,10 @@
 """
-Fit GD-1 stream data varying the RAR model.
+Fit GD-1 stream data with a fixed MW potential model.
 
 Computation of the orbit model for RAR + barionic component.
 Using Ibata+20 polinomial data-fits.
-Optimization to fit the best RAR parameters and the orbit.
+Optimization to find best fit orbit.
+
 
 Author: Martín Mestre.
 """
@@ -176,7 +177,7 @@ def chi2(w_0):
     import wrap
 
     ener_f = 56.0  # keV
-    theta_0, W_0, beta_0 = w_0[6], w_0[7], w_0[8]
+    theta_0, W_0, beta_0 = 3.77780827e+01, 6.63468885e+01, 1.20446329e-05
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(
         w_0[0], w_0[1], w_0[2], w_0[3], w_0[4], w_0[5], pot_list)
@@ -235,33 +236,26 @@ k0 = 50
 u_0 = np.array([Iba_sky['phi_1'][k0], Iba_sky['phi_2'][k0], Iba_sky['d_hel'][k0],
                 Iba_sky['mu_ra'][k0], Iba_sky['mu_dec'][k0], Iba_sky['v_hel'][k0]])
 w_0 = invert_ic(u_0)
-u_0 = np.array([3.77780827e+01, 6.63468885e+01, 1.20446329e-05])
-w_0 = np.concatenate((w_0, u_0))
-dw = np.abs(w_0)*0.01
-dw[6] = 2.0
-dw[7] = 2.0
-dw[8] = 0.1e-5
+dw = np.abs(w_0)*0.5
 bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
-          (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]),
-          (w_0[6]-dw[6], w_0[6]+dw[6]), (w_0[7]-dw[7], w_0[7]+dw[7]), (w_0[8]-dw[8], w_0[8]+dw[8]))
-# bounds = ((100, 300), (0, 90), (4, 15), (-50, 50), (-50, 50), (-300, 300),
-#           (36.0, 39.0), (65.0, 68.0), (1.0e-5, 2.0e-5))
+          (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
+bounds = ((100, 300), (0, 90), (4, 15), (-50, 50), (-50, 50), (-300, 300))
 
 r_sun = 8.122
 param_file = 'param_fit_orbit-pot_from_IbataPolysGaiaDR2-data.txt'
 
 # Optimization
 
-opt = optimize.differential_evolution(chi2, bounds, strategy='best1bin', maxiter=60, popsize=60, tol=5.0e-8,
-                                      atol=0.5e-8, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
-# w_0 = np.loadtxt(param_file)
+# opt = optimize.differential_evolution(chi2, bounds, strategy='best1bin', maxiter=30, popsize=30, tol=5.0e-8,
+#                                       atol=0.5e-8, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
+w_0 = np.loadtxt(param_file)
 print("w_0=", w_0)
 chi2(w_0)
 ener_f = 56.0  # keV
-theta_0, W_0, beta_0 = w_0[6], w_0[7], w_0[8]
+theta_0, W_0, beta_0 = 3.77780827e+01, 6.63468885e+01, 1.20446329e-05
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(w_0[0], w_0[1], w_0[2], w_0[3], w_0[4],
                                                                  w_0[5], pot_list)
@@ -278,7 +272,7 @@ plt.grid()
 plt.legend()
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/orbit_orbit-pot_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/orbit_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
 
 
 # Plots in the sky using the GD-1 frame
@@ -322,4 +316,4 @@ plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
 plt.show()
-fig.savefig("plots/sky_orbit-pot_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/sky_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
