@@ -176,6 +176,8 @@ def chi2(w_0, ener_f, beta_0, ic):
     import wrap
     theta_0 = w_0[0]
     d_theta = w_0[1]
+    ic[2] = w_0[2]
+    ic[5] = w_0[3]
     W_0 = theta_0 + d_theta
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(
@@ -207,12 +209,12 @@ def chi2(w_0, ener_f, beta_0, ic):
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 1.0
+    sigma2 = 10.0
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 1.0
+    sigma2 = 10.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     print('chi^2 =', np.sum(sum))
@@ -236,10 +238,10 @@ k0 = 50
 u_0 = np.array([Iba_sky['phi_1'][k0], Iba_sky['phi_2'][k0], Iba_sky['d_hel'][k0],
                 Iba_sky['mu_ra'][k0], Iba_sky['mu_dec'][k0], Iba_sky['v_hel'][k0]])
 ic = invert_ic(u_0)
-
+print('ic=', ic)
 
 # Parameters
-param_file = 'param_fit_orbit-slice_from_IbataPolysGaiaDR2-data.txt'
+param_file = 'param_fit_pot-slice_from_IbataPolysGaiaDR2-data.txt'
 r_sun = 8.122
 ener_f = 56.0  # keV
 # d_theta = 28.5751
@@ -247,18 +249,20 @@ beta_0 = 1.1977e-5
 
 
 # Optimization
-bounds = ((35, 40), (28, 29))
+bounds = ((33, 43), (27, 30), (6, 8), (-50, 0))
 opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best1bin', maxiter=30, popsize=30, tol=5.0e-8,
+                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
                                       atol=0.5e-8, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
 w_0 = param_fitted
-# s_0 = np.loadtxt(param_file)
+# w_0 = np.loadtxt(param_file)
 chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
+ic[2] = w_0[2]
+ic[5] = w_0[3]
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
@@ -276,7 +280,7 @@ plt.grid()
 plt.legend()
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/orbit_orbit-slice_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/orbit_pot-slice_from_IbataPolysGaiaDR2-data.png")
 
 
 # Plots in the sky using the GD-1 frame
@@ -287,7 +291,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35)
 ax1.set_title('Ibata+20 data with RAR and barions')
 ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red')
 ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Stream\n(Ibata+2020)')
-ax1.set_ylim(-4, 2)
+ax1.set_ylim(-10, 2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
 
 
@@ -307,6 +311,7 @@ ax3.set_ylabel(r'$D$ [kpc]')
 ax4.scatter(phi_1, mu_ra, s=0.5, color='red')
 ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
 ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
+ax4.set_ylim(-20, 0)
 ax4.legend()
 
 # Proper motion along DEC
@@ -320,4 +325,4 @@ plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
 plt.show()
-fig.savefig("plots/sky_orbit-slice_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/sky_pot-slice_from_IbataPolysGaiaDR2-data.png")

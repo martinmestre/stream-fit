@@ -223,15 +223,15 @@ r_sun = 8.129
 v_circ_sun=rot_vel_mw(r_sun)
 print('v_circ(r_sun)=',v_circ_sun)
 
-opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=30,popsize=30,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
+# opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=30,popsize=30,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
 
-param_fitted = opt.x
+# param_fitted = opt.x
 
-np.savetxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt', param_fitted, delimiter=',')  
+# np.savetxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt', param_fitted, delimiter=',')  
 
 
 # Test call:
-#w_0 =np.loadtxt('param_fit_Ibata.txt')
+w_0 = np.loadtxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt')
 #w_0=param_fitted
 #w_0=[1.512419743956743332e+02,
 #     3.746444750155115599e+01,
@@ -251,7 +251,7 @@ np.savetxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt', param_fitted, delimi
 #-7.365640413711687096e+00,-1.049256743365175737e+01,-6.229546056474869431e+01]
 #w_0=[1.503499419144439742e+02,3.671310321536615362e+01,8.315653523998493668e+00,-6.390434697724216129e+00,-1.106768595825563040e+01,-2.396566624782315813e+01]
 
-w_0=param_fitted
+
 print("w_0=",w_0)
 phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel,x,y,z = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5]) 
 
@@ -272,48 +272,46 @@ fig.savefig("plots/orbit_xyz_fit_my_w0_Ibata2RARbarionic.png")
 
 
 # Plots in the sky using the GD-1 frame
-#---------------------------------------
-fig, (ax1,ax2,ax3,ax4,ax5) = plt.subplots(5, 1, sharex=True, figsize=(7,35))
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35))
 
 
 # Sky position
-ax1.set_title('Ibata+20 data with RAR and barions')
-ax1.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red')
-ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Stream\n(Ibata+2020)')
-ax1.set_ylim(-4,2)
+ax1.set_title('Fitted GD-1 stream (orbit) \n' +
+              'in fixed "RAR+barions" potential with Ibata+20 data (Polynomials)')
+ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Poly (Ibata+2020)')
+ax1.set_ylim(-4, 2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
+ax1.legend()
 
-
-# heliocentric radial velocity 
-ax2.scatter(phi_1.wrap_at(180*u.deg),v_hel,s=0.1,marker='o', color='red')
-ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Stream\n(Ibata+2020)')
-ax2.set_ylim(-300,300)
+# Heliocentric radial velocity
+ax2.scatter(phi_1.wrap_at(180*u.deg), v_hel, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Poly (Ibata+2020)')
+ax2.set_ylim(-300, 300)
 ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 
-# heliocentric distance
-ax3.scatter(phi_1,d_hel,s=0.1,marker='o', color='red')
-ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Stream\n(Ibata+2020)')
-ax3.set_ylim(7,12)
+# Heliocentric distance
+ax3.scatter(phi_1, d_hel, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Poly (Ibata+2020)')
+ax3.set_ylim(7, 12)
 ax3.set_ylabel(r'$D$ [kpc]')
 
-# proper motion along RA 
-ax4.scatter(phi_1,mu_ra,s=0.5, color='red')
-ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
+# Proper motion along RA
+ax4.scatter(phi_1, mu_ra, s=0.5, color='red', label='Fitted orbit')
+ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Poly (Ibata+2020)')
 ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
-ax4.legend()
 
-# proper motion along DEC
-ax5.scatter(phi_1,mu_dec,s=0.5, color='red')
-ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Stream\n(Ibata+2020)')
+# Proper motion along DEC
+ax5.scatter(phi_1, mu_dec, s=0.5, color='red', label='Fitted orbit')
+ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Poly (Ibata+2020)')
 ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]')
-ax5.legend()
 
 plt.xlabel(r'$\phi_1$ [degrees]')
-plt.xlim(IbaPoly.limit[0],IbaPoly.limit[1])
-#plt.tight_layout()
+plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
+# plt.tight_layout()
 
 plt.show()
-fig.savefig("plots/sky_fit_Ibata2RARbarionic.png")
+fig.savefig("plots/sky_fit_orbit_from_IbataPolysGaiaDR2-data_RARbarionsOrig.png")
 
 
 

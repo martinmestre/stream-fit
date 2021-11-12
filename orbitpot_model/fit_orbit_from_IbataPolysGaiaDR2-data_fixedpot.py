@@ -198,7 +198,7 @@ def chi2(w_0):
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 1.0
+    sigma2 = 10.0
     sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
@@ -208,12 +208,12 @@ def chi2(w_0):
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 1.0
+    sigma2 = 10.0
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 1.0
+    sigma2 = 10.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     print('chi^2 =', np.sum(sum))
@@ -269,7 +269,6 @@ plt.scatter(x, z, s=0.1, marker='o', color='blue')
 plt.xlim(-15, 10)
 plt.ylim(-15, 20)
 plt.grid()
-plt.legend()
 plt.tight_layout()
 plt.show()
 fig.savefig("plots/orbit_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
@@ -280,36 +279,35 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35)
 
 
 # Sky position
-ax1.set_title('Ibata+20 data with RAR and barions')
-ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red')
-ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Stream\n(Ibata+2020)')
+ax1.set_title('Fitted GD-1 stream (orbit) \n' +
+              'in fixed "RAR+barions" potential with Ibata+20 data (Polynomials)')
+ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Poly (Ibata+2020)')
 ax1.set_ylim(-4, 2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
-
+ax1.legend()
 
 # Heliocentric radial velocity
-ax2.scatter(phi_1.wrap_at(180*u.deg), v_hel, s=0.1, marker='o', color='red')
-ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Stream\n(Ibata+2020)')
+ax2.scatter(phi_1.wrap_at(180*u.deg), v_hel, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Poly (Ibata+2020)')
 ax2.set_ylim(-300, 300)
 ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 
 # Heliocentric distance
-ax3.scatter(phi_1, d_hel, s=0.1, marker='o', color='red')
-ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Stream\n(Ibata+2020)')
+ax3.scatter(phi_1, d_hel, s=0.1, marker='o', color='red', label='Fitted orbit')
+ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Poly (Ibata+2020)')
 ax3.set_ylim(7, 12)
 ax3.set_ylabel(r'$D$ [kpc]')
 
 # Proper motion along RA
-ax4.scatter(phi_1, mu_ra, s=0.5, color='red')
-ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
+ax4.scatter(phi_1, mu_ra, s=0.5, color='red', label='Fitted orbit')
+ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Poly (Ibata+2020)')
 ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
-ax4.legend()
 
 # Proper motion along DEC
-ax5.scatter(phi_1, mu_dec, s=0.5, color='red')
-ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Stream\n(Ibata+2020)')
+ax5.scatter(phi_1, mu_dec, s=0.5, color='red', label='Fitted orbit')
+ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Poly (Ibata+2020)')
 ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]')
-ax5.legend()
 
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])

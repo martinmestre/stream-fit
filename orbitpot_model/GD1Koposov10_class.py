@@ -1,9 +1,11 @@
-# from Gala Package (to acknowledge)
-""" Astropy coordinate class for the Sagittarius coordinate system """
+"""
+Astropy coordinate class for the Sagittarius coordinate system.
+
+From Gala Package (to acknowledge)
+"""
 
 # Third-party
 import numpy as np
-
 import astropy.units as u
 import astropy.coordinates as coord
 from astropy.coordinates import frame_transform_graph
@@ -12,13 +14,11 @@ from astropy.coordinates.matrix_utilities import matrix_transpose
 __all__ = ["GD1Koposov10", "GD1"]
 
 
-
 class GD1Koposov10(coord.BaseCoordinateFrame):
     """
-    A Heliocentric spherical coordinate system defined by the orbit
-    of the GD1 stream, as described in
-    Koposov et al. 2010 (see: `<http://arxiv.org/abs/0907.1085>`_).
+    A Heliocentric spherical coordinate system defined by the orbit of the GD1 stream.
 
+    As described in Koposov et al. 2010 (see: `<http://arxiv.org/abs/0907.1085>`_).
     For more information about this class, see the Astropy documentation
     on coordinate frames in :mod:`~astropy.coordinates`.
 
@@ -44,6 +44,7 @@ class GD1Koposov10(coord.BaseCoordinateFrame):
         The Distance for this object along the line-of-sight.
 
     """
+
     default_representation = coord.SphericalRepresentation
     default_differential = coord.SphericalCosLatDifferential
 
@@ -57,6 +58,7 @@ class GD1Koposov10(coord.BaseCoordinateFrame):
     _default_wrap_angle = 180*u.deg
 
     def __init__(self, *args, **kwargs):
+        """Init."""
         wrap = kwargs.pop('wrap_longitude', True)
         super().__init__(*args, **kwargs)
         if wrap and isinstance(self._data, (coord.UnitSphericalRepresentation,
@@ -67,12 +69,10 @@ class GD1Koposov10(coord.BaseCoordinateFrame):
     # to have the longitude components wrap at the desired angle
 
     def represent_as(self, base, s='base', in_frame_units=False):
+        """Represent as."""
         r = super().represent_as(base, s=s, in_frame_units=in_frame_units)
         r.lon.wrap_angle = self._default_wrap_angle
         return r
-
-
-
 
 
 # Rotation matrix as defined in the Appendix of Koposov et al. (2010)
@@ -84,24 +84,23 @@ R = np.array([[-0.4776303088, -0.1738432154, 0.8611897727],
 @frame_transform_graph.transform(coord.StaticMatrixTransform, coord.ICRS,
                                  GD1Koposov10)
 def icrs_to_gd1():
-    """ Compute the transformation from Galactic spherical to
-        heliocentric GD1 coordinates.
-    """
+    """Compute the transformation from Galactic spherical to heliocentric GD1 coordinates."""
     return R
 
 
 @frame_transform_graph.transform(coord.StaticMatrixTransform, GD1Koposov10,
                                  coord.ICRS)
 def gd1_to_icrs():
-    """ Compute the transformation from heliocentric GD1 coordinates to
-        spherical Galactic.
-    """
+    """Compute the transformation from heliocentric GD1 coordinates to spherical Galactic."""
     return matrix_transpose(icrs_to_gd1())
 
 
 # TODO: remove this in next version
 class GD1(GD1Koposov10):
+    """GD-1 class."""
+
     def __init__(self, *args, **kwargs):
+        """Init GD-1 class."""
         import warnings
         warnings.warn("This frame is deprecated. Use GD1Koposov10 instead.",
                       DeprecationWarning)
