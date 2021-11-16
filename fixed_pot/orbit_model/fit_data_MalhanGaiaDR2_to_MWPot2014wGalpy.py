@@ -1,5 +1,5 @@
 
-# Computation of the orbit model the best fit potential in Malhan+19 (MWPotential2014+axisymmetry), 
+# Computation of the orbit model the best fit potential in Malhan+19 (MWPotential2014+axisymmetry),
 # using Malhan+19 data.
 # Optimization to find best fit orbit.
 
@@ -11,7 +11,6 @@ from astropy.io import ascii
 from scipy import optimize
 from scipy import interpolate
 import numpy as np
-import scipy.integrate as integrate
 from scipy.interpolate import InterpolatedUnivariateSpline
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
@@ -29,8 +28,8 @@ from galpy.orbit import Orbit
 # The orbit_model here defined works with sky coordinates at input and sky-cartesian at output
 def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
 #    print('param= ',alpha,delta,distance,mu_alpha,mu_delta,v_los)
-    
-    # Transformation to galactocentric coordinates     
+
+    # Transformation to galactocentric coordinates
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import CartesianDifferential
     c= SkyCoord(ra=alpha*u.degree, dec=delta*u.degree,
@@ -51,11 +50,11 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     ts2= np.linspace(0,0.2,n_steps+1)*u.Gyr
     o.integrate(ts2,mw,method='dop853_c')
     sol_forw = np.array([o.ra(ts2),o.dec(ts2),o.dist(ts2),o.pmra(ts2),o.pmdec(ts2),o.vlos(ts2)])
-    
+
     t = np.concatenate([ts1,ts2])
     y = np.concatenate([sol_back, sol_forw],axis=1)
     y = np.delete(y,0,axis=1) #Remove duplicated column
-    
+
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     icrs_coord=coord.ICRS(ra=y[0]*u.degree, dec=y[1]*u.degree,
                 distance=y[2]*u.kpc,
@@ -79,7 +78,7 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
 # [x] = radians
 # [S] = radians
 # [D] = kpc
-# [V] = km/s                                                              
+# [V] = km/s
 # [MU] = mas/year
 class IbaPoly:
     def S(self,x):
@@ -112,7 +111,7 @@ def invert_ic(u_0):
     icrs_coord = gd1_coord.transform_to(coord.ICRS)
     w_0[0]=icrs_coord.ra.value
     w_0[1]=icrs_coord.dec.value
-    return w_0   
+    return w_0
 
 #print('To compare with the Figures in Malhan+19')
 [Iba_sky['RA'],Iba_sky['Dec']] = invert_ic([Iba_sky['phi_1'],Iba_sky['phi_2']])
@@ -120,7 +119,7 @@ def invert_ic(u_0):
 
 # Load Malhan+19 tables
 """
-Uncomment to download data from Gaia for the first time. 
+Uncomment to download data from Gaia for the first time.
 Otherwise just open the file at the bottom of this cell.
 
 data = cross_match('asu.tsv')
@@ -144,39 +143,39 @@ print(len(data))
 # Chi^2 function
 def chi2(w_0):
 	import wrap_ra as wrap
-    
-	phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5]) 
-    
+
+	phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
+
 	[ra,dec] = invert_ic([phi_1.value,phi_2.value])
 	cfg.dec_spl = interp1d(ra,dec,kind='cubic')
 	cfg.v_hel_spl = interp1d(ra,v_hel,kind='cubic')
 	cfg.mu_ra_spl  = interp1d(ra,mu_ra,kind='cubic')
 	cfg.mu_dec_spl  = interp1d(ra,mu_dec,kind='cubic')
-    	
+
 	cfg.ra_min = np.amin(ra)
 	cfg.ra_max = np.amax(ra)
-  
+
 	sum=np.zeros(4)
 	y_mod = wrap.dec_wrap(data['RAJ2000'])
 	y_dat = data['DEJ2000']
 	sigma2 = 0.1**2
 	sum[0] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-	
+
 	y_mod = wrap.mu_ra_wrap(data['RAJ2000'])
 	y_dat = data['pmra']
 	sigma2 = data['pmra_error']**2
 	sum[1] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-	
+
 	y_mod = wrap.mu_dec_wrap(data['RAJ2000'])
 	y_dat = data['pmdec']
 	sigma2 = data['pmdec_error']**2
 	sum[2] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-    
+
 	y_mod = wrap.v_hel_wrap(data['RAJ2000'])
 	y_dat = data['Vlos']
 	sigma2 = data['e_Vlos']**2
 	sum[3] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-	
+
 	print('chi^2 =',np.sum(sum))
 	return np.sum(sum)
 
@@ -213,24 +212,24 @@ dw = np.abs(w_0)*0.5
 dw[0]=0.1
 bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],w_0[2]+dw[2]),
         (w_0[3]-dw[3],w_0[3]+dw[3]), (w_0[4]-dw[4],w_0[4]+dw[4]), (w_0[5]-dw[5],w_0[5]+dw[5]))
-#bounds =((130,220),(20,60),(7,12),(-20,0),(-14,-1),(-300,250) )
-#bounds =((0,360),(-90,90),(4,12),(-20,0),(-20,0),(-70,-20) )
+# bounds =((130,220),(20,60),(7,12),(-20,0),(-14,-1),(-300,250) )
+# bounds =((0,360),(-90,90),(4,12),(-20,0),(-20,0),(-70,-20) )
 
-opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=30,popsize=30,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
+# opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=30,popsize=30,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
 
-param_fitted = opt.x
+# param_fitted = opt.x
 
-np.savetxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')  
+# np.savetxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
 
 
 # Test call:
-#w_0 =np.loadtxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt')
-w_0=param_fitted
+w_0 =np.loadtxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt')
+# w_0=param_fitted
 #w_0=[1.493370985649162890e+02,3.667599798207655226e+01,8.281589084285746694e+00,-6.017245723518942491e+00,-1.088799601035909781e+01,-2.369380131502371611e+01]
 #w_0=[1.544035052724746038e+02,4.153208108236809437e+01,8.056920310518510320e+00,-8.378372205186138899e+00,-1.188171061092145209e+01,-5.948982987002553813e+01] #My fit
 
 print("w_0=",w_0)
-phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5]) 
+phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
 [ra,dec] = invert_ic([phi_1.value,phi_2.value])
 chi2(w_0)
 
@@ -249,7 +248,7 @@ ax1.set_ylim(-4,2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
 
 
-# heliocentric radial velocity 
+# heliocentric radial velocity
 ax2.scatter(phi_1.wrap_at(180*u.deg),v_hel,s=0.1,marker='o', color='red')
 ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Stream\n(Ibata+2020)')
 ax2.set_ylim(-300,300)
@@ -261,7 +260,7 @@ ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Stream\n(Ibata
 ax3.set_ylim(7,12)
 ax3.set_ylabel(r'$D$ [kpc]')
 
-# proper motion along RA 
+# proper motion along RA
 ax4.scatter(phi_1,mu_ra,s=0.5, color='red')
 ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
 ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
@@ -277,14 +276,13 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0],IbaPoly.limit[1])
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/sky_fit_Malhan2RARbarionicPolys.png")
-
+fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.png")
 
 
 # Plots using RA
 fig, (ax1,ax2,ax3) = plt.subplots(3, 1, sharex=True, figsize=(13,15))
 
-# proper motion along RA 
+# proper motion along RA
 ax1.scatter(ra,mu_ra,s=0.5,color='red')
 ax1.scatter(ra,mu_dec,s=0.5,color='orange')
 ax1.plot(Iba_sky['RA'], Iba_sky['mu_ra'], color='blue', label=r'$\mu_\alpha$(Malhan+19)')
@@ -295,7 +293,7 @@ ax1.set_ylabel(r'$\mu$ [mas yr$^{-1}$]')
 ax1.set_ylim(-15,5)
 ax1.legend()
 
-# heliocentric radial velocity 
+# heliocentric radial velocity
 ax2.scatter(ra,v_hel,s=0.5,color='red')
 ax2.plot(Iba_sky['RA'], Iba_sky['v_hel'], color='blue', label='Ibata+19')
 ax2.errorbar(data['RAJ2000'],data['Vlos'],yerr=data['e_Vlos'],fmt='o',color='black')
@@ -303,7 +301,7 @@ ax2.set_ylim(-300,300)
 ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 ax2.set_xlim(130,230)
 
-# sky position 
+# sky position
 ax3.scatter(ra,dec,s=0.5,color='red')
 ax3.plot(Iba_sky['RA'], Iba_sky['Dec'], color='blue', label='Ibata+19')
 ax3.scatter(data['RAJ2000'],data['DEJ2000'])
@@ -315,7 +313,7 @@ plt.xlabel('RA [degrees]')
 plt.xlim(130,230)
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/sky_fit_Malhan2RARbarionic.png")
+fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.png")
 
 
 

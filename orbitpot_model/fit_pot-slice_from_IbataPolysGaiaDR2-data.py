@@ -73,7 +73,6 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
 
     # Autoconsistent velocity of LSR
     v_circ_sun = rot_vel_mw(pot_list, r_sun)
-    # print('v_circ(r_sun)=', v_circ_sun)
 
     # Transformation to galactocentric coordinates
     sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
@@ -123,7 +122,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
     icrs_coord = galac_coord.transform_to(coord.ICRS)
     mu_ra = icrs_coord.pm_ra_cosdec / np.cos(icrs_coord.dec)
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2]
+    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
 
 
 class IbaPoly:
@@ -176,11 +175,9 @@ def chi2(w_0, ener_f, beta_0, ic):
     import wrap
     theta_0 = w_0[0]
     d_theta = w_0[1]
-    ic[2] = w_0[2]
-    ic[5] = w_0[3]
     W_0 = theta_0 + d_theta
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
-    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(
+    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
     cfg.d_hel_spl = interp1d(phi_1, d_hel, kind='cubic')
@@ -217,7 +214,7 @@ def chi2(w_0, ener_f, beta_0, ic):
     sigma2 = 10.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    print('chi^2 =', np.sum(sum))
+    print('chi^2 =', np.sum(sum), '  v_circ = ', v_circ)
     return np.sum(sum)
 
 
@@ -234,40 +231,46 @@ def invert_ic(u_0):
 
 
 # We take the initial condition from the good data from Ibata.
-k0 = 50
-u_0 = np.array([Iba_sky['phi_1'][k0], Iba_sky['phi_2'][k0], Iba_sky['d_hel'][k0],
-                Iba_sky['mu_ra'][k0], Iba_sky['mu_dec'][k0], Iba_sky['v_hel'][k0]])
-ic = invert_ic(u_0)
-print('ic=', ic)
+# k0 = 50
+# u_0 = np.array([Iba_sky['phi_1'][k0], Iba_sky['phi_2'][k0], Iba_sky['d_hel'][k0],
+#                 Iba_sky['mu_ra'][k0], Iba_sky['mu_dec'][k0], Iba_sky['v_hel'][k0]])
+# ic = invert_ic(u_0)
+# print('ic=', ic)
+
+# Taking the initial conditions from the Galpy fit with fixed MW2014 potential.
+ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
+              -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
+
 
 # Parameters
 param_file = 'param_fit_pot-slice_from_IbataPolysGaiaDR2-data.txt'
-r_sun = 8.122
+r_sun = 8.0    # 8.122
 ener_f = 56.0  # keV
 # d_theta = 28.5751
 beta_0 = 1.1977e-5
 
 
 # Optimization
-bounds = ((33, 43), (27, 30), (6, 8), (-50, 0))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
-                                      atol=0.5e-8, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
-# w_0 = np.loadtxt(param_file)
+bounds = ((35, 41), (25, 31))
+# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+#                                       strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
+#                                       atol=0.5e-8, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
+w_0 = np.loadtxt(param_file)
 chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
-ic[2] = w_0[2]
-ic[5] = w_0[3]
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
-phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
-                                                                 ic[5], pot_list)
+phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
+                                                                         ic[5], pot_list)
 
+print('Model parameters:')
+print('theta_0, W_0, beta_0 =', theta_0, W_0, beta_0)
+print('IC:', ic)
 
 # Plot in galactocentric coordinates
 fig = plt.figure(figsize=(10, 10))
@@ -291,7 +294,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35)
 ax1.set_title('Ibata+20 data with RAR and barions')
 ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red')
 ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Stream\n(Ibata+2020)')
-ax1.set_ylim(-10, 2)
+ax1.set_ylim(-4, 2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
 
 
