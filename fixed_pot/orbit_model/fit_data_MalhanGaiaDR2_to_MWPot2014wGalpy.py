@@ -276,7 +276,7 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0],IbaPoly.limit[1])
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.png")
+fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_Polys.png")
 
 
 # Plots using RA
