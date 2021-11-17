@@ -49,13 +49,13 @@ def rot_vel_mw(pot_list, r):
     return np.sqrt(r*(grad_mw(pot_list, r, 0, 0)[0]))
 
 
-def pot_model(ener_f, theta_0, W_0, beta_0, alpha):
+def pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale):
     """Potential model including barions and dark matter halo."""
     # Set barionic potentials
     M_gal = 2.32e7  # Msun
     bulge = pot.Plummer(460.0*M_gal, 0.3)
-    thin = pot.MiyamotoNagai(1700.0*M_gal*alpha, 5.3, 0.25)
-    thick = pot.MiyamotoNagai(1700.0*M_gal*alpha, 2.6, 0.8)
+    thin = pot.MiyamotoNagai(1700.0*M_gal*alpha, 5.3*scale, 0.25*scale)
+    thick = pot.MiyamotoNagai(1700.0*M_gal*alpha, 2.6*scale, 0.8*scale)
     # Set halo potential
     param = np.array([ener_f, theta_0, W_0, beta_0])
     halo = pot.RAR(param)
@@ -176,8 +176,9 @@ def chi2(w_0, ener_f, beta_0, ic):
     theta_0 = w_0[0]
     d_theta = w_0[1]
     alpha = w_0[2]
+    scale = w_0[3]
     W_0 = theta_0 + d_theta
-    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha)
+    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
@@ -215,7 +216,8 @@ def chi2(w_0, ener_f, beta_0, ic):
     sigma2 = 10.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    print('chi^2 =', np.sum(sum), ' v_circ = ', v_circ, ' theta_0=', theta_0, ' W_0=', W_0, ' alpha=', alpha)
+    print('chi^2 =', np.sum(sum), ' v_circ = ', v_circ, ' theta_0=', theta_0, ' W_0=', W_0,
+          ' alpha=', alpha, ' scale=', scale)
     return np.sum(sum)
 
 
@@ -252,9 +254,9 @@ beta_0 = 1.1977e-5
 
 
 # Optimization
-bounds = ((35.2, 36.2), (26.6, 27.6), (0.7, 1.3))
+bounds = ((35.2, 36.2), (26.6, 27.6), (0.7, 1.3), (0.7, 1.3))
 opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-6,
+                                      strategy='best2bin', maxiter=20, popsize=30, tol=5.0e-6,
                                       atol=0.5e-6, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
@@ -265,8 +267,9 @@ chi2(w_0, ener_f, beta_0, ic)
 theta_0 = w_0[0]
 d_theta = w_0[1]
 alpha = w_0[2]
+scale = w_0[3]
 W_0 = theta_0 + d_theta
-pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha)
+pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
                                                                          ic[5], pot_list)
 
