@@ -49,13 +49,13 @@ def rot_vel_mw(pot_list, r):
     return np.sqrt(r*(grad_mw(pot_list, r, 0, 0)[0]))
 
 
-def pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale):
+def pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb):
     """Potential model including barions and dark matter halo."""
     # Set barionic potentials
     M_gal = 2.32e7  # Msun
     bulge = pot.Plummer(460.0*M_gal, 0.3)
-    thin = pot.MiyamotoNagai(1700.0*M_gal*alpha, 5.3*scale, 0.25*scale)
-    thick = pot.MiyamotoNagai(1700.0*M_gal*alpha, 2.6*scale, 0.8*scale)
+    thin = pot.MiyamotoNagai(1700.0*M_gal*alpha, 5.3*scale, 0.25*scaleb)
+    thick = pot.MiyamotoNagai(1700.0*M_gal*alpha, 2.6*scale, 0.8*scaleb)
     # Set halo potential
     param = np.array([ener_f, theta_0, W_0, beta_0])
     halo = pot.RAR(param)
@@ -120,7 +120,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
     # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
     # Transformation to ICRS coordinates
     icrs_coord = galac_coord.transform_to(coord.ICRS)
-    mu_ra = icrs_coord.pm_ra_cosdec / np.cos(icrs_coord.dec)
+    mu_ra = icrs_coord.pm_ra_cosdec  # / np.cos(icrs_coord.dec) # It seems that Ibata gives pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
     return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
 
@@ -177,8 +177,9 @@ def chi2(w_0, ener_f, beta_0, ic):
     d_theta = w_0[1]
     alpha = w_0[2]
     scale = w_0[3]
+    scaleb = w_0[4]
     W_0 = theta_0 + d_theta
-    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale)
+    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
@@ -198,26 +199,27 @@ def chi2(w_0, ener_f, beta_0, ic):
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 10.0
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    sigma2 = 100.0
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    sum[1] = 0.0
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['v_hel']
-    sigma2 = 100.0
+    sigma2 = 1000.0
     sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 10.0
+    sigma2 = 1.0
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 10.0
+    sigma2 = 100.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     print('chi^2 =', np.sum(sum), ' v_circ = ', v_circ, ' theta_0=', theta_0, ' W_0=', W_0,
-          ' alpha=', alpha, ' scale=', scale)
+          ' alpha=', alpha, ' scale=', scale, 'scaleb=', scaleb)
     return np.sum(sum)
 
 
@@ -254,7 +256,7 @@ beta_0 = 1.1977e-5
 
 
 # Optimization
-bounds = ((35.2, 36.2), (26.6, 27.6), (0.7, 1.3), (0.7, 1.3))
+bounds = ((35.2, 36.2), (26.6, 27.6), (0.7, 1.3), (0.7, 1.3), (0.7, 1.3))
 opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
                                       strategy='best2bin', maxiter=20, popsize=30, tol=5.0e-6,
                                       atol=0.5e-6, disp=True, polish=True, workers=-1)
@@ -268,8 +270,9 @@ theta_0 = w_0[0]
 d_theta = w_0[1]
 alpha = w_0[2]
 scale = w_0[3]
+scaleb = w_0[4]
 W_0 = theta_0 + d_theta
-pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale)
+pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
                                                                          ic[5], pot_list)
 
@@ -287,7 +290,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
-plt.show()
+# plt.show()
 fig.savefig("plots/orbit_pot-slice-barions_from_IbataPolysGaiaDR2-data.png")
 
 
@@ -332,5 +335,5 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
-plt.show()
+# plt.show()
 fig.savefig("plots/sky_pot-slice-barions_from_IbataPolysGaiaDR2-data.png")

@@ -122,9 +122,9 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
     # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
     # Transformation to ICRS coordinates
     icrs_coord = galac_coord.transform_to(coord.ICRS)
-    mu_ra = icrs_coord.pm_ra_cosdec / np.cos(icrs_coord.dec)
+    mu_ra = icrs_coord.pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2]
+    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
 
 
 class IbaPoly:
@@ -172,15 +172,11 @@ Iba_sky['mu_ra'] = pol.MU_RA(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['mu_dec'] = pol.MU_DEC(cfg.deg2rad*Iba_sky['phi_1'])
 
 
-def chi2(w_0):
+def chi2(w_0, pot_list):
     """Chi^2 function."""
     import wrap
 
-    ener_f = 56.0  # keV
-    theta_0, d_theta, beta_0 = 3.577681843966851005e+01, 2.712173245217939055e+01, 1.1977e-5
-    W_0 = theta_0 + d_theta
-    pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
-    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(
+    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         w_0[0], w_0[1], w_0[2], w_0[3], w_0[4], w_0[5], pot_list)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
     cfg.d_hel_spl = interp1d(phi_1, d_hel, kind='cubic')
@@ -194,22 +190,22 @@ def chi2(w_0):
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['phi_2']
-    sigma2 = 1.0
+    sigma2 = 0.5**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 10.0
+    sigma2 = 1.5**2
     sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 10.0
+    sigma2 = 4.0
     sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 10.0
+    sigma2 = 4.0
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
@@ -217,7 +213,7 @@ def chi2(w_0):
     sigma2 = 100.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    print('chi^2 =', np.sum(sum))
+    print('chi^2 =', np.sum(sum), 'v_circ =', v_circ)
     return np.sum(sum)
 
 
@@ -250,22 +246,24 @@ bounds = ((w_ic[0]-dw[0], w_ic[0]+dw[0]), (w_ic[1]-dw[1], w_ic[1]+dw[1]), (w_ic[
 r_sun = 8.0  # 8.122
 param_file = 'param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt'
 
+ener_f = 56.0  # keV
+theta_0, d_theta, beta_0 = 3.595711139271328705e+01, 2.725291292672873666e+01, 1.1977e-5
+W_0 = theta_0 + d_theta
+pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
+
 # Optimization
 
-opt = optimize.differential_evolution(chi2, bounds, strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
+opt = optimize.differential_evolution(chi2, bounds, args=([pot_list]), strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
                                       atol=0.5e-8, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
 w_0 = param_fitted
-# # w_0 = np.loadtxt(param_file)
-# w_0 = w_ic
+# w_0 = np.loadtxt(param_file)
+
 print("w_0=", w_0)
-chi2(w_0)
-ener_f = 56.0  # keV
-theta_0, d_theta, beta_0 = 3.577681843966851005e+01, 2.712173245217939055e+01, 1.1977e-5
-W_0 = theta_0 + d_theta
-pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
-phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z = orbit_model(w_0[0], w_0[1], w_0[2], w_0[3],
+chi2(w_0, pot_list)
+
+phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(w_0[0], w_0[1], w_0[2], w_0[3],
                                                                  w_0[4], w_0[5], pot_list)
 
 
@@ -283,7 +281,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.tight_layout()
 # plt.show()
-fig.savefig("plots/orbit_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
+fig.savefig("plots/orbit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
 
 
 # Plots in the sky using the GD-1 frame
@@ -325,5 +323,5 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
-plt.show()
-fig.savefig("plots/sky_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
+# plt.show()
+fig.savefig("plots/sky_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")

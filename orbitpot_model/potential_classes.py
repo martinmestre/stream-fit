@@ -29,7 +29,7 @@ class Plummer:
 class RAR:
 	def __init__(self,param):
 		self.param = param
-		r,mass = model_def.model(self.param)
+		r,mass,nu = model_def.model(self.param)
 		isnan = np.argwhere(np.isnan(mass))
 		if (np.any(isnan)):
 			k = np.argwhere(np.isnan(mass))[0][0]

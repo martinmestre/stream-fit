@@ -58,10 +58,10 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     icrs_coord=coord.ICRS(ra=y[0]*u.degree, dec=y[1]*u.degree,
                 distance=y[2]*u.kpc,
-                pm_ra_cosdec=y[3]*u.mas/u.yr*np.cos(y[1]*u.degree),
+                pm_ra_cosdec=y[3]*u.mas/u.yr, # *np.cos(y[1]*u.degree),
                 pm_dec=y[4]*u.mas/u.yr,
                 radial_velocity=y[5]*u.km/u.s)
-    mu_ra = icrs_coord.pm_ra_cosdec / np.cos(icrs_coord.dec)
+    mu_ra = icrs_coord.pm_ra_cosdec  # / np.cos(icrs_coord.dec)
     mu_dec= icrs_coord.pm_dec
     gd1_coord = icrs_coord.transform_to(GD1_class.GD1Koposov10)
     phi_1 = gd1_coord.phi1
@@ -241,12 +241,12 @@ fig, (ax1,ax2,ax3,ax4,ax5) = plt.subplots(5, 1, sharex=True, figsize=(7,35))
 
 
 # Sky position
-ax1.set_title('Ibata+20 data with RAR and barions')
-ax1.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red')
-ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Stream\n(Ibata+2020)')
+ax1.set_title('Ibata+20 (Polynomials) data fitted by axisymmetric NFW halo plus barions')
+ax1.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red', label='Malhan et Ibata fit')
+ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='GD-1 (Ibata+2020)')
 ax1.set_ylim(-4,2)
 ax1.set_ylabel(r'$\phi_2$ [degrees]')
-
+ax1.legend()
 
 # heliocentric radial velocity
 ax2.scatter(phi_1.wrap_at(180*u.deg),v_hel,s=0.1,marker='o', color='red')
@@ -264,17 +264,17 @@ ax3.set_ylabel(r'$D$ [kpc]')
 ax4.scatter(phi_1,mu_ra,s=0.5, color='red')
 ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
 ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
-ax4.legend()
 
 # proper motion along DEC
 ax5.scatter(phi_1,mu_dec,s=0.5, color='red')
 ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Stream\n(Ibata+2020)')
 ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]')
-ax5.legend()
+
 
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0],IbaPoly.limit[1])
-plt.tight_layout()
+# plt.tight_layout()
+
 plt.show()
 fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_Polys.png")
 
