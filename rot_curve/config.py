@@ -7,6 +7,7 @@ deg2rad = np.pi/180.0
 # Splines
 r_max_mw = 0
 mass_spline = 0
+nu_spline = 0
 phi_1_min = 0
 phi_1_max = 0
 phi_2_spl = 0
@@ -19,6 +20,7 @@ mu_dec_spl = 0
 ra_min = 0
 ra_max = 0
 dec_spl = 0
+
 
 # Model parameters
 g = 4.300923924e-6
