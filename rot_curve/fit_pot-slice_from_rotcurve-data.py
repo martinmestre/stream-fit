@@ -105,12 +105,12 @@ v_data = v_Eilers['v']
 
 # Optimization
 bounds = ((35, 41), (25, 31))
-# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, r_data, v_data, dv_data),
-#                                       strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
-#                                       atol=0., disp=True, polish=True, workers=-1)
-# param_fitted = opt.x
-# np.savetxt(param_file, param_fitted, delimiter=',')
-# w_0 = param_fitted
+opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, r_data, v_data, dv_data),
+                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
+                                      atol=0., disp=True, polish=True, workers=-1)
+param_fitted = opt.x
+np.savetxt(param_file, param_fitted, delimiter=',')
+w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
 
 chi2(w_0, ener_f, beta_0, r_data, v_data, dv_data)

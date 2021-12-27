@@ -19,6 +19,7 @@ mu_dec_spl = 0
 ra_min = 0
 ra_max = 0
 dec_spl = 0
+r_aux = 0
 
 # Model parameters
 g = 4.300923924e-6

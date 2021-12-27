@@ -53,7 +53,6 @@ class RAR:
 		cfg.r_max = np.amax(r_s)
 		cfg.mass_spline = InterpolatedUnivariateSpline(r_s, mass_s, k=4)
 		cfg.nu_spline = InterpolatedUnivariateSpline(r_s, nu_s, k=4)
-		print('r_max=',r[-1])
 
 	def mass_wrap(self, r):
 		"""Wrap."""

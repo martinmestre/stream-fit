@@ -1,21 +1,26 @@
 """Test example for RAR model."""
 
 import numpy as np
-import model_def
+import model_def_units as model_def
 import matplotlib.pyplot as plt
 from scipy.interpolate import InterpolatedUnivariateSpline
+import astropy.units as u
+import time
 
 # Model evaluation
-ener_f = 56.0
+ener_f = 56.0*u.keV
 # theta_0, W_0, beta_0 = 3.77780827e+01, 6.63468885e+01, 1.20446329e-05
 theta_0 = 3.623511473208260014e+01
 W_0 = theta_0 + 2.745737545624503895e+01
 beta_0 = 1.1977e-5
-param = np.array([ener_f, theta_0, W_0, beta_0])
+param = [ener_f, theta_0, W_0, beta_0]
+start_time = time.time()
 r, mass, nu = model_def.model(param)
+execution_time = (time.time()-start_time)
+print('time=', execution_time)
 
 # Density profile
-mass_spline = InterpolatedUnivariateSpline(r, mass, k=4)  # Allows easy computation of derivatives
+mass_spline = InterpolatedUnivariateSpline(r.value, mass.value, k=4)  # Allows easy computation of derivatives
 
 
 def rho_spline(r):
@@ -24,7 +29,11 @@ def rho_spline(r):
     return deriv(r)/(4.0*np.pi*r*r)
 
 
+r = r.value
+mass = mass.value
 rho = rho_spline(r)
+
+np.savetxt('test.out', np.column_stack((r, mass, nu)))
 
 # Plots
 fig = plt.figure(figsize=(10, 7))

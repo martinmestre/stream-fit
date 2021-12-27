@@ -252,14 +252,14 @@ beta_0 = 1.1977e-5
 
 # Optimization
 bounds = ((35, 37), (26, 28))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
-                                      atol=0.0, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
+# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+#                                       strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
+#                                       atol=0.0, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
-# chi2(w_0, ener_f, beta_0, ic)
+chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
