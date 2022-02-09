@@ -23,15 +23,19 @@ import pandas as pd
 
 # Rar model evaluation
 ener_f = 56.0  # keV
-param = np.array([ener_f, 3.77780827e+01, 6.63468885e+01, 1.20446329e-05])  # 
-r_mw,mass_mw = model_def.model(param)
+param = np.array([ener_f, 3.77780827e+01, 6.63468885e+01, 1.20446329e-05])  #
+r_mw,mass_mw, nu = model_def.model(param)
 rho_mw = np.diff(mass_mw)/np.diff(r_mw)/(4.0*np.pi*r_mw[:-1]**2)  # M_sun/pc^3
 
 # Interpolation avoiding NANs
-k = np.argwhere(np.isnan(mass_mw))[0][0]
-r_sh = r_mw[0:k]
-mass_sh = mass_mw[0:k]
-cfg.r_max_mw=r_sh[-1]
+isnan = np.argwhere(np.isnan(mass_mw))
+if (np.any(isnan)):
+    k = isnan[0][0]
+else:
+    k = -1
+    r_sh = r_mw[0:k]
+    mass_sh = mass_mw[0:k]
+cfg.r_max_mw = r_sh[-1]
 
 cfg.mass_spline = InterpolatedUnivariateSpline(r_sh,mass_sh,k=4)  # Allows easy computation of derivatives
 def rho_spline(r) :
@@ -62,7 +66,7 @@ def rot_vel_mw(r):
 # The orbit_model here defined works with sky coordinates at input and sky-cartesian at output
 def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
 #    print('param= ',alpha,delta,distance,mu_alpha,mu_delta,v_los)
-    
+
     # Transformation to galactocentric coordinates
     sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
                 distance=distance*u.kpc,
@@ -76,30 +80,30 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
                                 galcen_v_sun=v_sun,
                                 z_sun=z_sun)
     galac_coord= sky_coord.transform_to(frame)
-    
+
     w_0 = np.zeros(6)
     w_0[:3]=[galac_coord.x/u.kpc,galac_coord.y/u.kpc,galac_coord.z/u.kpc]
     w_0[3:]=[galac_coord.v_x/(u.km/u.s),galac_coord.v_y/(u.km/u.s),galac_coord.v_z/(u.km/u.s)]
 
-    
+
     # ODE integration
     unit_t = 0.977792221680356   # Gyr
     time_span_s2 = 0.2/unit_t #
-    t_0=0.0/unit_t    
+    t_0=0.0/unit_t
     n_steps = 1000
     t_back = np.linspace(t_0,-time_span_s2, n_steps+1)
-    t_forw = np.linspace(t_0,time_span_s2, n_steps+1)       
+    t_forw = np.linspace(t_0,time_span_s2, n_steps+1)
     sol_back = solve_ivp(symp_grad_mw, [t_0,-time_span_s2], w_0, t_eval=t_back,method='DOP853',rtol=5.0e-14,atol=0.5e-14)
     sol_forw = solve_ivp(symp_grad_mw, [t_0,time_span_s2], w_0, t_eval=t_forw,method='DOP853',rtol=5.0e-14,atol=0.5e-14)
-    
+
     t = np.concatenate([sol_back.t,sol_forw.t])
     y = np.concatenate([sol_back.y, sol_forw.y],axis=1)
     y = np.delete(y,0,axis=1) #Remove duplicated column
-    
+
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     galac_coord=coord.Galactocentric(x=y[0]*u.kpc,y=y[1]*u.kpc,z=y[2]*u.kpc,
                                      v_x=y[3]*u.km/u.s,v_y=y[4]*u.km/u.s,v_z=y[5]*u.km/u.s,
-                           galcen_distance=galcen_distance,galcen_v_sun=v_sun,z_sun=z_sun) 
+                           galcen_distance=galcen_distance,galcen_v_sun=v_sun,z_sun=z_sun)
     gd1_coord = galac_coord.transform_to(GD1_class.GD1Koposov10)
     phi_1 = gd1_coord.phi1
     phi_2 = gd1_coord.phi2
@@ -108,7 +112,7 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     mu_phi_1 = gd1_coord.pm_phi1_cosphi2/np.cos(phi_2)  #not used by Ibata
     mu_phi_2 = gd1_coord.pm_phi2
     #return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
-    # Transformation to ICRS coordinates      
+    # Transformation to ICRS coordinates
     icrs_coord=galac_coord.transform_to(coord.ICRS)
     mu_ra = icrs_coord.pm_ra_cosdec / np.cos(icrs_coord.dec)
     mu_dec= icrs_coord.pm_dec
@@ -121,7 +125,7 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
 # [x] = radians
 # [S] = radians
 # [D] = kpc
-# [V] = km/s                                                              
+# [V] = km/s
 # [MU] = mas/year
 class IbaPoly:
     def S(self,x):
@@ -147,13 +151,13 @@ Iba_sky['d_hel'] = pol.D(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['v_hel'] = pol.V(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['mu_ra'] = pol.MU_RA(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['mu_dec'] = pol.MU_DEC(cfg.deg2rad*Iba_sky['phi_1'])
-    
-    
+
+
 # Chi^2 function
 def chi2(w_0):
     import wrap
-    
-    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x,y,z = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5]) 
+
+    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x,y,z = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
     cfg.phi_2_spl = interp1d(phi_1,phi_2,kind='cubic')
     cfg.d_hel_spl = interp1d(phi_1,d_hel,kind='cubic')
     cfg.v_hel_spl = interp1d(phi_1,v_hel,kind='cubic')
@@ -162,8 +166,8 @@ def chi2(w_0):
 
     cfg.phi_1_min = np.amin(phi_1.value)
     cfg.phi_1_max = np.amax(phi_1.value)
-  
-    
+
+
     sum=np.zeros(5)
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
@@ -190,7 +194,7 @@ def chi2(w_0):
     y_dat = Iba_sky['mu_dec']
     sigma2 = 1.0
     sum[4] = np.sum( (y_dat-y_mod)**2 / sigma2 )
-    
+
     print('chi^2 =',np.sum(sum))
     return np.sum(sum)
 
@@ -211,8 +215,8 @@ u_0=np.array([Iba_sky['phi_1'][k0],Iba_sky['phi_2'][k0],Iba_sky['d_hel'][k0],
               Iba_sky['mu_ra'][k0],Iba_sky['mu_dec'][k0],Iba_sky['v_hel'][k0]])
 w_0 = invert_ic(u_0)
 
-#w_0=np.array([157.6,43.717, 8.25, -6.53 ,-11.0 , -90.0]) 
-#w_0=np.array([154.43815737978053, 41.352611518783334, 9.127975838807465, -6.135527680412597, -9.275558167001593, -63.00000001]) 
+#w_0=np.array([157.6,43.717, 8.25, -6.53 ,-11.0 , -90.0])
+#w_0=np.array([154.43815737978053, 41.352611518783334, 9.127975838807465, -6.135527680412597, -9.275558167001593, -63.00000001])
 #w_0=np.array([1.559367262212365404e+02,4.244852938178294721e+01,7.808891728113153796e+00,-8.257404940737194110e+00,-1.118645915891409359e+01,-6.129407632055352195e+01])
 dw = np.abs(w_0)*0.5
 bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],w_0[2]+dw[2]),
@@ -227,7 +231,7 @@ print('v_circ(r_sun)=',v_circ_sun)
 
 # param_fitted = opt.x
 
-# np.savetxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt', param_fitted, delimiter=',')  
+# np.savetxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt', param_fitted, delimiter=',')
 
 
 # Test call:
@@ -253,7 +257,7 @@ w_0 = np.loadtxt('param_fit_IbataPolysGaiaDR2_to_RARbarions.txt')
 
 
 print("w_0=",w_0)
-phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel,x,y,z = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5]) 
+phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel,x,y,z = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
 
 
 # Plot in galactocentric coordinates

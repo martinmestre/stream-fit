@@ -3,6 +3,7 @@
 Metric convention:
 g_00 = e^(nu)
 g_11 = -e^(lambda)
+
 """
 
 from scipy.integrate import solve_ivp
