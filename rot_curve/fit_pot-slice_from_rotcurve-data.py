@@ -15,7 +15,6 @@ import pandas as pd
 import potential_classes as pot
 from scipy.integrate import solve_ivp
 from scipy import optimize
-from scipy.interpolate import interp1d
 import vel_Sofue13 as data
 
 
@@ -92,16 +91,16 @@ ener_f = 56.0  # keV
 beta_0 = 1.1977e-5
 
 # Set rotation data from Sofue 2013
-# r_data = data.v_Sof['r']/1.e3  # now in kpc.
-# v_data = data.v_Sof['v']
-# dv_data = data.v_Sof['err_v']
+r_data = data.v_Sof['r']/1.e3  # now in kpc.
+v_data = data.v_Sof['v']
+dv_data = data.v_Sof['err_v']
 
 # Set rotation data from Eilers et al. 2019
-v_Eilers = pd.read_csv('vel_Eilers.txt', sep="  ")
-asym_error = [v_Eilers['e_down'], v_Eilers['e_up']]
-dv_data = 0.5*(v_Eilers['e_down']+v_Eilers['e_up'])
-r_data = v_Eilers['r']
-v_data = v_Eilers['v']
+# v_Eilers = pd.read_csv('vel_Eilers.txt', sep="  ")
+# asym_error = [v_Eilers['e_down'], v_Eilers['e_up']]
+# dv_data = 0.5*(v_Eilers['e_down']+v_Eilers['e_up'])
+# r_data = v_Eilers['r']
+# v_data = v_Eilers['v']
 
 # Optimization
 bounds = ((35, 41), (25, 31))
