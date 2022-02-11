@@ -1,12 +1,17 @@
-"""RAR model."""
+"""RAR model.
+
+Metric convention:
+g_00 = e^(nu)
+g_11 = -e^(lambda)
+
+"""
 
 from scipy.integrate import solve_ivp
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 from scipy.interpolate import interp1d
 from scipy.interpolate import InterpolatedUnivariateSpline
-from scipy.optimize import least_squares
+
 
 
 def model(param):
@@ -125,11 +130,11 @@ def model(param):
     min_r = 1.0e-16  # kpc
     max_r = 1.0e3  # kpc
     machine_eps = np.finfo(float).eps
-    
+
     # Set initial conditions
     psi_0 = 2.0*tau
     z_0 = np.log(psi_0)
-    nu_0 = tau
+    nu_0 = 2.0*tau
     theta_0 = param[1]  # 35.55
     W_0 = param[2]  # 80.0
     beta_0 = param[3]  # 1.0e-5
@@ -138,14 +143,14 @@ def model(param):
     rho_0 = density(n_eos, alpha_0, beta_0, eps_0)
 
     u_0 = [z_0, nu_0]
-    t_0 = np.log(np.sqrt(6.0*tau*rho_0/rho_rel))
+    t_0 = np.log(np.sqrt(6.0*tau*rho_rel/rho_0))
     t_f = np.log(max_r/cm2kpc/R)
 
     # Solving the TOV system
     sol = solve_ivp(tov, [t_0, t_f], u_0, method='LSODA',
                     events=(border_density),
                     rtol=5.0e-14, atol=0.0)
-  
+
     # Defining physical variables
     r = np.exp(sol.t)*R
     z = sol.y[0]
@@ -160,7 +165,7 @@ def model(param):
     nu = nu + nu_origin*np.ones(len(nu))
 
     # In astrophysical units
-    r = r*cm2kpc  # kpc   
+    r = r*cm2kpc  # kpc
     mass = mass*g2Msun  # M_sun
     bool_r = (r > min_r)
     r = r[bool_r]
