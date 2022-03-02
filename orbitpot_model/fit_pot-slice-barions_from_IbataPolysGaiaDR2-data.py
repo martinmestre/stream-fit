@@ -194,27 +194,26 @@ def chi2(w_0, ener_f, beta_0, ic):
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['phi_2']
-    sigma2 = 1.0
+    sigma2 = 0.5**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 100.0
-    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
-    sum[1] = 0.0
-
-    y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['v_hel']
-    sigma2 = 1000.0
-    sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
+    sigma2 = 1.5**2
+    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 1.0
-    sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
+    sigma2 = 4.0
+    sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
+    sigma2 = 4.0
+    sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['v_hel']
     sigma2 = 100.0
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
@@ -252,18 +251,18 @@ param_file = 'param_fit_pot-slice-barions_from_IbataPolysGaiaDR2-data.txt'
 r_sun = 8.0    # 8.122
 ener_f = 56.0  # keV
 # d_theta = 28.5751
-beta_0 = 1.1977e-5
+beta_0 = 1.25e-5  # 1.1977e-5
 
 
 # Optimization
-bounds = ((35.2, 36.2), (26.6, 27.6), (0.7, 1.3), (0.7, 1.3), (0.7, 1.3))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=20, popsize=30, tol=5.0e-6,
-                                      atol=0.5e-6, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
-# w_0 = np.loadtxt(param_file)
+# bounds = ((34, 39), (25, 30), (0.85, 1.15), (0.9, 1.1), (0.9, 1.1))
+# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+#                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-6,
+#                                      atol=0.5e-6, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
+w_0 = np.loadtxt(param_file)
 chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
@@ -335,5 +334,5 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
-# plt.show()
+plt.show()
 fig.savefig("plots/sky_pot-slice-barions_from_IbataPolysGaiaDR2-data.png")

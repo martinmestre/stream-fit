@@ -8,11 +8,10 @@ g_11 = -e^(lambda)
 
 from scipy.integrate import solve_ivp
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 from scipy.interpolate import interp1d
 from scipy.interpolate import InterpolatedUnivariateSpline
-from scipy.optimize import least_squares
+
 
 
 def model(param):
