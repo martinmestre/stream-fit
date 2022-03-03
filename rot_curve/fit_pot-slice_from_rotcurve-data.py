@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 import config as cfg
 import pandas as pd
 import potential_classes as pot
+import vel_Sofue13 as data
 from scipy.integrate import solve_ivp
 from scipy import optimize
-import vel_Sofue13 as data
 
 
 def accel_mw(pot_list, x, y, z):
@@ -85,7 +85,8 @@ def chi2(w_0, ener_f, beta_0, r_data, v_data, dv_data):
 
 
 # Parameters
-param_file = 'param_fit_pot-slice_from_Eilers19-data.txt'
+param_file = 'param_fit_pot-slice_from_Sofue13-data.txt'
+# param_file = 'param_fit_pot-slice_from_Eilers19-data.txt'
 ener_f = 56.0  # keV
 # d_theta = 28.5751 # this is a fitted parameter.
 beta_0 = 1.1977e-5
@@ -103,14 +104,25 @@ dv_data = data.v_Sof['err_v']
 # v_data = v_Eilers['v']
 
 # Optimization
-bounds = ((35, 41), (25, 31))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, r_data, v_data, dv_data),
-                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
-                                      atol=0., disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
+# bounds = ((35, 41), (25, 31))
+# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, r_data, v_data, dv_data),
+#                                       strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-8,
+#                                       atol=0., disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
+
+# Tests for the crests of maximus.
+
+# beta_0 = 1.0e-5
+# w_0 = [36.5310621242485, 27.687374749498996]
+
+# beta_0 = 1.2e-05
+# w_0 = [36.28657314629258, 27.494989979959918]
+
+# beta_0 = 1.5e-05
+# w_0 = [36.02204408817635, 27.286573146292586]
 
 chi2(w_0, ener_f, beta_0, r_data, v_data, dv_data)
 theta_0 = w_0[0]
@@ -125,13 +137,13 @@ fig = plt.figure(figsize=(10, 6))
 
 plt.scatter(r, v_mod, s=8, marker='o', color='red', label='Best fit')
 plt.errorbar(r_data, v_data, yerr=dv_data, fmt='o', color='cyan', label='Sofue+13')
-plt.xlim(0, 40)
+# plt.xlim(0, 40)
 plt.ylim(0, 300)
 plt.xlabel('r')
 plt.ylabel('v_r')
-# plt.xscale('symlog')
+plt.xscale('log')
 plt.grid()
 plt.legend()
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/orbit_pot-slice_from_Eilers19-data.png")
+fig.savefig("plots/orbit_pot-slice_from_Sofue13-data.png")
