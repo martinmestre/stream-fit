@@ -49,13 +49,15 @@ def rot_vel_mw(pot_list, r):
     return np.sqrt(r*(grad_mw(pot_list, r, 0, 0)[0]))
 
 
-def pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb):
+def pot_model(ener_f, theta_0, W_0, beta_0, scales):
     """Potential model including barions and dark matter halo."""
     # Set barionic potentials
+    scaleM_thin, scaleR_thin, scaleZ_thin = scales[0:3]
+    scaleM_thick, scaleR_thick, scaleZ_thick = scales[3:6]
     M_gal = 2.32e7  # Msun
     bulge = pot.Plummer(460.0*M_gal, 0.3)
-    thin = pot.MiyamotoNagai(1700.0*M_gal*alpha, 5.3*scale, 0.25*scaleb)
-    thick = pot.MiyamotoNagai(1700.0*M_gal*alpha, 2.6*scale, 0.8*scaleb)
+    thin = pot.MiyamotoNagai(1700.0*M_gal*scaleM_thin, 5.3*scaleR_thin, 0.25*scaleZ_thin)
+    thick = pot.MiyamotoNagai(1700.0*M_gal*scaleM_thick, 2.6*scaleR_thick, 0.8*scaleZ_thick)
     # Set halo potential
     param = np.array([ener_f, theta_0, W_0, beta_0])
     halo = pot.RAR(param)
@@ -193,11 +195,9 @@ def chi2(w_0, ener_f, beta_0, ic):
     import wrap
     theta_0 = w_0[0]
     d_theta = w_0[1]
-    alpha = w_0[2]
-    scale = w_0[3]
-    scaleb = w_0[4]
+    scales = w_0[2:8]
     W_0 = theta_0 + d_theta
-    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb)
+    pot_list = pot_model(ener_f, theta_0, W_0, beta_0, scales)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
@@ -237,10 +237,11 @@ def chi2(w_0, ener_f, beta_0, ic):
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     # Rotation curve contribution
+    weight = 0.25
     v_mod = rot_curve_model(pot_list, r_data)
-    sum[5] = np.sum((v_data-v_mod)**2 / dv_data**2)
+    sum[5] = weight*np.sum((v_data-v_mod)**2 / dv_data**2)
 
-    print('stream chi^2 =', np.sum(sum[0:5]), '----   Rotation chi^2 =', sum[5])
+    print('stream chi^2 =', np.sum(sum[0:5]), '---   Rotation chi^2 =', sum[5])
     print(' v_circ = ', v_circ)
     print(' theta_0 =', theta_0, ' W_0 =', W_0, ' alpha =', alpha, ' scale =', scale, 'scaleb =', scaleb)
     return np.sum(sum)
@@ -279,10 +280,12 @@ beta_0 = 1.25e-5  # 1.1977e-5
 
 
 # Optimization
-bounds = ((34, 39), (25, 30), (0.85, 1.15), (0.9, 1.1), (0.9, 1.1))
+bounds = ((34, 39), (25, 30),
+          (0.85, 1.15), (0.9, 1.1), (0.9, 1.1),
+          (0.85, 1.15), (0.9, 1.1), (0.9, 1.1))
 opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=40, popsize=40, tol=5.0e-6,
-                                      atol=0.5e-6, disp=True, polish=True, workers=-1)
+                                      strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-6,
+                                      atol=0.0, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
 w_0 = param_fitted
@@ -291,16 +294,15 @@ chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
-alpha = w_0[2]
-scale = w_0[3]
-scaleb = w_0[4]
+scales = w_0[2:8]
 W_0 = theta_0 + d_theta
-pot_list = pot_model(ener_f, theta_0, W_0, beta_0, alpha, scale, scaleb)
+pot_list = pot_model(ener_f, theta_0, W_0, beta_0, scales)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
                                                                          ic[5], pot_list)
 
 print('Model parameters:')
-print('theta_0, W_0, beta_0, alpha =', theta_0, W_0, beta_0, alpha)
+print('theta_0, W_0, beta_0 =', theta_0, W_0, beta_0)
+print('scales = ', scales)
 print('IC:', ic)
 
 # Plot in galactocentric coordinates
@@ -358,5 +360,5 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
-plt.show()
+#plt.show()
 fig.savefig("plots/sky_pot-slice-rot-barions_from_IbataPolysGaiaDR2-data.png")
