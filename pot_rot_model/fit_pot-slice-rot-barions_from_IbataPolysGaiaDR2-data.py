@@ -121,6 +121,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
     galac_coord = coord.Galactocentric(x=y[0]*u.kpc, y=y[1]*u.kpc, z=y[2]*u.kpc,
                                        v_x=y[3]*u.km/u.s, v_y=y[4]*u.km/u.s, v_z=y[5]*u.km/u.s,
                                        galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
+
     gd1_coord = galac_coord.transform_to(GD1_class.GD1Koposov10)
     phi_1 = gd1_coord.phi1
     phi_2 = gd1_coord.phi2
@@ -241,9 +242,10 @@ def chi2(w_0, ener_f, beta_0, ic):
     v_mod = rot_curve_model(pot_list, r_data)
     sum[5] = weight*np.sum((v_data-v_mod)**2 / dv_data**2)
 
-    print('stream chi^2 =', np.sum(sum[0:5]), '---   Rotation chi^2 =', sum[5])
+    print('Stream chi^2 =', np.sum(sum[0:5]), '  ---   Rotation chi^2 =', sum[5])
     print(' v_circ = ', v_circ)
-    print(' theta_0 =', theta_0, ' W_0 =', W_0, ' alpha =', alpha, ' scale =', scale, 'scaleb =', scaleb)
+    print(' theta_0 =', theta_0, ' W_0 =', W_0)
+    print('scales =', scales)
     return np.sum(sum)
 
 
@@ -284,7 +286,7 @@ bounds = ((34, 39), (25, 30),
           (0.85, 1.15), (0.9, 1.1), (0.9, 1.1),
           (0.85, 1.15), (0.9, 1.1), (0.9, 1.1))
 opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-6,
+                                      strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-7,
                                       atol=0.0, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
@@ -360,5 +362,5 @@ plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
-#plt.show()
+# plt.show()
 fig.savefig("plots/sky_pot-slice-rot-barions_from_IbataPolysGaiaDR2-data.png")
