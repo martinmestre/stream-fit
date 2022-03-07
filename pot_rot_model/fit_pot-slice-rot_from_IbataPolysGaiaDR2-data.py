@@ -196,7 +196,7 @@ def chi2(w_0, ener_f, beta_0, ic):
     import wrap
     theta_0 = w_0[0]
     d_theta = w_0[1]
-    scales = w_0[2:8]
+    scales = np.ones(6)
     W_0 = theta_0 + d_theta
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0, scales)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
@@ -274,29 +274,37 @@ ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.91703954514
 
 
 # Parameters
-param_file = 'param_fit_pot-slice-rot-barions_from_IbataPolysGaiaDR2-data.txt'
-r_sun = 8.0    # 8.122
-ener_f = 56.0  # keV
-# d_theta = 28.5751
-beta_0 = 1.25e-5  # 1.1977e-5
-
+param_file = 'param_fit_pot-slice-rot_from_IbataPolysGaiaDR2-data.txt'
+inparam_file = 'inparam.txt'
+r_sun, ener_f, beta_0, weight, bool_opt = np.loadtxt(inparam_file)
+print('inparams:')
+print('r_sun = ', r_sun, ' kpc')
+print('ener_f = ', ener_f, ' keV')
+print('beta_0 = ', beta_0 )
+print('weight = ', weight)
+if(bool_opt==0):
+    bool_opt = False
+else:
+    bool_opt = True
+print('bool_opt = ', bool_opt)
 
 # Optimization
-bounds = ((34, 39), (25, 30),
-          (0.85, 1.15), (0.9, 1.1), (0.9, 1.1),
-          (0.85, 1.15), (0.9, 1.1), (0.9, 1.1))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-7,
+if(bool_opt):
+    bounds = ((34, 39), (25, 30))
+    opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+                                      strategy='best2bin', maxiter=50, popsize=100, tol=5.0e-4,
                                       atol=0.0, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
-# w_0 = np.loadtxt(param_file)
+    param_fitted = opt.x
+    np.savetxt(param_file, param_fitted, delimiter=',')
+    w_0 = param_fitted
+else:
+    w_0 = np.loadtxt(param_file)
+
 chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
-scales = w_0[2:8]
+scales = np.ones(6)
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0, scales)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
@@ -307,7 +315,12 @@ print('theta_0, W_0, beta_0 =', theta_0, W_0, beta_0)
 print('scales = ', scales)
 print('IC:', ic)
 
+# ---------
+# Plots
+#----------
+
 # Plot in galactocentric coordinates
+#-----------------------------------
 fig = plt.figure(figsize=(10, 10))
 
 plt.scatter(x, y, s=0.1, marker='o', color='red')
@@ -317,11 +330,11 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
+fig.savefig("plots/orbit_pot-slice-rot_from_IbataPolysGaiaDR2-data.png")
 # plt.show()
-fig.savefig("plots/orbit_pot-slice-barions_from_IbataPolysGaiaDR2-data.png")
-
 
 # Plots in the sky using the GD-1 frame
+#--------------------------------------
 fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35))
 
 
@@ -361,6 +374,29 @@ ax5.legend()
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
-
+fig.savefig("plots/sky_pot-slice-rot-rot_from_IbataPolysGaiaDR2-data.png")
 # plt.show()
-fig.savefig("plots/sky_pot-slice-rot-barions_from_IbataPolysGaiaDR2-data.png")
+
+
+# Plot of rotation curve
+#-----------------------
+r_grid=np.logspace(-7,2,1000)
+v_mod = rot_curve_model(pot_list, r_grid)
+v_Sof20=pd.read_csv('vel_Sofue20.txt', sep=" ")
+
+fig = plt.figure(figsize=(10,7))
+font = {"size": 15}
+plt.rc('font', **font)
+plt.scatter(r_grid,v_mod,s=8,marker='o', color='red', label='RAR+barions--spline')
+plt.errorbar(v_Sof20['Radius'],v_Sof20['Velocity'],yerr=v_Sof20['Error'],fmt='o',color='black',label='Sofue+20')
+plt.xlim(1.e-7,40)
+plt.ylim(1.e-2,300)
+plt.xlabel(r'$r$ [kpc]')
+plt.ylabel(r'$v_r$ [km/s]')
+plt.grid(True)
+plt.legend()
+# plt.xscale('log')
+# plt.yscale('log')
+plt.title(r'Rotation curve that fits GD-1 stream (RAR with $\beta_0=1.25\times 10^{-5}$)')
+plt.savefig('plots/rotation_curve_beta0_1.25e-5.png')
+# plt.show()
