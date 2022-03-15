@@ -5,7 +5,7 @@ Computation of the orbit model for RAR + barionic component.
 Using Ibata+20 polinomial data-fits.
 Optimization to fit the best RAR parameters.
 
-Author: Martín Mestre.
+Author: Martin Mestre.
 """
 
 import numpy as np
@@ -238,7 +238,6 @@ def chi2(w_0, ener_f, beta_0, ic):
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     # Rotation curve contribution
-    weight = 0.25
     v_mod = rot_curve_model(pot_list, r_data)
     sum[5] = weight*np.sum((v_data-v_mod)**2 / dv_data**2)
 
@@ -280,9 +279,9 @@ r_sun, ener_f, beta_0, weight, bool_opt = np.loadtxt(inparam_file)
 print('inparams:')
 print('r_sun = ', r_sun, ' kpc')
 print('ener_f = ', ener_f, ' keV')
-print('beta_0 = ', beta_0 )
+print('beta_0 = ', beta_0)
 print('weight = ', weight)
-if(bool_opt==0):
+if(bool_opt == 0):
     bool_opt = False
 else:
     bool_opt = True
@@ -292,8 +291,8 @@ print('bool_opt = ', bool_opt)
 if(bool_opt):
     bounds = ((34, 39), (25, 30))
     opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=50, popsize=100, tol=5.0e-4,
-                                      atol=0.0, disp=True, polish=True, workers=-1)
+                                          strategy='best2bin', maxiter=100, popsize=200, tol=5.0e-6,
+                                          atol=0.5e-6, disp=True, polish=True, workers=-1)
     param_fitted = opt.x
     np.savetxt(param_file, param_fitted, delimiter=',')
     w_0 = param_fitted
@@ -317,10 +316,10 @@ print('IC:', ic)
 
 # ---------
 # Plots
-#----------
+# ----------
 
 # Plot in galactocentric coordinates
-#-----------------------------------
+# -----------------------------------
 fig = plt.figure(figsize=(10, 10))
 
 plt.scatter(x, y, s=0.1, marker='o', color='red')
@@ -330,11 +329,11 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
-fig.savefig("plots/orbit_pot-slice-rot_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("orbit_pot-slice-rot_from_IbataPolysGaiaDR2-data.png")
 # plt.show()
 
 # Plots in the sky using the GD-1 frame
-#--------------------------------------
+# --------------------------------------
 fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(7, 35))
 
 
@@ -374,23 +373,24 @@ ax5.legend()
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
-fig.savefig("plots/sky_pot-slice-rot-rot_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("sky_pot-slice-rot-rot_from_IbataPolysGaiaDR2-data.png")
 # plt.show()
 
 
 # Plot of rotation curve
-#-----------------------
-r_grid=np.logspace(-7,2,1000)
+# -----------------------
+r_grid = np.logspace(-7, 2, 1000)
 v_mod = rot_curve_model(pot_list, r_grid)
-v_Sof20=pd.read_csv('vel_Sofue20.txt', sep=" ")
+v_Sof20 = pd.read_csv('vel_Sofue20.txt', sep=" ")
 
-fig = plt.figure(figsize=(10,7))
+fig = plt.figure(figsize=(10, 7))
 font = {"size": 15}
 plt.rc('font', **font)
-plt.scatter(r_grid,v_mod,s=8,marker='o', color='red', label='RAR+barions--spline')
-plt.errorbar(v_Sof20['Radius'],v_Sof20['Velocity'],yerr=v_Sof20['Error'],fmt='o',color='black',label='Sofue+20')
-plt.xlim(1.e-7,40)
-plt.ylim(1.e-2,300)
+plt.scatter(r_grid, v_mod, s=8, marker='o', color='red', label='RAR+barions--spline')
+plt.errorbar(v_Sof20['Radius'], v_Sof20['Velocity'], yerr=v_Sof20['Error'], fmt='o',
+             color='black', label='Sofue+20')
+plt.xlim(1.e-7, 40)
+plt.ylim(1.e-2, 300)
 plt.xlabel(r'$r$ [kpc]')
 plt.ylabel(r'$v_r$ [km/s]')
 plt.grid(True)
@@ -398,5 +398,5 @@ plt.legend()
 # plt.xscale('log')
 # plt.yscale('log')
 plt.title(r'Rotation curve that fits GD-1 stream (RAR with $\beta_0=1.25\times 10^{-5}$)')
-plt.savefig('plots/rotation_curve_beta0_1.25e-5.png')
+plt.savefig('rotation_curve_beta0_1.25e-5.png')
 # plt.show()
