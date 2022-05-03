@@ -19,6 +19,7 @@ from astropy import units as u
 from scipy.integrate import solve_ivp
 from scipy import optimize
 from scipy.interpolate import interp1d
+from scipy.signal import argrelextrema
 
 
 def accel_mw(pot_list, x, y, z):
@@ -72,6 +73,24 @@ def rot_curve_model(pot_list, r):
     for i in range(0, len(r)):
         v_circ[i] = rot_vel_mw(pot_list, r[i])
     return v_circ
+
+
+def v_circular(r, mass_spline):
+    """Circular velocity."""
+    G_u = 4.3009e-6  # kpc (km/s)^2 M_sun^-1
+    return np.sqrt(G_u*mass_spline(r)/r)
+
+
+def get_core(r_s, m_spline):
+    """Core mass."""
+    arg_max = argrelextrema(v_circular(r_s, m_spline), np.greater)
+    arg_first_max = arg_max[0][0]
+    r_cand = r_s[arg_first_max]
+    bounds = np.array([r_cand*0.5, r_cand*1.5])
+    r_core = optimize.fminbound(lambda r: -v_circular(r, m_spline),
+                                bounds[0], bounds[1], xtol=0.5e-12, maxfun=1000)
+    m_core = m_spline(r_core)
+    return r_core, m_core
 
 
 def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list):
@@ -308,12 +327,19 @@ W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0, scales)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
                                                                          ic[5], pot_list)
+rar_halo = pot_list[3]
+print(vars(rar_halo))
+print(rar_halo)
+print(rar_halo.r_s)
+print(rar_halo.mass_spline)
+r_core, mass_core = get_core(rar_halo.r_s, rar_halo.mass_spline)
 
 print('Model parameters:')
 print('theta_0, W_0, beta_0 =', theta_0, W_0, beta_0)
 print('scales = ', scales)
 print('IC:', ic)
-
+print('core radius = ', r_core)
+print('core mass = ', mass_core)
 # ---------
 # Plots
 # ----------
