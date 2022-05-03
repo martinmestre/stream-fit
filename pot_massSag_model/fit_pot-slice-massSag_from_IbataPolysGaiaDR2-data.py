@@ -282,9 +282,9 @@ ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.91703954514
 # Parameters
 param_file = 'param_fit_pot-slice-massSag_from_IbataPolysGaiaDR2-data.txt'
 inparam_file = 'inparam.txt'
-bounds_theta = np.zeros(2)
-bounds_dtheta = np.zeros(2)
-r_sun, ener_f, beta_0, weight, bool_opt, bounds_theta[0], bounds_theta[1], bounds_dtheta[0], bounds_dtheta[1] = np.loadtxt(inparam_file)
+bounds_theta_0 = np.zeros(2)
+bounds_d_theta = np.zeros(2)
+r_sun, ener_f, beta_0, weight, bool_opt, bounds_theta_0[0], bounds_theta_0[1], bounds_d_theta[0], bounds_d_theta[1], maxiter, popsize = np.loadtxt(inparam_file)
 print('inparams:')
 print('r_sun = ', r_sun, ' kpc')
 print('ener_f = ', ener_f, ' keV')
@@ -295,21 +295,25 @@ if(bool_opt == 0):
 else:
     bool_opt = True
 print('bool_opt = ', bool_opt)
-print('bounds_theta = ', bounds_theta)
-print('bounds_dtheta = ', bounds_dtheta)
-bounds = [bounds_theta, bounds_dtheta]
+print('bounds_theta = ', bounds_theta_0)
+print('bounds_dtheta = ', bounds_d_theta)
+print('maxiter =', int(maxiter))
+print('popsize =', int(popsize))
 
 # Optimization
 if(bool_opt):
+    bounds = [bounds_theta_0, bounds_d_theta]
     opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                          strategy='best2bin', maxiter=100, popsize=200, tol=5.0e-6,
-                                          atol=0.5e-6, disp=True, polish=True, workers=-1)
+                                          strategy='best2bin', maxiter=int(maxiter),
+                                          popsize=int(popsize), tol=5.0e-6,
+                                          atol=0.5e-6, disp=True, polish=True,
+                                          workers=-1)
     param_fitted = opt.x
     np.savetxt(param_file, param_fitted, delimiter=',')
     w_0 = param_fitted
 else:
     w_0 = np.loadtxt(param_file)
-w_0 = [3.617308965727325187e+01, 2.740902073407499984e+01]
+
 chi2(w_0, ener_f, beta_0, ic)
 
 
