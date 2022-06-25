@@ -243,18 +243,20 @@ bounds = ((w_ic[0]-dw[0], w_ic[0]+dw[0]), (w_ic[1]-dw[1], w_ic[1]+dw[1]), (w_ic[
           (w_ic[3]-dw[3], w_ic[3]+dw[3]), (w_ic[4]-dw[4], w_ic[4]+dw[4]), (w_ic[5]-dw[5], w_ic[5]+dw[5]))
 # bounds = ((100, 300), (4, 15), (-50, 50), (-50, 50), (-300, 300))
 
-r_sun = 8.0  # 8.122
-param_file = 'param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt'
+r_sun = 8.122  # 8.122
+param_file = 'param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot_ener360.txt'
 
-ener_f = 56.0  # keV
-theta_0, d_theta, beta_0 = 3.595711139271328705e+01, 2.725291292672873666e+01, 1.1977e-5
+
+# ener_f, theta_0, d_theta, beta_0 = 56.0, 36.224542166107774, 27.46389908753495, 1.2472408164492195e-5
+ener_f, theta_0, d_theta, beta_0 = 360.0, 43.09324206542024, 29.59101374198425, 0.0029974545524116413
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
 
 # Optimization
 
-opt = optimize.differential_evolution(chi2, bounds, args=([pot_list]), strategy='best2bin', maxiter=30, popsize=30, tol=5.0e-8,
-                                      atol=0.5e-8, disp=True, polish=True, workers=-1)
+opt = optimize.differential_evolution(chi2, bounds, args=([pot_list]), strategy='best2bin',
+                                      maxiter=100, popsize=200, tol=5.0e-7,
+                                      atol=0.5e-7, disp=True, polish=True, workers=-1)
 param_fitted = opt.x
 np.savetxt(param_file, param_fitted, delimiter=',')
 w_0 = param_fitted
@@ -264,7 +266,7 @@ print("w_0=", w_0)
 chi2(w_0, pot_list)
 
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(w_0[0], w_0[1], w_0[2], w_0[3],
-                                                                 w_0[4], w_0[5], pot_list)
+                                                                         w_0[4], w_0[5], pot_list)
 
 
 print('Model parameters:')
@@ -281,7 +283,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.tight_layout()
 # plt.show()
-fig.savefig("plots/orbit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
+fig.savefig("plots/orbit_orbit_from_IbataPolysGaiaDR2-data_fixedpot_ener360.png")
 
 
 # Plots in the sky using the GD-1 frame
@@ -324,4 +326,4 @@ plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
 # plt.show()
-fig.savefig("plots/sky_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
+fig.savefig("plots/sky_orbit_from_IbataPolysGaiaDR2-data_fixedpot_ener360.png")

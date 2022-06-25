@@ -13,7 +13,6 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import InterpolatedUnivariateSpline
 
 
-
 def model(param):
     """RAR model as a function."""
     def fermi(eps, alpha_r, beta_r, eps_r):
@@ -72,6 +71,23 @@ def model(param):
     border_density.terminal = True
     border_density.direction = -1
 
+    def dnu_dt(t, u):
+        """Derive nu respect to t."""
+        # Computing density and pressure:
+        exponential = np.exp(-0.5*(u[1]-nu_origin))
+        alpha_r = alpha_0*exponential
+        beta_r = beta_0*exponential
+        eps_r = eps_0*exponential
+        if(eps_r < 1.0):           # This is important to avoid NaNs and to define the halo border.
+            eps_r = 1.0
+
+        rho = density(n_eos, alpha_r, beta_r, eps_r)
+        P = pressure(n_eos, alpha_r, beta_r, eps_r)
+
+        d_nu = (np.exp(u[0]) + np.exp(2.0*t)*P/(rho_rel*c*c))/(1.0-np.exp(u[0]))
+
+        return d_nu
+
     def tov(t, u):
         """
         Tolman-Oppenheimer-Volkoff equation.
@@ -124,7 +140,7 @@ def model(param):
     R = c/np.sqrt(8.0*pi*G*rho_rel)
     M = 4.0*pi*R**3*rho_rel
     a = 4.0*rho_rel/np.sqrt(pi)
-    b = a*c*c
+    b = a*c*c/3.0
     n_eos = 2**10+1
     tau = 1.0e-15
     min_r = 1.0e-16  # kpc
@@ -172,6 +188,8 @@ def model(param):
     mass = mass[bool_r]
     nu = nu[bool_r]
 
+    dnu_dr = [dnu_dt(sol.t[i], [z[i], nu[i]])/r[i] for i in range(1, len(sol.t))]
+
     # Uncomment only if we need to check the Density.
     # mass_spline = InterpolatedUnivariateSpline(r, mass, k=4)  # Allows easy computation of derivatives
     # def rho_spline(r):
@@ -180,4 +198,4 @@ def model(param):
     #     return deriv(r)/(4.0*np.pi*r*r)
     # rho = rho_spline(r)
 
-    return r, mass, nu
+    return r, mass, nu, dnu_dr
