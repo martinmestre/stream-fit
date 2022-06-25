@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"julia.environmentPath": "/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/likelihood_grid"
+	}
+}
