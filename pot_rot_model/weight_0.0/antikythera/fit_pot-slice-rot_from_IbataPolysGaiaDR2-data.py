@@ -289,7 +289,9 @@ def invert_ic(u_0):
 # Taking the initial conditions from the Galpy fit with fixed MW2014 potential.
 ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
               -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
-
+# Optimized IC with fixed potential
+ic = np.array([148.87671997, 36.34168516,  7.95627538,
+               -6.87147041, -12.48727587, -16.05002458])
 
 # Parameters
 param_file = 'param_fit_pot-slice-rot_from_IbataPolysGaiaDR2-data_corr.txt'
@@ -311,7 +313,7 @@ print('bool_opt = ', bool_opt)
 if(bool_opt):
     bounds = ((34, 39), (25, 30))
     opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                          strategy='best2bin', maxiter=100, popsize=200, tol=5.0e-6,
+                                          strategy='best2bin', maxiter=50, popsize=100, tol=5.0e-6,
                                           atol=0.5e-6, disp=True, polish=True, workers=-1)
     param_fitted = opt.x
     np.savetxt(param_file, param_fitted, delimiter=',')
