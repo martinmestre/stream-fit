@@ -94,7 +94,7 @@ r☼ = 8.122
 println("i ::: β ::: r_core ::: m_core ::: χ²stream")
 for i = 1:length(ϵ)
       halo = potentials.RAR(param[i])
-      temp = stream.get_core_GR(halo.r, halo.dnu_wrap, halo.mass_spline)
+      temp = stream.get_core_GR(halo)
       r_core[i] = temp[1]
       m_core[i] = temp[2][1]
       χ²stream[i] = stream.chi2_stream(θ[i], Δθ[i], β[i], ϵ[i], ic, r☼)

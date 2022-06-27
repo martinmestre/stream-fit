@@ -82,6 +82,7 @@ def get_core_GR(halo):
     r_core = optimize.fminbound(lambda r: -v_circ_GR(r, halo),
                                 bounds[0], bounds[1], xtol=0.5e-12, maxfun=1000)
     m_core = halo.mass_wrap(r_core)
+    print('r_cand = ', r_cand, ' ---- r_core = ', r_core)
     return r_core, m_core
 
 
