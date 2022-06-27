@@ -20,6 +20,8 @@ from astropy import units as u
 from scipy.integrate import solve_ivp
 from scipy import optimize
 from scipy.interpolate import interp1d
+import emcee
+import corner
 
 
 def accel_mw(pot_list, x, y, z):
@@ -248,18 +250,24 @@ def chi2(w_0, ener_f, beta_0, ic):
     print('scales =', scales)
     return np.sum(sum)
 
+
 # MCMC
 def log_likelihood(param, ener_f, beta_0, ic):
+    """Log Likelihood function."""
     return -chi2(param, ener_f, beta_0, ic)
 
+
 def log_prior(param, bounds):
+    """Log Prior function."""
     theta_0 = param[0]
     d_theta = param[1]
     if bounds[0][0] < theta_0 < bounds[0][1] and bounds[1][0] < d_theta < bounds[1][1]:
         return 0.0
     return -np.inf
 
+
 def log_probability(param, ener_f, beta_0, ic, bounds):
+    """Log of Probability."""
     lp = log_prior(param, bounds)
     if not np.isfinite(lp):
         return -np.inf
@@ -282,6 +290,7 @@ def invert_ic(u_0):
 #                 Iba_sky['mu_ra'][k0], Iba_sky['mu_dec'][k0], Iba_sky['v_hel'][k0]])
 # ic = invert_ic(u_0)
 # print('ic=', ic)
+
 
 # Taking the initial conditions from the Galpy fit with fixed MW2014 potential.
 ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
@@ -307,7 +316,6 @@ print('bool_mcmc = ', bool_mcmc)
 
 # Monte Carlo Markov Chain with EMCEE.
 if(bool_mcmc):
-    import emcee
     import time
     import os
     os.environ["OMP_NUM_THREADS"] = "1"
@@ -318,10 +326,12 @@ if(bool_mcmc):
     print("{0} CPUs".format(ncpu))
     np.random.seed(57)
     bounds = ((34, 39), (25, 30))
-    initial = np.zeros((64,2))
+    param_0 = [3.617308965727325187e+01, 2.740902073407499984e+01]
+    initial = np.zeros((64, 2))
     print(initial.shape)
-    for i in range(0,2):
-        initial[:,i] = bounds[i][0]+np.random.randn(64)*(bounds[i][1]-bounds[i][0])
+    for i in range(0, 2):
+        initial[:, i] = bounds[i][0]+np.random.randn(64)*(bounds[i][1]-bounds[i][0])  # macro rectangle
+        # initial[:, i] = (np.random.randn(64)*1.e-4 + 1.0)*param_0[i]  # tiny ball
     nwalkers, ndim = initial.shape
     nsteps = 10000
     print('initial: ', initial)
@@ -330,19 +340,49 @@ if(bool_mcmc):
     # Don't forget to clear it in case the file already exists
     backend = emcee.backends.HDFBackend(backend_file)
     backend.reset(nwalkers, ndim)
+    print('backend =', backend)
 
     with Pool() as pool:
         sampler = emcee.EnsembleSampler(nwalkers, ndim, log_probability,
                                         args=(ener_f, beta_0, ic, bounds),
                                         pool=pool, backend=backend)
         start = time.time()
-        sampler.run_mcmc(initial, nsteps, progress=True)
+        # sampler.run_mcmc(initial, nsteps, progress=True)
+
+        # We'll track how the average autocorrelation time estimate changes
+        index = 0
+        autocorr = np.empty(nsteps)
+
+        # This will be useful to testing convergence
+        old_tau = np.inf
+
+        # Now we'll sample for up to max_n steps
+        for sample in sampler.sample(initial, iterations=nsteps, progress=True):
+            # Only check convergence every 100 steps
+            if sampler.iteration % 100:
+                continue
+
+            # Compute the autocorrelation time so far
+            # Using tol=0 means that we'll always get an estimate even
+            # if it isn't trustworthy
+            tau = sampler.get_autocorr_time(tol=0)
+            autocorr[index] = np.mean(tau)
+            index += 1
+
+            # Check convergence
+            converged = np.all(tau * 100 < sampler.iteration)
+            converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+            if converged:
+                break
+            old_tau = tau
+
         end = time.time()
         multi_time = end - start
         print("Multiprocessing took {0:.1f} seconds".format(multi_time))
 
 reader = emcee.backends.HDFBackend(backend_file)
 tau = reader.get_autocorr_time()
+print('tau=', tau)
 burnin = int(2 * np.max(tau))
 thin = int(0.5 * np.min(tau))
 samples = reader.get_chain(discard=burnin, flat=True, thin=thin)
@@ -355,15 +395,20 @@ print("flat chain shape: {0}".format(samples.shape))
 print("flat log prob shape: {0}".format(log_prob_samples.shape))
 print("flat log prior shape: {0}".format(log_prior_samples.shape))
 
+# Time series plots (not saved).
+plt.plot(samples[:, 0])
+plt.plot(samples[:, 1])
+plt.xlabel('step')
+plt.show()
+
 # Corner plots.
-import corner
-
 param = np.zeros(2)
-param[0] = np.sum(samples[:,0])/len(samples[:,0])
-param[1] = np.sum(samples[:,1])/len(samples[:,1])
+param[0] = np.sum(samples[:, 0])/len(samples[:, 0])
+param[1] = np.sum(samples[:, 1])/len(samples[:, 1])
 
-fig = corner.corner(samples, labels=[r'theta_0',r'W_0-theta_0'], truths=param)
-
+fig = corner.corner(samples, labels=[r'$\theta_0$', r'$W_0-\theta_0$'], truths=param)
+fig.savefig("corner.png")
+plt.show()
 
 # Plots in observable space
 chi2(param, ener_f, beta_0, ic)

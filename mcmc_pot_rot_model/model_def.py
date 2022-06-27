@@ -13,7 +13,6 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import InterpolatedUnivariateSpline
 
 
-
 def model(param):
     """RAR model as a function."""
     def fermi(eps, alpha_r, beta_r, eps_r):
@@ -124,7 +123,7 @@ def model(param):
     R = c/np.sqrt(8.0*pi*G*rho_rel)
     M = 4.0*pi*R**3*rho_rel
     a = 4.0*rho_rel/np.sqrt(pi)
-    b = a*c*c
+    b = a*c*c/3.0
     n_eos = 2**10+1
     tau = 1.0e-15
     min_r = 1.0e-16  # kpc
