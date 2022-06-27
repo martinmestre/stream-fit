@@ -214,16 +214,23 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
         (w_0[3]-dw[3],w_0[3]+dw[3]), (w_0[4]-dw[4],w_0[4]+dw[4]), (w_0[5]-dw[5],w_0[5]+dw[5]))
 # bounds =((130,220),(20,60),(7,12),(-20,0),(-14,-1),(-300,250) )
 # bounds =((0,360),(-90,90),(4,12),(-20,0),(-20,0),(-70,-20) )
+# A posteriori refinement:
+w_0 = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
+                -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
+dw = np.abs(w_0)*1.e-1
+bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
+          (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-# opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=30,popsize=30,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
+# opt=optimize.differential_evolution(chi2, bounds,strategy='best1bin',maxiter=100,popsize=200,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
 
 # param_fitted = opt.x
 
-# np.savetxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
+# np.savetxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_refined.txt', param_fitted, delimiter=',')
 
 
 # Test call:
-w_0 =np.loadtxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.txt')
+w_0 = np.loadtxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_refined.txt')
+# w_0 = np.loadtxt('param_refined.txt')
 # w_0=param_fitted
 #w_0=[1.493370985649162890e+02,3.667599798207655226e+01,8.281589084285746694e+00,-6.017245723518942491e+00,-1.088799601035909781e+01,-2.369380131502371611e+01]
 #w_0=[1.544035052724746038e+02,4.153208108236809437e+01,8.056920310518510320e+00,-8.378372205186138899e+00,-1.188171061092145209e+01,-5.948982987002553813e+01] #My fit
@@ -237,45 +244,46 @@ chi2(w_0)
 
 # Plots in the sky using the GD-1 frame
 #---------------------------------------
-fig, (ax1,ax2,ax3,ax4,ax5) = plt.subplots(5, 1, sharex=True, figsize=(7,35))
-
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(10,15))
+font = {"size": 20}
+plt.rc('font', **font)
 
 # Sky position
-ax1.set_title('Ibata+20 (Polynomials) data fitted by axisymmetric NFW halo plus barions')
-ax1.scatter(phi_1.wrap_at(180*u.deg),phi_2,s=0.1,marker='o', color='red', label='Malhan et Ibata fit')
-ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='GD-1 (Ibata+2020)')
-ax1.set_ylim(-4,2)
-ax1.set_ylabel(r'$\phi_2$ [degrees]')
+ax1.set_title('Axisym. NFW in MWPotential2014 fit by Malhan+19')
+ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red',label='Fit (Malhan+19)' )
+ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Data (Ibata+20)')
+ax1.set_ylim(-4, 2)
+ax1.set_ylabel(r'$\phi_2$ [degrees]',fontsize=20)
 ax1.legend()
 
-# heliocentric radial velocity
-ax2.scatter(phi_1.wrap_at(180*u.deg),v_hel,s=0.1,marker='o', color='red')
-ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue', label='Stream\n(Ibata+2020)')
-ax2.set_ylim(-300,300)
-ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
+# Heliocentric radial velocity
+ax2.scatter(phi_1.wrap_at(180*u.deg), v_hel, s=0.1, marker='o', color='red')
+ax2.plot(Iba_sky['phi_1'], Iba_sky['v_hel'], color='blue')
+ax2.set_ylim(-300, 300)
+ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]',fontsize=20)
 
-# heliocentric distance
-ax3.scatter(phi_1,d_hel,s=0.1,marker='o', color='red')
-ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Stream\n(Ibata+2020)')
-ax3.set_ylim(7,12)
-ax3.set_ylabel(r'$D$ [kpc]')
+# Heliocentric distance
+ax3.scatter(phi_1, d_hel, s=0.1, marker='o', color='red')
+ax3.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue')
+ax3.set_ylim(7, 12)
+ax3.set_ylabel(r'$D$ [kpc]', fontsize=20)
 
-# proper motion along RA
-ax4.scatter(phi_1,mu_ra,s=0.5, color='red')
-ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue', label='Stream\n(Ibata+2020)')
-ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]')
-
-# proper motion along DEC
-ax5.scatter(phi_1,mu_dec,s=0.5, color='red')
-ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue', label='Stream\n(Ibata+2020)')
-ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]')
+# Proper motion along RA
+ax4.scatter(phi_1, mu_ra, s=0.5, color='red')
+ax4.plot(Iba_sky['phi_1'], Iba_sky['mu_ra'], color='blue')
+ax4.set_ylabel(r'$\mu_\alpha$ [mas yr$^{-1}$]', fontsize=20)
+ax4.set_ylim(-10, 0)
 
 
-plt.xlabel(r'$\phi_1$ [degrees]')
-plt.xlim(IbaPoly.limit[0],IbaPoly.limit[1])
-# plt.tight_layout()
+# Proper motion along DEC
+ax5.scatter(phi_1, mu_dec, s=0.5, color='red')
+ax5.plot(Iba_sky['phi_1'], Iba_sky['mu_dec'], color='blue')
+ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]', fontsize=20)
 
-plt.show()
+
+plt.xlabel(r'$\phi_1$ [degrees]', fontsize=20)
+plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
+plt.tight_layout()
 fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_Polys.png")
 
 

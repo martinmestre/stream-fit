@@ -3,15 +3,14 @@
 Metric convention:
 g_00 = e^(nu)
 g_11 = -e^(lambda)
+
 """
 
 from scipy.integrate import solve_ivp
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 from scipy.interpolate import interp1d
 from scipy.interpolate import InterpolatedUnivariateSpline
-from scipy.optimize import least_squares
 
 
 def model(param):
@@ -124,7 +123,7 @@ def model(param):
     R = c/np.sqrt(8.0*pi*G*rho_rel)
     M = 4.0*pi*R**3*rho_rel
     a = 4.0*rho_rel/np.sqrt(pi)
-    b = a*c*c
+    b = a*c*c/3.0
     n_eos = 2**10+1
     tau = 1.0e-15
     min_r = 1.0e-16  # kpc
