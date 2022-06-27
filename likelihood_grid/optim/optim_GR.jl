@@ -49,7 +49,7 @@ r☼ = 8.122
 # θ₀, Δθ₀, βᵣ₀ = 39.285705296552436, 29.261703198023056, 0.0004816356819529165 * 1.e5
 # E = range(218.3, 400.0, step=0.1)
 θ₀, Δθ₀, βᵣ₀ = 36.224542166107774, 27.46389908753495, 1.2472408164492195
-E = range(56.0, 380.0, step=0.1)
+E = range(56.0, 380.0, step=1.0)
 println("ϵ ∈ E = ", E)
 # %%
 outfile = "solutions_stream_core_GR_NLoptNelderMead.txt"
@@ -82,7 +82,7 @@ for ϵ in E
         p = [ϵ]
         x₀ = [θ₀, Δθ₀, βᵣ₀]
         lb = [0.999θ₀, 0.999Δθ₀, 0.9βᵣ₀]
-        ub = [1.01θ₀, 1.01Δθ₀, 1.1βᵣ₀]
+        ub = [1.05θ₀, 1.05Δθ₀, 1.2βᵣ₀]
         prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
         sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
         x₀ = sol.u

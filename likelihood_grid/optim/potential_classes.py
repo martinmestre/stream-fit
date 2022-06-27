@@ -59,7 +59,7 @@ class RAR:
         self.r_s = r_s
         self.mass_spline = InterpolatedUnivariateSpline(r_s, mass_s, k=4)
         self.nu_spline = InterpolatedUnivariateSpline(r_s, nu_s, k=4)
-        self.dnu_spline = self.nu_spline.derivative(1)
+        # self.dnu_spline = self.nu_spline.derivative(1)
         self.dnu_integral_spl = InterpolatedUnivariateSpline(r_s, dnu, k=4)
 
     def mass_wrap(self, r):
