@@ -1,0 +1,23 @@
+# r_sun
+8.0
+# ener_f
+56.0
+# beta_0
+1.25e-5
+# weight chi^2
+5.0
+# bool_opt
+1
+# bounds_theta
+25
+35
+# bounds_dtheta
+35
+45
+# maxiter
+100
+# popsize
+200
+
+
+

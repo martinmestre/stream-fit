@@ -284,7 +284,9 @@ param_file = 'param_fit_pot-slice-massSag_from_IbataPolysGaiaDR2-data.txt'
 inparam_file = 'inparam.txt'
 bounds_theta_0 = np.zeros(2)
 bounds_d_theta = np.zeros(2)
-r_sun, ener_f, beta_0, weight, bool_opt, bounds_theta_0[0], bounds_theta_0[1], bounds_d_theta[0], bounds_d_theta[1], maxiter, popsize = np.loadtxt(inparam_file)
+[r_sun, ener_f, beta_0, weight, bool_opt, bounds_theta_0[0], bounds_theta_0[1],
+ bounds_d_theta[0], bounds_d_theta[1], maxiter, popsize] = np.loadtxt(inparam_file)
+
 print('inparams:')
 print('r_sun = ', r_sun, ' kpc')
 print('ener_f = ', ener_f, ' keV')
@@ -315,8 +317,6 @@ else:
     w_0 = np.loadtxt(param_file)
 
 chi2(w_0, ener_f, beta_0, ic)
-
-
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
