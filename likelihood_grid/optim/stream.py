@@ -7,8 +7,7 @@ Using Ibata+20 polinomial data-fits.
 Author: Martín Mestre.
 """
 
-from mmap import MADV_SEQUENTIAL
-import sunau
+
 import numpy as np
 import astropy.coordinates as coord
 import pandas as pd
@@ -50,39 +49,39 @@ def rot_vel_mw(pot_list, r):
     return np.sqrt(r*(grad_mw(pot_list, r, 0, 0)[0]))
 
 
-def rot_vel_rar(r, m_spline):
+def v_circ_Newton(r, halo):
     """Circular velocity for the rar model."""
     G_u = 4.3009e-6  # kpc (km/s)^2 M_sun^-1
-    return np.sqrt(G_u*m_spline(r)/r)
+    return np.sqrt(G_u*halo.mass_wrap(r)/r)
 
 
-def get_core(r_s, m_spline):
+def get_core(halo):
     """Core mass."""
-    arg_max = argrelextrema(rot_vel_rar(r_s, m_spline), np.greater)
+    arg_max = argrelextrema(v_circ_Newton(halo.r_s, halo), np.greater)
     arg_first_max = arg_max[0][0]
-    r_cand = r_s[arg_first_max]
+    r_cand = halo.r_s[arg_first_max]
     bounds = np.array([r_cand*0.5, r_cand*1.5])
-    r_core = optimize.fminbound(lambda r: -rot_vel_rar(r, m_spline),
+    r_core = optimize.fminbound(lambda r: -v_circ_Newton(r, halo),
                                 bounds[0], bounds[1], xtol=0.5e-12, maxfun=1000)
-    m_core = m_spline(r_core)
+    m_core = halo.mass_wrap(r_core)
     return r_core, m_core
 
 
-def rot_vel_rar_GR(r, dnu):
+def v_circ_GR(r, halo):
     """GR circula velocity for the rar model. Better to use this one instead of the Newtonian."""
     c = 2.997925e5  # km s^-1
-    return np.sqrt(0.5*c*c*r*dnu(r))
+    return np.sqrt(0.5*c*c*r*halo.dnu_wrap(r))
 
 
-def get_core_GR(r_s, dnu, mass):
+def get_core_GR(halo):
     """Compute the core mass and radius."""
-    arg_max = argrelextrema(rot_vel_rar(r_s, mass), np.greater)  # The approximation is Newtonian
+    arg_max = argrelextrema(v_circ_GR(halo.r_s, halo), np.greater)  # The approximation is Newtonian
     arg_first_max = arg_max[0][0]
-    r_cand = r_s[arg_first_max]
+    r_cand = halo.r_s[arg_first_max]
     bounds = np.array([r_cand*0.5, r_cand*1.5])
-    r_core = optimize.fminbound(lambda r: -rot_vel_rar_GR(r, dnu),
+    r_core = optimize.fminbound(lambda r: -v_circ_GR(r, halo),
                                 bounds[0], bounds[1], xtol=0.5e-12, maxfun=1000)
-    m_core = mass(r_core)
+    m_core = halo.mass_wrap(r_core)
     return r_core, m_core
 
 
@@ -252,7 +251,7 @@ def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
 
     halo = pot_list[3]
 
-    r_core, mass_core = get_core_GR(halo.r, halo.dnu_wrap, halo.mass_spline)
+    r_core, mass_core = get_core_GR(halo)
 
     print(theta_0, d_theta, beta_0, ener_f, '--- chi2_stream = ', np.sum(sum))
     print("::: r_core = ", r_core, " ::: m_core = ", mass_core/1.e6, "x10⁶ M_sun")
@@ -264,7 +263,7 @@ def chi2_core(theta_0, d_theta, beta_0, ener_f):
     W_0 = theta_0 + d_theta
     param = np.array([ener_f, theta_0, W_0, beta_0])
     halo = pot.RAR(param)
-    r_core, mass_core = get_core_GR(halo.r, halo.dnu_wrap, halo.mass_spline)
+    r_core, mass_core = get_core_GR(halo)
     chisq_core = (mass_core - m_core_const)**2/(0.01*m_core_const)**2
     print(theta_0, d_theta, beta_0, ener_f, '--- chi2_core = ', chisq_core)
     print("::: r_core = ", r_core, " ::: m_core = ", mass_core/1.e6, "x10⁶ M_sun")
@@ -315,7 +314,7 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
 
     halo = pot_list[3]
 
-    r_core, mass_core = get_core_GR(halo.r, halo.dnu_wrap, halo.mass_spline)
+    r_core, mass_core = get_core_GR(halo)
     # print('GR: ', r_core, mass_core)
     # r_core, mass_core = get_core(halo.r, halo.mass_spline)
     # print('Newton: ', r_core, mass_core)
@@ -369,7 +368,7 @@ def chi2_stream_potlist(pot_list, ic, r_sun):
 
     halo = pot_list[3]
 
-    r_core, mass_core = get_core_GR(halo.r, halo.dnu_wrap, halo.mass_spline)
+    r_core, mass_core = get_core_GR(halo)
 
     print("chi2_stream_pot_list = ", np.sum(sum), "  r_core = ", r_core,
           "  m_core = ", mass_core/1.e6, "x10⁶ M_sun")
