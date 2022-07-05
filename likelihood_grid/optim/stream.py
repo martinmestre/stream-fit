@@ -96,7 +96,7 @@ def pot_model(ener_f, theta_0, W_0, beta_0):
     # Set halo potential
     param = np.array([ener_f, theta_0, W_0, beta_0])
     halo = pot.RAR(param)
-    return bulge, thin, thick, halo
+    return [bulge, thin, thick, halo]
 
 
 def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_sun):
@@ -203,6 +203,13 @@ Iba_sky['d_hel'] = pol.D(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['v_hel'] = pol.V(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['mu_ra'] = pol.MU_RA(cfg.deg2rad*Iba_sky['phi_1'])
 Iba_sky['mu_dec'] = pol.MU_DEC(cfg.deg2rad*Iba_sky['phi_1'])
+Iba_phi1_np = Iba_sky['phi_1'].to_numpy()
+Iba_phi2_np = Iba_sky['phi_2'].to_numpy()
+Iba_dhel_np = Iba_sky['d_hel'].to_numpy()
+Iba_vhel_np = Iba_sky['v_hel'].to_numpy()
+Iba_mura_np = Iba_sky['mu_ra'].to_numpy()
+Iba_mudec_np = Iba_sky['mu_dec'].to_numpy()
+sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
 
 # Core constraint
 m_core_const = 3.5e6  # M_sun
@@ -227,27 +234,27 @@ def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['phi_2']
-    sigma2 = 0.5**2
+    sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 1.5**2
+    sigma2 = sigma_array[1]**2
     sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 4.0
+    sigma2 = sigma_array[2]**2
     sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 4.0
+    sigma2 = sigma_array[3]**2
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['v_hel']
-    sigma2 = 100.0
+    sigma2 = sigma_array[4]**2
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     halo = pot_list[3]
