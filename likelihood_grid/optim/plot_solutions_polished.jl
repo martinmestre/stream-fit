@@ -18,18 +18,19 @@
 # %%
 """Plot solutions from the optimization loop."""
 
-
+using Revise
 using AlgebraOfGraphics, CairoMakie
 using PyCall
 using CSV
 using DataFrames
 using Showoff
+using CubicSplines
+using DelimitedFiles
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 stream = pyimport("stream")
 potentials = pyimport("potential_classes")
-
 
 # %%
 # Load file of selected solutions.
@@ -37,7 +38,7 @@ df = DataFrame(CSV.File("solutions_stream_core_polished_with_GR_NLoptNelderMead.
 println(df)
 
 
-ϵ = [56, 100, 200, 300, 360]
+ϵ = [56, 100, 200, 360]
 println(ϵ)
 
 θ = Vector{Float64}(undef,length(ϵ))
@@ -160,7 +161,7 @@ println("ρ(r) plot done.")
 r = rar[2].r_s
 
 ϵs = ϵ
-is = 1:5
+is = 1:4
 labels = ["$x" for x ∈ ϵs]
 
 function ρ_f(r, i)
@@ -194,6 +195,7 @@ let
             limits=((1.e-10, 10^2),(1, nothing)),
             xscale=log10, yscale=log10, xgridvisible=false, ygridvisible=false,
             xticks = (xtickpos, xticknames)))
+            #xticks = LogTicks(LinearTicks(6))))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
 
       display(fig)
@@ -205,12 +207,8 @@ end
 
 # %%
 # Plot in observable space.
-i = 1
-pot_list = stream.pot_model(ϵ[i], θ[i], W[i], β[i])
-temp = stream.orbit_model(ic[1], ic[2], ic[3], ic[4], ic[5],ic[6], pot_list, r☼)
-(ϕ₁, ϕ₂, d☼, μ_ra, μ_dec, v☼, x, y, z, v_circ) = temp
 
-# %%
+# GD-1 stream observables (Ibata polynomials).
 ϕ₁ₒ = stream.Iba_phi1_np
 ϕ₂ₒ = stream.Iba_phi2_np
 d☼ₒ = stream.Iba_dhel_np
@@ -236,33 +234,57 @@ d☼ᵢ = d☼ₒ - Δd☼
 v☼ₛ = v☼ₒ + Δv☼
 v☼ᵢ = v☼ₒ - Δv☼
 
+# MEPP solution.
+i = 1
+pot_list = stream.pot_model(ϵ[i], θ[i], W[i], β[i])
+temp = stream.orbit_model(ic[1], ic[2], ic[3], ic[4], ic[5],ic[6], pot_list, r☼)
+# Cubic spline for solution:
+boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
+fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
+ϕ₂ = fϕ₂(ϕ₁ₒ)
+d☼ = fd☼(ϕ₁ₒ)
+μ_ra = fμ_ra(ϕ₁ₒ)
+μ_dec = fμ_dec(ϕ₁ₒ)
+v☼ = fv☼(ϕ₁ₒ)
+
+# Malhan (MWPotential2014) solution.
+temp = readdlm("for_julia_plot.txt")
+boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
+fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
+ϕ₂ₘ = fϕ₂(ϕ₁ₒ)
+d☼ₘ = fd☼(ϕ₁ₒ)
+μ_raₘ = fμ_ra(ϕ₁ₒ)
+μ_decₘ = fμ_dec(ϕ₁ₒ)
+v☼ₘ = fv☼(ϕ₁ₒ)
 # %%
-lab_sol = fill("MEPP model",length(ϕ₁))
-lab_obs = fill("Observed", length(ϕ₁ₒ))
-df_sol = DataFrame([ϕ₁, ϕ₂, d☼, μ_ra, μ_dec, v☼, lab_sol], [:ϕ₁, :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼, :lab_sol])
-df_obs = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ, d☼ᵢ,
+df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ, d☼ᵢ,
                     μ_raₒ, μ_raₛ, μ_raᵢ, μ_decₒ, μ_decₛ, μ_decᵢ,
-                    v☼ₒ, v☼ₛ, v☼ᵢ, lab_obs],
+                    v☼ₒ, v☼ₛ, v☼ᵢ,
+                    ϕ₂, d☼, μ_ra, μ_dec, v☼,
+                    ϕ₂ₘ, d☼ₘ, μ_raₘ, μ_decₘ, v☼ₘ],
                     [:ϕ₁ₒ, :ϕ₂ₒ, :ϕ₂ₛ, :ϕ₂ᵢ, :d☼ₒ, :d☼ₛ, :d☼ᵢ,
                     :μ_raₒ, :μ_raₛ, :μ_raᵢ, :μ_decₒ, :μ_decₛ, :μ_decᵢ,
-                    :v☼ₒ, :v☼ₛ, :v☼ᵢ, :lab_obs])
-
+                    :v☼ₒ, :v☼ₛ, :v☼ᵢ,
+                    :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
+                    :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ])
 # %%
+
+labels = [ "ϕ₂ₘ(MEPP)", "ϕ₂ₒ", "ϕ₂ₒ+σ","ϕ₂ₒ-σ"]
 let
-
-      fig = Figure(resolution = size_pt, fontsize = 25)
+      size_inches = (4.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
       gridpos = fig[1, 1]
-      plt_sol = data(df_sol)*
-            mapping(:ϕ₁,:ϕ₂,color=:lab_sol=>"")*
-            visual(Scatter, markersize=3)
+      grp = dims(1) => renamer(labels) => "Sky position"
+      plt = data(df_obsmod) *
+          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [17, 2,3,4] .=> L"$ϕ_2$ [°]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=3)
 
-      plt_obs = data(df_obs)*
-            (mapping(:ϕ₁ₒ,:ϕ₂ₒ,color=:lab_obs=>"")+ mapping(:ϕ₁ₒ,:ϕ₂ₛ,color=:lab_obs=>"")+ mapping(:ϕ₁ₒ,:ϕ₂ᵢ,color=:lab_obs=>""))*
-            visual(Lines, color="blue", linewidth=2, linestyle=:dot)
-
-      f = draw!(gridpos, plt_sol+plt_obs, axis=(xlabel=L"$ϕ_1$ [degrees]",
-                  ylabel=L"$ϕ_2$ [degrees]",
-                  limits=((-90,10),(-4, 1))))
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1))
+                  ))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10))
 
 

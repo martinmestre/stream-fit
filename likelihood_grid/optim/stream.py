@@ -137,8 +137,10 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     sol_forw = solve_ivp(symp_grad_mw, [t_0, time_span_s2], w_0, t_eval=t_forw, args=[pot_list],
                          method='DOP853', rtol=5.0e-14, atol=0.5e-14)
     # t = np.concatenate([sol_back.t,sol_forw.t])  Not used
-    y = np.concatenate([sol_back.y, sol_forw.y],  axis=1)
-    y = np.delete(y, 0, axis=1)  # Remove duplicated column
+    y_back = np.delete(sol_back.y, 0, axis=1)  # Remove duplicated column
+    y_back = np.flip(y_back, axis=1)
+    y = np.concatenate([y_back, sol_forw.y],  axis=1)
+    y = np.flip(y, axis=1)
 
     # Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     galac_coord = coord.Galactocentric(x=y[0]*u.kpc, y=y[1]*u.kpc, z=y[2]*u.kpc,
