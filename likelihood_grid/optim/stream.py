@@ -216,7 +216,6 @@ sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
 # Core constraint
 m_core_const = 3.5e6  # M_sun
 
-
 def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     """Chi^2 stream function."""
     import wrap

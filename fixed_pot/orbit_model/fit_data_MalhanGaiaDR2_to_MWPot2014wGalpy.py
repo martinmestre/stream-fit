@@ -52,8 +52,11 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     sol_forw = np.array([o.ra(ts2),o.dec(ts2),o.dist(ts2),o.pmra(ts2),o.pmdec(ts2),o.vlos(ts2)])
 
     t = np.concatenate([ts1,ts2])
-    y = np.concatenate([sol_back, sol_forw],axis=1)
-    y = np.delete(y,0,axis=1) #Remove duplicated column
+    y_back = np.delete(sol_back, 0, axis=1)  # Remove duplicated column
+    y_back = np.flip(y_back, axis=1)
+    y = np.concatenate([y_back, sol_forw],  axis=1)
+    y = np.flip(y, axis=1)
+
 
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     icrs_coord=coord.ICRS(ra=y[0]*u.degree, dec=y[1]*u.degree,
@@ -71,6 +74,8 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     #mu_phi_1 = gd1_coord.pm_phi1_cosphi2/np.cos(phi_2)  #not used by Ibata
     #mu_phi_2 = gd1_coord.pm_phi2
     #return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
+
+    np.savetxt('for_julia_plot.txt', (phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel))
     return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel
 
 

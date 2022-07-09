@@ -18,7 +18,6 @@
 # %%
 """Plot solutions from the optimization loop."""
 
-using Revise
 using AlgebraOfGraphics, CairoMakie
 using PyCall
 using CSV
@@ -29,8 +28,10 @@ using DelimitedFiles
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
+importLib = pyimport("importlib")
 stream = pyimport("stream")
 potentials = pyimport("potential_classes")
+importLib.reload(stream)
 
 # %%
 # Load file of selected solutions.
@@ -249,8 +250,8 @@ v☼ = fv☼(ϕ₁ₒ)
 
 # Malhan (MWPotential2014) solution.
 temp = readdlm("for_julia_plot.txt")
-boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
-fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
+boolϕ₁ = (temp[1,:].>-95 .&& temp[1,:].<15)
+fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1,:][boolϕ₁], temp[i,:][boolϕ₁]) for i=2:6]
 ϕ₂ₘ = fϕ₂(ϕ₁ₒ)
 d☼ₘ = fd☼(ϕ₁ₒ)
 μ_raₘ = fμ_ra(ϕ₁ₒ)
@@ -268,27 +269,129 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
                     :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ])
 # %%
-
-labels = [ "ϕ₂ₘ(MEPP)", "ϕ₂ₒ", "ϕ₂ₒ+σ","ϕ₂ₒ-σ"]
+labels = [ "MEPP", "NFW", "Obs", "Obs+σ","Obs-σ"]
+lw = 5
+# Sky position plot
 let
-      size_inches = (4.2*2, 3*2)
+      size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 24)
       gridpos = fig[1, 1]
-      grp = dims(1) => renamer(labels) => "Sky position"
+      grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [17, 2,3,4] .=> L"$ϕ_2$ [°]";
+          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [17, 22, 2,3,4] .=> L"$ϕ_2$ [°]";
               color = grp,
               linestyle = grp
           ) *
-          visual(Lines, linewidth=3)
+          visual(Lines, linewidth=lw)
 
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1))
-                  ))
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
+            xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10))
 
-
+      show(f)
       display(fig)
       save("observables_position.pdf", fig, pt_per_unit = 1)
+      println("plot done.")
+end
+
+
+# Proper motion (RA) plot
+let
+      size_inches = (6.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => ""
+      plt = data(df_obsmod) *
+          mapping(:ϕ₁ₒ => L"ϕ_1 [°]", [19, 24, 8, 9, 10] .=> L"μ_{\mathrm{RA}} [\mathrm{mas}~\mathrm{yr}^{-1}]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=lw)
+
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+            xgridvisible=false, ygridvisible=false))
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
+
+      show(f)
+      display(fig)
+      save("observables_pmra.pdf", fig, pt_per_unit = 1)
+      println("plot done.")
+end
+
+
+# Proper motion (DEC) plot
+let
+      size_inches = (6.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => ""
+      plt = data(df_obsmod) *
+          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [20, 25, 11, 12, 13] .=> L"μ_{\mathrm{Dec}} [\mathrm{mas}~\mathrm{yr}^{-1}]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=lw)
+
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+            xgridvisible=false, ygridvisible=false))
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10))
+
+      show(f)
+      display(fig)
+      save("observables_pmra.pdf", fig, pt_per_unit = 1)
+      println("plot done.")
+end
+
+
+# Heliocentric distance plot
+let
+      size_inches = (6.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => ""
+      plt = data(df_obsmod) *
+          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [18, 23, 5, 6, 7] .=> L"d_\odot [\mathrm{kpc}]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=lw)
+
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+            xgridvisible=false, ygridvisible=false))
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10))
+
+      show(f)
+      display(fig)
+      save("observables_heldist.pdf", fig, pt_per_unit = 1)
+      println("plot done.")
+end
+
+
+# Heliocentric radial velocity plot
+labels = [ "MEPP", "NFW", "Obs+σ", "Obs-σ"]
+let
+      size_inches = (6.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => ""
+      plt = data(df_obsmod) *
+          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [21, 26, 15, 16] .=> L"v_\odot [\mathrm{kpc}]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=lw)
+
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+            xgridvisible=false, ygridvisible=false))
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
+
+      show(f)
+      display(fig)
+      save("observables_helvel.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
