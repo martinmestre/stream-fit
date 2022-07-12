@@ -25,6 +25,7 @@ using DataFrames
 using Showoff
 using CubicSplines
 using DelimitedFiles
+include("bugfixMakie.jl")
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -188,7 +189,7 @@ let
               color = grp,
               linestyle = grp
           ) *
-          visual(Lines, linewidth=3)
+          visual(Lines, linewidth=4)
       exp_rng=range(-9,1,step=2)
       xtickpos = (e->10.0.^e).(exp_rng)
       xticknames=replace.(Showoff.showoff(10. .^(exp_rng), :scientific),"1.0×"=> "" )
@@ -197,8 +198,12 @@ let
             xscale=log10, yscale=log10, xgridvisible=false, ygridvisible=false,
             xticks = (xtickpos, xticknames)))
             #xticks = LogTicks(LinearTicks(6))))
-      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
-
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:5]
+      for l in _lines
+            l.linewidth = 4
+      end
       display(fig)
       save("density_profiles.pdf", fig, pt_per_unit = 1)
       println("ρ(r) plot done.")
@@ -287,9 +292,13 @@ let
 
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
-      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10))
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:6]
+      for l in _lines
+            l.linewidth = 4
+      end
 
-      show(f)
       display(fig)
       save("observables_position.pdf", fig, pt_per_unit = 1)
       println("plot done.")
@@ -312,7 +321,12 @@ let
 
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
-      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:6]
+      for l in _lines
+            l.linewidth = 4
+      end
 
       show(f)
       display(fig)
@@ -337,9 +351,13 @@ let
 
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
-      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10))
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:6]
+      for l in _lines
+            l.linewidth = 4
+      end
 
-      show(f)
       display(fig)
       save("observables_pmra.pdf", fig, pt_per_unit = 1)
       println("plot done.")
@@ -362,9 +380,13 @@ let
 
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
-      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10))
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:6]
+      for l in _lines
+            l.linewidth = 4
+      end
 
-      show(f)
       display(fig)
       save("observables_heldist.pdf", fig, pt_per_unit = 1)
       println("plot done.")
@@ -388,10 +410,66 @@ let
 
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
-      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10))
 
-      show(f)
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:5]
+      for l in _lines
+            l.linewidth = 4
+      end
+
       display(fig)
       save("observables_helvel.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
+
+
+# %%
+d = (
+    x = repeat(range(0, pi, length = 100), 5),
+    group = repeat(1:5, inner = 100),
+    label = repeat(["A", "B", "C", "C", "C"], inner = 100),
+)
+d = (; d..., y = sin.(d.x) .+ d.group)
+
+plt = data(d) *
+    mapping(:x, :y, color = :label, group = :group => nonnumeric) *
+    visual(Lines)
+fgrid = draw(plt)
+leg = fgrid.figure.content[2]
+_lines = leg.blockscene.children[1].plots[2:5]
+for l in _lines
+    l.linewidth = 5
+end
+fgrid
+
+# %%
+labels = [ "MEPP", "NFW", "Obs+σ", "Obs-σ"]
+
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+fig = Figure(resolution = size_pt, fontsize = 24)
+gridpos = fig[1, 1]
+grp = dims(1) => renamer(labels) => ""
+plt = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [21, 26, 15, 16] .=> L"v_\odot [\mathrm{kpc}]";
+            color = grp,
+            linestyle = grp
+      ) *
+      visual(Lines, linewidth=lw)
+
+f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+            xgridvisible=false, ygridvisible=false))
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10),patchsize = (50, 35))
+leg = fig.content[2]
+_lines = leg.blockscene.children[1].plots[2:5]
+for l in _lines
+    l.linewidth = 4
+    println(l)
+end
+
+display(fig)
+save("observables_helvel.pdf", fig, pt_per_unit = 1)
+println("plot done.")
+
+
