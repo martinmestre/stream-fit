@@ -111,7 +111,7 @@ where
    M &=& 4\pi R^3 \rho_{\rm{rel}},\\
    \rho_{\rm{rel}}&=& \frac{ G\pi^{3/2} m^4 c^3}{h^3},
 \end{eqnarray}
-where $M(r)$ is the mass enclosed up to radius $r$, $\nu(r)$ is the metric exponent (we use the convention $g_{00}=e^{\nu(r)}$), $c$ is the speed of light, $h$ is the Planck constant and $m$ is the fermion mass. The phase-space function ($f$) is given by a Fermi-Dirac distribution with energy cutoff:
+where $c$ is the speed of light, $h$ is the Planck constant, $m$ is the fermion mass, $M(r)$ is the mass enclosed up to radius $r$ and $\nu(r)$ is the metric exponent, i.e. we use the convention $g_{00}=e^{\nu(r)}$. The phase-space function ($f$) is given by a Fermi-Dirac distribution with energy cutoff:
 \begin{equation}
 f(r,\epsilon)=
    \begin{cases}
@@ -131,17 +131,26 @@ along the geodesic given in~\citet{1989A&A...221....4M}:
    \label{geod_energy}
 \end{equation}
 
-It is not possible to integrate this equations from a radius exactly zero because the right hand side
-of the system of differential equations are not well defined in that situation. Nevertheless, it is possible
-to reach the following approximations for the initial conditions at a value $r_{\rm{min}}$ close to zero:
+It is not possible to integrate this equations from $r=0$ because the right hand the change of variables $\zeta(r)$ is divergent at the origin. Nevertheless, it is possible
+to reach the following approximations for the initial conditions at a value $r_{\rm{min}}\gtrsim 0$:
 \begin{eqnarray}
    \nu(r_{\rm{min}})-\nu_0 &\approx& \frac{1}{6}\frac{\rho_0}{\rho_{\rm{rel}}}\left[\frac{r_{\rm{min}}}{R}\right]^2\equiv\tau, \\
    \psi(r_{\rm{min}})&\approx&\frac{1}{3}\frac{\rho_0}{\rho_{\rm{rel}}}\left[\frac{r_{\rm{min}}}{R}\right]^2=2\tau,
 \end{eqnarray}
 which implies
 \begin{equation}
-   \frac{r_{\rm{min}}}{R}=\sqrt{6\tau\frac{\rho_{\rm{rel}}}{\rho_0}}.
+   \frac{r_{\rm{min}}}{R}=\sqrt{6\tau\frac{\rho_{\rm{rel}}}{\rho_0}},
 \end{equation}
+where $rho_0\equiv \rho(0)$. The initial condition of the metric, $\nu_0=\nu(0)$, is determined
+afterwards with a condition of continuity with the Schwarzschild metric at the border of the
+fermion distribution:
+$$2\ln\left(\frac{\beta_b}{\beta_0}\sqrt{1-\psi_b}\right)$$,
+where $\psi_b$ and $\beta_b$ are quantities evaluated at the border.
+
+The system of equations thus obtained has four free parameters: $m$, $\alpha_0=\alpha(0)$,
+$\beta_0=\beta(0)$, and $\theta_0=\theta(0)$ but in practice we will use the following related
+quantities as parameters:
+
 
 Equations~\ref{sode}-\ref{geod_energy} are solved using a {\scshape{Python}}~\citep{van1995python} script\footnote{\url{https://github.com/martinmestre/stream-fit/blob/main/likelihood_grid/optim/model_def.py}} that makes use of the {\scshape{NumPy}}~\citep{2020SciPy-NMeth} and {\scshape{SciPy}}~\citep{harris2020array} packages.
 
