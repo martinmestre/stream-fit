@@ -186,7 +186,7 @@ class IbaPoly:
         return 90.68*x**3+204.5*x**2-254.2*x-261.5
 
     def MU_RA(self, x):
-        """Proper motion in RA (without cos(Dec)."""
+        """Proper motion in RA (with cos(Dec)."""
         return 3.794*x**3+9.467*x**2+1.615*x-7.844
 
     def MU_DEC(self, x):
@@ -215,6 +215,7 @@ sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
 
 # Core constraint
 m_core_const = 3.5e6  # M_sun
+
 
 def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     """Chi^2 stream function."""
