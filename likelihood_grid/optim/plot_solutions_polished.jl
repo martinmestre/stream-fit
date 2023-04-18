@@ -289,7 +289,7 @@ let
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
-
+      println("plt=",plt)
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
@@ -425,51 +425,11 @@ end
 
 
 # %%
-d = (
-    x = repeat(range(0, pi, length = 100), 5),
-    group = repeat(1:5, inner = 100),
-    label = repeat(["A", "B", "C", "C", "C"], inner = 100),
-)
-d = (; d..., y = sin.(d.x) .+ d.group)
+# Compute DM density at solar distance.
 
-plt = data(d) *
-    mapping(:x, :y, color = :label, group = :group => nonnumeric) *
-    visual(Lines)
-fgrid = draw(plt)
-leg = fgrid.figure.content[2]
-_lines = leg.blockscene.children[1].plots[2:5]
-for l in _lines
-    l.linewidth = 5
+for i = 1:length(ϵ)
+      r = rar[i].r_s
+      ρ_f = rar[i].mass_spline.derivative(1)
+      ρ☼=ρ_f(r☼)[1]/(4π*r☼^2)
+      println("ρ☼=$(ρ☼) M_⊙/kpc³")
 end
-fgrid
-
-# %%
-labels = [ "MEPP", "NFW", "Obs+σ", "Obs-σ"]
-
-size_inches = (6.2*2, 3*2)
-size_pt = 72 .* size_inches
-fig = Figure(resolution = size_pt, fontsize = 24)
-gridpos = fig[1, 1]
-grp = dims(1) => renamer(labels) => ""
-plt = data(df_obsmod) *
-      mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [21, 26, 15, 16] .=> L"v_\odot [\mathrm{kpc}]";
-            color = grp,
-            linestyle = grp
-      ) *
-      visual(Lines, linewidth=lw)
-
-f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
-            xgridvisible=false, ygridvisible=false))
-legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10),patchsize = (50, 35))
-leg = fig.content[2]
-_lines = leg.blockscene.children[1].plots[2:5]
-for l in _lines
-    l.linewidth = 4
-    println(l)
-end
-
-display(fig)
-save("observables_helvel.pdf", fig, pt_per_unit = 1)
-println("plot done.")
-
-
