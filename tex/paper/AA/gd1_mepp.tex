@@ -105,6 +105,8 @@ Those polinomials are the following:
    \label{Ibata_polynb}
 \end{eqnarray}
 with $\phi_1$ and $\phi_2$ in radians, $D$ in kpc and $\tilde{\mu}_\alpha$ ($=\mu_\alpha cos \delta$) and $\mu_\delta$ in mas/yr. The domain of this polinomials is limited to $-90^\circ<\phi_1[^\circ]<10^\circ$.
+To have our observable data points we sample the domain with 100 points ($\phi_1^(i)$ for $i=1...100$)
+and evaluate the polinomials there in order to have a complete set of observables.
 
 The background measurements or estimations used in this paper are the
 galactocentric distance of the sun $R_\odot=8.122$ kpc~\citep{2018A&A...615L..15G}, the sun's peculiar
@@ -209,12 +211,28 @@ we will explain how this initial condition was chosen for some simulations and f
 After having the stream's orbit integrated, we transform the orbit to both the ICRS and the GD-1 frame of coordinates. For the latter we used the \texttt{GD1Koposov10} class defined in the {\scshape{Gala}} package~\citep{gala,adrian_price_whelan_2020_4159870} which uses the transformation matrix defined
 by~\citet{Koposov_2010}.
 After these two transformation we obtain the orbit expressed in the observable variables ($\phi_1$, $\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$ and $\mu_\delta$) used in Eqs.~(\ref{Ibata_polyn})-(\ref{Ibata_polynb}).
+Finally, we build interpolators of these variables.
 
 
-\subsection{Optimization algorithm}
+\subsection{Optimization algorithms}
+Our objective consists in fitting our MW model
 
 In this work we use two optimization algorithms. One of them is {\scshape{SciPy}}'s
-\texttt{optimize.differential\_evolution} algorithm.
+\texttt{optimize.differential\_evolution} algorithm. This genetic architecture
+was used with metaparemeters given by
+\texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=100, \texttt{popsize}=50,
+\texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0. This method can be run in parallel with shared memory,
+so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. doubling the values of \texttt{maxiter} and \texttt{popsize}).
+
+The other algorithm is {\scshape{NLopt}}'s
+\texttt{LN\_NELDERMEAD} called from a  {\scshape{Julia}}~\citep{bezanson2017julia}
+environment. We used default values for the all its metaparameters except for
+\texttt{reltol}=$5\times10^{-5}$.
+
+These two optimizators where used for different purposes that will be explained
+in the following section along the results.
+
+
 
 \section{Results}
 
