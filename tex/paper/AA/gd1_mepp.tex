@@ -106,6 +106,10 @@ Those polinomials are the following:
 with $\phi_1$ and $\phi_2$ in radians, $D$ in kpc and, $\tilde{\mu}_\alpha$ ($=\mu_\alpha cos \delta$) and $\mu_\delta$ in mas/yr. The domain of this polinomials is limited to $-90^\circ<\phi_1[^\circ]<10^\circ$.
 To have our observable data points we sample the domain with 100 points ($\phi_1^{(i)}$ for $i=1...100$)
 and evaluate the polinomials there in order to have a complete set of observables.
+In one of the experiments we will consider an observable of a different nature of the stream
+but related to the density concentration at the origin, of size smaller than $10^{-6}~\rm{kpc}$, characteristic of the fermionic halo distribution. By convention, the core radius is defined
+as the radius when the circular velocity reaches its first maximum.
+The constraint for the mass of the core of the distribution is assumed to be $m_{\rm{core}}=3.5\times10^6 M_\odot$ in agreement with~\citet{2020A&A...641A..34B,2021MNRAS.505L..64B,2022MNRAS.511L..35A}.
 
 The assumed measurements used in this paper are the
 galactocentric distance of the sun $R_\odot=8.122$ kpc~\citep{2018A&A...615L..15G}, the sun's peculiar
@@ -219,16 +223,25 @@ to evaluate the following $\chi^2$ stream function:
 \begin{eqnarray}
    \label{chi2}
    \chi^2_{\rm{stream}} &=& \chi^2_{\phi_2} + \chi^2_{D}+ \chi^2_{v_h}+\chi^2_{\tilde{\mu}_\alpha}+ \chi^2_{\delta},\\
-   \chi^2_{\eta} &=& \frac{1}{\sigma_\eta^2}\sum_{i=1}^{100} [\eta^{(i)}-\eta(\phi_1^{(i)})]^2,
+   \chi^2_{\eta} &=& \frac{1}{\sigma_\eta^2}\sum_{i=1}^{100} \big(\eta^{(i)}-\eta(\phi_1^{(i)})\big)^2,
 \end{eqnarray}
 where
-$\eta$ represents the four corresponding independent variables ($\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$ and $\mu_\delta$) and $\sigma_\eta$ is an approximate (eye-guided) estimation of the average errors given by
+$\eta$ represents each of the four corresponding independent variables ($\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$ and $\mu_\delta$) and $\sigma_\eta$ is an approximate (eye-guided) estimation of the average errors given by
 $\sigma_{\phi_2}=0.5^\circ$,
 $\sigma_{D}= 1.5~\rm{kpc}$,
-$\sigma_{v_h} = 100~\rm{km/s}$,
-$\sigma_{\tilde{\mu}_\alpha}= 4~\rm{mas/yr}$
-and $\sigma_{\delta}= 4~\rm{mas/yr}$.
-
+$\sigma_{v_h} = 10~\rm{km/s}$ and
+$\sigma_{\tilde{\mu}_\alpha}= \sigma_{\delta}= 2~\rm{mas/yr}$.
+Thus $\chi^2_{\rm{stream}}$ measures the departure of the model from the stream observations.
+For some fits we will also consider the departature of the model from a mass constraint in the core
+of the distribution:
+\begin{equation}
+   \chi^2_{\rm{core}}=\frac{(m-m_{\rm{core}})^2}{\sigma_m^2},
+\end{equation}
+usually testing with $\sigma_m$ equal to either 10\% or 50\% of the core mass, so
+sometimes we will make use of the following compound function:
+\begin{equation}
+   \chi^2_{\rm{full}}=\chi^2_{\rm{stream}}+\chi^2_{\rm{core}}.
+\end{equation}
 
 
 \subsection{Optimization algorithms}
