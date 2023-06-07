@@ -220,15 +220,16 @@ we will explain how this initial condition was chosen for some simulations and f
 
 After having the stream's orbit integrated, we transform the orbit to both the ICRS and the GD-1 frame of coordinates. For the latter we used the \texttt{GD1Koposov10} class defined in the {\scshape{Gala}} package~\citep{gala,adrian_price_whelan_2020_4159870} which uses the transformation matrix defined
 by~\citet{Koposov_2010}.
-After these two transformation we obtain the orbit expressed in the observable variables ($\phi_1$, $\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$ and $\mu_\delta$) used in Eqs.~(\ref{Ibata_polyn})-(\ref{Ibata_polynb}).
-Finally, we build interpolators of these variables as a function of $\phi_1$ that will be used, together with the observed data, to evaluate the following $\chi^2$ stream function:
+After these two transformation we obtain the orbit expressed in the observable variables ($\phi_1$, $\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$, $\mu_\delta$) used in Eqs.~(\ref{Ibata_polyn})-(\ref{Ibata_polynb}).
+Finally, we build interpolators of these variables as a function of $\phi_1$ that will be used, together with the observed data defined in Sec.~\ref{observables}, to evaluate the following $\chi^2$ stream function:
 \begin{eqnarray}
    \label{chi2}
    \chi^2_{\rm{stream}} &=& \chi^2_{\phi_2} + \chi^2_{D}+ \chi^2_{v_h}+\chi^2_{\tilde{\mu}_\alpha}+ \chi^2_{\mu_\delta},\\
    \chi^2_{\eta} &=& \frac{1}{\sigma_\eta^2}\sum_{i=1}^{100} \big(\eta^{(i)}-\eta(\phi_1^{(i)})\big)^2,
 \end{eqnarray}
 where
-$\eta$ represents each of the four corresponding independent variables ($\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$ and $\mu_\delta$) and $\sigma_\eta$ is an approximate (eye-guided) estimation of the average errors given by
+$\eta$ represents each of the four corresponding independent variables ($\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$, $\mu_\delta$) and $\sigma_\eta$ is the average dispersion of the stream data points taken by
+ocular inspection from Figs.~1,3,4 of~\citet{Ibata_2020}:
 $\sigma_{\phi_2}=0.5^\circ$,
 $\sigma_{D}= 1.5~\rm{kpc}$,
 $\sigma_{v_h} = 10~\rm{km/s}$ and
