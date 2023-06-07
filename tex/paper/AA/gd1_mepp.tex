@@ -90,7 +90,7 @@ dark matter halo.
 In this section we explain the observables and methods used in this research.
 
 \subsection{Observables and assumed measurements}
-\label{observables}
+\label{sec:observables}
 
 The main observables used in this project are materialized by the polynomial fits performed by
 \citet{Ibata_2020} on the GD-1\\ stream using astrometry (Gaia DR2), photometry and high-precision spectroscopy datasets together with the analysis of the {\sc streamfinder} algorithm.
@@ -221,7 +221,7 @@ we will explain how this initial condition was chosen for some simulations and f
 After having the stream's orbit integrated, we transform the orbit to both the ICRS and the GD-1 frame of coordinates. For the latter we used the \texttt{GD1Koposov10} class defined in the {\scshape{Gala}} package~\citep{gala,adrian_price_whelan_2020_4159870} which uses the transformation matrix defined
 by~\citet{Koposov_2010}.
 After these two transformation we obtain the orbit expressed in the observable variables ($\phi_1$, $\phi_2$, $D$, $v_h$, $\tilde{\mu}_\alpha$, $\mu_\delta$) used in Eqs.~(\ref{Ibata_polyn})-(\ref{Ibata_polynb}).
-Finally, we build interpolators of these variables as a function of $\phi_1$ that will be used, together with the observed data defined in Sec.~\ref{observables}, to evaluate the following $\chi^2$ stream function:
+Finally, we build interpolators of these variables as a function of $\phi_1$ that will be used, together with the observed data defined in Sec.~\ref{sec:observables}, to evaluate the following $\chi^2$ stream function:
 \begin{eqnarray}
    \label{chi2}
    \chi^2_{\rm{stream}} &=& \chi^2_{\phi_2} + \chi^2_{D}+ \chi^2_{v_h}+\chi^2_{\tilde{\mu}_\alpha}+ \chi^2_{\mu_\delta},\\
@@ -249,7 +249,8 @@ $\sigma_m$ was tested between 10\% and 50\% of its value, so sometimes we will u
 
 
 \subsection{Optimization algorithms}
-Our objective consists in fitting our MW model by minimizing the $\chi^2$ function given by Eqs.~(\ref{chi2},\ref{chi2_full}).  In order to do so we use two optimization algorithms in this work.
+Our objective consists in fitting our MW model by minimizing the $\chi^2$ function given by Eqs.~(\ref{chi2},\ref{chi2_full}).  In order to do so we use two optimization algorithms for different purposes
+that will be explained in Sec.~\ref{sec:results}
 One of them is {\scshape{SciPy}}'s
 \texttt{optimize.differential\_evolution} algorithm. This genetic architecture
 was used with metaparemeters given by
@@ -262,16 +263,16 @@ The other algorithm is {\scshape{NLopt}}'s
 environment. We used default values for the all its metaparameters except for
 \texttt{reltol}=$5\times10^{-5}$.
 
-These two optimizators where used for different purposes that will be explained
-in the following section along the results.
 
 
 \section{Results}
+\label{sec:results}
 
 \section{Discussion}
+\label{sec: discussion}
 
 \section{Conclusions}
-
+\label{sec:conclusions}
 
 %______________________________________________________________
 
