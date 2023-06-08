@@ -97,17 +97,18 @@ The main observables used in this project are materialized by the polynomial fit
 Those polinomials are the following:
 \begin{eqnarray}
    \label{Ibata_polyn}
-   \phi_2  &=& 0.008367\phi_1^3-0.05332\phi_1^2-0.07739\phi_1-0.02007 \\
+   \phi_2  &=& 0.008367\phi_1^3-0.05332\phi_1^2-0.07739\phi_1-0.02007, \\
    D &=& -4.302\phi_1^5-11.54\phi_1^4-7.161\phi_1^3 +5.985\phi_1^2 \nonumber\\
-      &&+ 8.595\phi_1+10.36\\
-   v_h &=&  90.68\phi_1^3+204.5\phi_1^2-254.2\phi_1-261.5\\
-   \tilde{\mu}_\alpha &=& 3.794\phi_1^3+9.467\phi_1^2+1.615\phi_1-7.844\\
-   \mu_\delta &=& -1.225\phi_1^3+8.313\phi_1^2+18.68\phi_1-3.95,
+      &&+ 8.595\phi_1+10.36,\\
+   \tilde{\mu}_\alpha &=& 3.794\phi_1^3+9.467\phi_1^2+1.615\phi_1-7.844,\\
+   \mu_\delta &=& -1.225\phi_1^3+8.313\phi_1^2+18.68\phi_1-3.95,\\
+   v_h &=&  90.68\phi_1^3+204.5\phi_1^2-254.2\phi_1-261.5,\\
    \label{Ibata_polynb}
 \end{eqnarray}
-with $\phi_1$ and $\phi_2$ in radians, $D$ in kpc and, $\tilde{\mu}_\alpha=\mu_\alpha cos \delta$ and $\mu_\delta$ in mas/yr. These quantities correspond respectively to longitude and latitude in GD-1 celestial frame of reference~\citep{Koposov_2010}, heliocentric distance, heliocentric velocity, proper motion in right ascension and declination. The domain of this polinomials is limited to $-90<\phi_1[^\circ]<10$.
+with $\phi_1$ and $\phi_2$ in radians, $D$ in kpc, $\tilde{\mu}_\alpha=\mu_\alpha cos \delta$ and $\mu_\delta$ in mas/yr and $v_h$ in km/s. These quantities correspond respectively to longitude and latitude in GD-1 celestial frame of reference~\citep{Koposov_2010}, heliocentric distance, proper motion in right ascension and declination, and heliocentric radial velocity.
+The domain of this polinomials is limited to $-90<\phi_1[^\circ]<10$.
 To have our observable data points we sample the domain with 100 points ($\phi_1^{(i)}$ for $i=1,...,100$)
-and evaluate the polinomials there in order to have a complete set of observables ($\phi_1^{(i)}$, $\phi_2^{(i)}$, $D^{(i)}$, $\tilde{\mu}_\alpha^{(i)}$, $\mu_\delta^{(i)}$).
+and evaluate the polinomials there in order to have a complete set of observables ($\phi_1^{(i)}$, $\phi_2^{(i)}$, $D^{(i)}$, $\tilde{\mu}_\alpha^{(i)}$, $\mu_\delta^{(i)}$, $v_h^{(i)}$).
 In one of the experiments we will consider an observable of a different nature
 and related to the density concentration at the origin, of size $\lesssim 1$ milliparsec,
 characteristic of the fermionic halo distribution. By convention, the core radius is defined
@@ -188,6 +189,7 @@ could properly integrate these equations was the \texttt{LSODA} algorithm. We us
 
 
 \subsection{Milky Way and stream models}
+\label{sec:MW_stream_models}
 
 We model our Galaxy with a combination of the fermionic dark halo recently described, whose parameters will be determined in this work, plus a barionic component fixed and identical to the one in Model I of~\citet{2017A&A...598A..66P}. Here we name this full Galaxy model as Fermionic-MW.
 
@@ -201,8 +203,7 @@ one-dimensional distribution in phase-space can be well approximated with the or
 Another facts in this direction, are that there has not been any observation of the tidal arms feature
 nor of the progenitor's position~\citep{2019MNRAS.486.2995M,10.1093/mnras/sty677,10.1093/mnras/sty1338,Price-Whelan_2018}.
 
-In the code, the orbit model is computed starting from initial conditions in spherical equatorial coordinates:
-$\alpha$, $\delta$, $D_h$, $\mu_\alpha \cos\delta$, $\mu_\delta$, $v_h$, which are respectively, RA, declination, heliocentric distance, proper motion in $\alpha$ times the cosine of $\delta$, proper motion in $\delta$ and helicentric radial velocity.
+In the code, the orbit model is computed starting from initial conditions in spherical equatorial coordinates, ICRS frame: $\alpha$ (RA), $\delta$ (declination), $D$, $\tilde{\mu}_\alpha$, $\mu_\delta$, $v_h$.
 The code uses the {\scshape{Astropy}} ecosystem~\citep{astropy:2022, astropy:2018, astropy:2013} in order to transform the initial condition to galactocentric coordinates assuming a Galactocentric reference frame with the sun at the position $\boldsymbol{x}_\odot=(-R_\odot,0,0)$ and a sun's velocity given by the sum of the circular velocity at the position of the sun and
 the sun's peculiar velocity: $\boldsymbol{v}_\odot=(11.1, v_c(R_\odot)+12.24, 7.25)$. The circular velocity is dependent on the model and the position and given by
 
@@ -248,6 +249,8 @@ $\sigma_m$ was tested between 10\% and 50\% of $m_{\rm{core}}$, so sometimes we 
 
 
 \subsection{Optimization algorithms}
+\label{sec:optimization}
+
 Our objective consists in fitting our MW model by minimizing the $\chi^2$ function given by Eqs.~(\ref{chi2},\ref{chi2_full}).  In order to do so we use two optimization algorithms for different purposes
 that will be explained in Sec.~\ref{sec:results}
 One of them is {\scshape{SciPy}}'s
@@ -266,6 +269,17 @@ environment. We used default values for the all its metaparameters except for
 
 \section{Results}
 \label{sec:results}
+
+Initially, we searched for a good enough initial condition (IC) of the progenitor orbit for our
+Fermionic-MW. For that, we fitted the initial conditions in the (fixed) NFW-MW model defined in
+Sec.~\ref{sec:MW_stream_models} by using the $\chi^2_{\rm{stream}}$ function defined in Eq.~(\ref{chi2})
+and the genetic algorithm specified in Sec.~\ref{sec:optimization}. This IC is not uniquely
+determined as any point along the stream is equally good, but we just need one solution. The IC
+found is given by approximately by $\alpha_0=149.4^{\circ}$, $\delta_0=36.8^{\circ}$, $D_0=7.9$ kpc,
+$\tilde{\mu}_{\alpha,0}=-7.1$ mas/yr, $\mu_{\delta,0}=-12.5$ mas/yr and $v_{h,0}=-17.3$ km/s.
+
+
+
 
 \section{Discussion}
 \label{sec: discussion}
