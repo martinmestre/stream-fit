@@ -410,7 +410,7 @@ let
       _lines[3].linestyle = :dot
 
       display(fig)
-      save("observables_pmra.pdf", fig, pt_per_unit = 1)
+      save("observables_pmdec.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
 
