@@ -274,8 +274,8 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
                     :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ])
 # %%
-labels = [ "Fermionic-MW", "NFW-MW", "Obs", "Obs+σ","Obs-σ"]
-lw = 5
+labels = ["Observed±σ", "NFW-MW", "Fermionic-MW" ]
+lw = 4
 
 
 # Sky position plot
@@ -286,28 +286,37 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [17, 22, 2,3,4] .=> L"$ϕ_2$ [°]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [2, 22, 17] .=> L"ϕ_2~[°]";
               color = grp,
               linestyle = grp
           ) *
-          visual(Lines)
-      println("plt=",plt)
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
+          visual(Lines, linewidth=lw)
+      plt2 = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [3,4] .=> L"ϕ_2~[°]";
+      ) *
+      visual(Lines, linewidth=lw)
+      println("plt=",plt+plt2)
+      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+
+      # Lines re-styling
+      lineas = fig.content[1].scene.plots
+      lineas[1].color = "black"
+      lineas[4].linewidth = 2
+      lineas[5].linewidth = 2
+      lineas[2].linestyle = :dash
+      lineas[3].linestyle = :dot
+
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:6]
+      _lines = leg.blockscene.children[1].plots[2:4]
       for l in _lines
             l.linewidth = 4
       end
-      # _lines[1].linestyle = :dash
-      # _lines[2].linestyle = :dot
-      # _lines[3].linestyle = :solid
-      # _lines[4].linestyle = :solid
-      # _lines[5].linestyle = :solid
-      # _lines[4].linewidth = 2
-      # _lines[5].linewidth = 2
-
+      _lines[1].color = "black"
+      _lines[1].linestyle = :solid
+      _lines[2].linestyle = :dash
+      _lines[3].linestyle = :dot
 
       display(fig)
       save("observables_position.pdf", fig, pt_per_unit = 1)
@@ -324,27 +333,42 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"ϕ_1 [°]", [19, 24, 8, 9, 10] .=> L"μ_{\mathrm{RA}} [\mathrm{mas}~\mathrm{yr}^{-1}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [8, 24, 19] .=> L"\tilde{μ}_{α}~[\mathrm{mas}~\mathrm{yr}^{-1}]";
               color = grp,
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
-
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt2 = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [9,10] .=> L"\tilde{μ}_{α}~[\mathrm{mas}~\mathrm{yr}^{-1}]";
+      ) *
+      visual(Lines, linewidth=lw)
+      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+
+      # Lines re-styling
+      lineas = fig.content[1].scene.plots
+      lineas[1].color = "black"
+      lineas[4].linewidth = 2
+      lineas[5].linewidth = 2
+      lineas[2].linestyle = :dash
+      lineas[3].linestyle = :dot
+
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:6]
+      _lines = leg.blockscene.children[1].plots[2:4]
       for l in _lines
             l.linewidth = 4
       end
-
-      show(f)
+      _lines[1].color = "black"
+      _lines[1].linestyle = :solid
+      _lines[2].linestyle = :dash
+      _lines[3].linestyle = :dot
       display(fig)
       save("observables_pmra.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
 
+# %%
 
 # Proper motion (DEC) plot
 let
@@ -354,27 +378,43 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [20, 25, 11, 12, 13] .=> L"μ_{\mathrm{Dec}} [\mathrm{mas}~\mathrm{yr}^{-1}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [11, 25, 20] .=> L"μ_δ~[\mathrm{mas}~\mathrm{yr}^{-1}]";
               color = grp,
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
-
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt2 = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [12,13] .=> L"μ_δ~[\mathrm{mas}~\mathrm{yr}^{-1}]";
+      ) *
+      visual(Lines, linewidth=lw)
+      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+
+      # Lines re-styling
+      lineas = fig.content[1].scene.plots
+      lineas[1].color = "black"
+      lineas[4].linewidth = 2
+      lineas[5].linewidth = 2
+      lineas[2].linestyle = :dash
+      lineas[3].linestyle = :dot
+
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:6]
+      _lines = leg.blockscene.children[1].plots[2:4]
       for l in _lines
             l.linewidth = 4
       end
+      _lines[1].color = "black"
+      _lines[1].linestyle = :solid
+      _lines[2].linestyle = :dash
+      _lines[3].linestyle = :dot
 
       display(fig)
       save("observables_pmra.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
 
-
+# %%
 # Heliocentric distance plot
 let
       size_inches = (6.2*2, 3*2)
@@ -383,29 +423,44 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [18, 23, 5, 6, 7] .=> L"d_\odot [\mathrm{kpc}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [5, 23, 18] .=> L"D~[\mathrm{kpc}]";
               color = grp,
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
-
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt2 = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [6,7] .=> L"D~[\mathrm{kpc}]";
+      ) *
+      visual(Lines, linewidth=lw)
+      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+
+      # Lines re-styling
+      lineas = fig.content[1].scene.plots
+      lineas[1].color = "black"
+      lineas[4].linewidth = 2
+      lineas[5].linewidth = 2
+      lineas[2].linestyle = :dash
+      lineas[3].linestyle = :dot
+
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:6]
+      _lines = leg.blockscene.children[1].plots[2:4]
       for l in _lines
             l.linewidth = 4
       end
+      _lines[1].color = "black"
+      _lines[1].linestyle = :solid
+      _lines[2].linestyle = :dash
+      _lines[3].linestyle = :dot
 
       display(fig)
       save("observables_heldist.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
-
+# %%
 
 # Heliocentric radial velocity plot
-labels = [ "MEPP", "NFW", "Obs+σ", "Obs-σ"]
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
@@ -413,21 +468,37 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"$ϕ_1$ [°]", [21, 26, 15, 16] .=> L"v_\odot [\mathrm{kpc}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [15, 26, 21] .=> L"v_h~[\mathrm{kpc}]";
               color = grp,
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
-
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt2 = data(df_obsmod) *
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [16] .=> L"v_h~[\mathrm{kpc}]";
+      ) *
+      visual(Lines, linewidth=lw)
+      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
             xgridvisible=false, ygridvisible=false))
 
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+
+       # Lines re-styling
+      lineas = fig.content[1].scene.plots
+      lineas[1].color = "black"
+      lineas[1].linewidth = 2
+      lineas[4].linewidth = 2
+      lineas[2].linestyle = :dash
+      lineas[3].linestyle = :dot
+
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:5]
+      _lines = leg.blockscene.children[1].plots[2:4]
       for l in _lines
             l.linewidth = 4
       end
+      _lines[1].color = "black"
+      _lines[1].linestyle = :solid
+      _lines[2].linestyle = :dash
+      _lines[3].linestyle = :dot
 
       display(fig)
       save("observables_helvel.pdf", fig, pt_per_unit = 1)
