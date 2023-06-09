@@ -254,7 +254,7 @@ font = {"size": 20}
 plt.rc('font', **font)
 
 # Sky position
-ax1.set_title('Axisym. NFW in MWPotential2014 fit by Malhan+19')
+# ax1.set_title('Axisym. NFW in MWPotential2014 fit by Malhan+19')
 ax1.scatter(phi_1.wrap_at(180*u.deg), phi_2, s=0.1, marker='o', color='red',label='Fit (Malhan+19)' )
 ax1.plot(Iba_sky['phi_1'], Iba_sky['phi_2'], color='blue', label='Data (Ibata+20)')
 ax1.set_ylim(-4, 2)

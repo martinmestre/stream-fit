@@ -274,8 +274,10 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
                     :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ])
 # %%
-labels = [ "MEPP", "NFW", "Obs", "Obs+σ","Obs-σ"]
+labels = [ "Fermionic-MW", "NFW-MW", "Obs", "Obs+σ","Obs-σ"]
 lw = 5
+
+
 # Sky position plot
 let
       size_inches = (6.2*2, 3*2)
@@ -288,7 +290,7 @@ let
               color = grp,
               linestyle = grp
           ) *
-          visual(Lines, linewidth=lw)
+          visual(Lines)
       println("plt=",plt)
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
@@ -298,12 +300,21 @@ let
       for l in _lines
             l.linewidth = 4
       end
+      # _lines[1].linestyle = :dash
+      # _lines[2].linestyle = :dot
+      # _lines[3].linestyle = :solid
+      # _lines[4].linestyle = :solid
+      # _lines[5].linestyle = :solid
+      # _lines[4].linewidth = 2
+      # _lines[5].linewidth = 2
+
 
       display(fig)
       save("observables_position.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
 
+# %%
 
 # Proper motion (RA) plot
 let
