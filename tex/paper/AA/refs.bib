@@ -1,5 +1,101 @@
 # Software
+@misc{NLopt,
+  title = {The {NLopt} nonlinear-optimization package},
+  author = {Steven G. Johnson},
+  year = {2007},
+  howpublished = {\url{https://github.com/stevengj/nlopt}}
+}
 
+@article{NELDERMEAD,
+  author = {J. A. Nelder and R. Mead},
+  title = {A simplex method for function minimization},
+  doi = {10.1093/comjnl/7.4.308},
+  year = {1965},
+  volume = {7},
+  pages = {308--313},
+  journal = {The Computer Journal}
+}
+
+@article{10.1093/comjnl/8.1.42,
+    author = {Box, M. J.},
+    title = "{A New Method of Constrained Optimization and a Comparison With Other Methods}",
+    journal = {The Computer Journal},
+    volume = {8},
+    number = {1},
+    pages = {42-52},
+    year = {1965},
+    month = {04},
+    abstract = "{A new method for finding the maximum of a general non-linear function of several variables within a constrained region is described, and shown to be efficient compared with existing methods when the required optimum lies on one or more constraints. The efficacy of using effective constraints to eliminate variables is demonstrated, and a program to achieve this easily and automatically is described. Finally, the performance of the new method (the “Complex” method) with unconstrained problems, is compared with those of the Simplex method, from which it was evolved, and Rosenbrock's method.}",
+    issn = {0010-4620},
+    doi = {10.1093/comjnl/8.1.42},
+    url = {https://doi.org/10.1093/comjnl/8.1.42},
+    eprint = {https://academic.oup.com/comjnl/article-pdf/8/1/42/1323328/8-1-42.pdf},
+}
+
+@article{shere,
+author = {Shere, Kenneth},
+year = {1974},
+month = {08},
+pages = {471},
+title = {The Complex Method for Constrained Optimization (Remark on Algorithm 454).},
+volume = {17},
+journal = {Commun. ACM},
+doi = {10.1145/361082.372783}
+}
+
+@ARTICLE{2020SciPy-NMeth,
+  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and
+            Haberland, Matt and Reddy, Tyler and Cournapeau, David and
+            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and
+            Bright, Jonathan and {van der Walt}, St{\'e}fan J. and
+            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and
+            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and
+            Kern, Robert and Larson, Eric and Carey, C J and
+            Polat, {\.I}lhan and Feng, Yu and Moore, Eric W. and
+            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and
+            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and
+            Harris, Charles R. and Archibald, Anne M. and
+            Ribeiro, Ant{\^o}nio H. and Pedregosa, Fabian and
+            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},
+  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific
+            Computing in Python}},
+  journal = {Nature Methods},
+  year    = {2020},
+  volume  = {17},
+  pages   = {261--272},
+  adsurl  = {https://rdcu.be/b08Wh},
+  doi     = {10.1038/s41592-019-0686-2},
+}
+
+@Article{harris2020array,
+ title         = {Array programming with {NumPy}},
+ author        = {Charles R. Harris and K. Jarrod Millman and St{\'{e}}fan J.
+                 van der Walt and Ralf Gommers and Pauli Virtanen and David
+                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian
+                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus
+                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew
+                 Brett and Allan Haldane and Jaime Fern{\'{a}}ndez del
+                 R{\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre
+                 G{\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and
+                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and
+                 Travis E. Oliphant},
+ year          = {2020},
+ month         = sep,
+ journal       = {Nature},
+ volume        = {585},
+ number        = {7825},
+ pages         = {357--362},
+ doi           = {10.1038/s41586-020-2649-2},
+ publisher     = {Springer Science and Business Media {LLC}},
+ url           = {https://doi.org/10.1038/s41586-020-2649-2}
+}
+
+@book{van1995python,
+  title={Python tutorial},
+  author={Van Rossum, Guido and Drake Jr, Fred L},
+  year={1995},
+  publisher={Centrum voor Wiskunde en Informatica Amsterdam, The Netherlands}
+}
 @article{bezanson2017julia,
   title={Julia: A fresh approach to numerical computing},
   author={Bezanson, Jeff and Edelman, Alan and Karpinski, Stefan and Shah, Viral B},
@@ -12,6 +108,18 @@
   url={https://doi.org/10.1137/141000671}
 }
 
+@article{DanischKrumbiegel2021,
+  doi = {10.21105/joss.03349},
+  url = {https://doi.org/10.21105/joss.03349},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {65},
+  pages = {3349},
+  author = {Simon Danisch and Julius Krumbiegel},
+  title = {{Makie.jl}: Flexible high-performance data visualization for {Julia}},
+  journal = {Journal of Open Source Software}
+}
 # RAR model
 
 @article{arguelles_novel_2018,
@@ -127,60 +235,7 @@ archivePrefix = {arXiv},
 
 
 
-# Packages.
-@ARTICLE{2020SciPy-NMeth,
-  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and
-            Haberland, Matt and Reddy, Tyler and Cournapeau, David and
-            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and
-            Bright, Jonathan and {van der Walt}, St{\'e}fan J. and
-            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and
-            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and
-            Kern, Robert and Larson, Eric and Carey, C J and
-            Polat, {\.I}lhan and Feng, Yu and Moore, Eric W. and
-            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and
-            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and
-            Harris, Charles R. and Archibald, Anne M. and
-            Ribeiro, Ant{\^o}nio H. and Pedregosa, Fabian and
-            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},
-  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific
-            Computing in Python}},
-  journal = {Nature Methods},
-  year    = {2020},
-  volume  = {17},
-  pages   = {261--272},
-  adsurl  = {https://rdcu.be/b08Wh},
-  doi     = {10.1038/s41592-019-0686-2},
-}
 
-@Article{harris2020array,
- title         = {Array programming with {NumPy}},
- author        = {Charles R. Harris and K. Jarrod Millman and St{\'{e}}fan J.
-                 van der Walt and Ralf Gommers and Pauli Virtanen and David
-                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian
-                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus
-                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew
-                 Brett and Allan Haldane and Jaime Fern{\'{a}}ndez del
-                 R{\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre
-                 G{\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and
-                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and
-                 Travis E. Oliphant},
- year          = {2020},
- month         = sep,
- journal       = {Nature},
- volume        = {585},
- number        = {7825},
- pages         = {357--362},
- doi           = {10.1038/s41586-020-2649-2},
- publisher     = {Springer Science and Business Media {LLC}},
- url           = {https://doi.org/10.1038/s41586-020-2649-2}
-}
-
-@book{van1995python,
-  title={Python tutorial},
-  author={Van Rossum, Guido and Drake Jr, Fred L},
-  year={1995},
-  publisher={Centrum voor Wiskunde en Informatica Amsterdam, The Netherlands}
-}
 
 # Streams
 
