@@ -84,7 +84,7 @@
 
 Stellar streams probe the acceleration field produced by the Milky Way (MW).
 This information together with barionic measurements help in making claims about the
-dark matter halo.
+dark matter (DM) halo.
 
 \section{Methodology}
 In this section we explain the observables and methods used in this research.
@@ -120,8 +120,8 @@ galactocentric distance of the sun $R_\odot=8.122$ kpc~\citep{2018A&A...615L..15
 velocity $\boldsymbol{v}_{\odot p} = (11.1, 12.24, 7.25)$ km/s~\citep{Shonrich}.
 
 
-\subsection{The fermionic dark matter model}
-Our dark matter model consists of a spherical and isotropic distribution of fermions at finite temperature in hydrostatic equilibrium subject to the law of General Relativity (i.e. T.O.V equations) as defined in~\cite{arguelles_novel_2018} with the particularity that we have made a few change of variables in order to make the numerical computation more robust. The system of equations thus obtained is as follows:
+\subsection{The fermionic DM model}
+Our DM model consists of a spherical and isotropic distribution of fermions at finite temperature in hydrostatic equilibrium subject to the law of General Relativity (GR), i.e. T.O.V equations, as defined in~\cite{arguelles_novel_2018} with the particularity that we have made a few change of variables in order to make the numerical computation more robust. The system of equations thus obtained is as follows:
 
 \begin{eqnarray}
    \label{sode}
@@ -138,7 +138,7 @@ where
    M &=& 4\pi R^3 \rho_{\rm{rel}},\\
    \rho_{\rm{rel}}&=& \frac{ G\pi^{3/2} m^4 c^3}{h^3},
 \end{eqnarray}
-where $G$ is the Gravitational constant, $c$ is the speed of light, $h$ is the Planck constant, $m$ is the fermion mass, $M_{\rm{DM}}(r)$ is dark matter mass enclosed up to radius $r$, $\rho(r)$ is the density, $P(r)$ is the pressure and $\nu(r)$ is the metric exponent, i.e. we use the convention $g_{00}=e^{\nu(r)}$. The phase-space function ($f$) is given by a Fermi-Dirac distribution with energy cutoff:
+where $G$ is the Gravitational constant, $c$ is the speed of light, $h$ is the Planck constant, $m$ is the fermion mass, $M_{\rm{DM}}(r)$ is DM mass enclosed up to radius $r$, $\rho(r)$ is the density, $P(r)$ is the pressure and $\nu(r)$ is the metric exponent, i.e. we use the convention $g_{00}=e^{\nu(r)}$. The phase-space function ($f$) is given by a Fermi-Dirac distribution with energy cutoff:
 \begin{equation}
 f(r,\epsilon)=
    \begin{cases}
@@ -181,10 +181,10 @@ quantities as parameters:
 $m$, $\beta_0$, $\theta_0=(\alpha_0-1)/\beta_0$, and $W_0=(\epsilon_{c0}-1)/\beta_0$.
 
 Equations~\ref{sode}-\ref{geod_energy} are solved using
-a Python~\citep{van1995python} script\footnote{
+a {\sc Python}~\citep{van1995python} script\footnote{
 \url{https://github.com/martinmestre/stream-fit/blob/main/likelihood_grid/optim/model_def.py}
 }
-that makes use of the NumPy~\citep{2020SciPy-NMeth} and SciPy~\citep{harris2020array} libraries. We tried all the solvers available in the latter package but the only one that
+that makes use of the {\it NumPy}~\citep{2020SciPy-NMeth} and {\it SciPy}~\citep{harris2020array} libraries. We tried all the solvers available in the latter package but the only one that
 could properly integrate these equations was the \texttt{LSODA} algorithm. We used relative and absolute tolerance parameters respectively given by \texttt{rtol}$=5\times10^{-14}$ and \texttt{atol}$=0$.
 
 
@@ -196,7 +196,7 @@ We model our Galaxy with a combination of the fermionic dark halo recently descr
 Appart from our model, for some intermediary tasks, we will make use of the Galactic model fitted
 by~\citet{2019MNRAS.486.2995M} which consists in the {\texttt{MWPotential2014}}
 model with an axisymmetric NFW profile. This fitted model corresponds to a circular velocity at the position of the sun of
-$v_c(R_\odot)=244 \pm 4 \rm{ km s}^{-1}$ and a $z-$flattening of the dark matter density distribution of $q_\rho=0.82^{+0.25}_{-0.13}$. Here we name this Galaxy model as NFW-MW.
+$v_c(R_\odot)=244 \pm 4 \rm{ km s}^{-1}$ and a $z-$flattening of the DM density distribution of $q_\rho=0.82^{+0.25}_{-0.13}$. Here we name this Galaxy model as NFW-MW.
 
 As GD-1 is a dynamically cold stream, with its stars keeping a large degree of correlation, its almost
 one-dimensional distribution in phase-space can be well approximated with the orbit of its progenitor.
@@ -204,7 +204,7 @@ Another facts in this direction, are that there has not been any observation of 
 nor of the progenitor's position~\citep{2019MNRAS.486.2995M,10.1093/mnras/sty677,10.1093/mnras/sty1338,Price-Whelan_2018}.
 
 In the code, the orbit model is computed starting from initial conditions in spherical equatorial coordinates, ICRS frame: $\alpha$ (RA), $\delta$ (declination), $D$, $\tilde{\mu}_\alpha$, $\mu_\delta$, $v_h$.
-The code uses the Astropy ecosystem~\citep{astropy:2022, astropy:2018, astropy:2013} in order to transform the initial condition to galactocentric coordinates assuming a Galactocentric reference frame with the sun at the position $\boldsymbol{x}_\odot=(-R_\odot,0,0)$ and a sun's velocity given by the sum of the circular velocity at the position of the sun and
+The code uses the {\it Astropy} ecosystem~\citep{astropy:2022, astropy:2018, astropy:2013} in order to transform the initial condition to galactocentric coordinates assuming a Galactocentric reference frame with the sun at the position $\boldsymbol{x}_\odot=(-R_\odot,0,0)$ and a sun's velocity given by the sum of the circular velocity at the position of the sun and
 the sun's peculiar velocity: $\boldsymbol{v}_\odot=(11.1, v_c(R_\odot)+12.24, 7.25)$. The circular velocity is dependent on the model and the position and given by
 
 \begin{eqnarray}
@@ -215,7 +215,7 @@ the sun's peculiar velocity: $\boldsymbol{v}_\odot=(11.1, v_c(R_\odot)+12.24, 7.
 where $\Phi$ is the total potential, $\Phi_B$ is the potential generated by the three barionic components and $M_{\rm{DM}}(r)$ was defined in Eq.~(\ref{mass_dm}). We have used the spherical symmetry property of the DM distribution in order to relate the acceleration with the enclosed mass.
 
 A second step is to integrate the orbit forwards and backwards in time during a time interval of $\Delta t=0.2$ Gyr, starting in both cases from a given initial condition for the progenitor. In the next sections
-we will explain how this initial condition was chosen for some simulations and fitted for others. The integrator used is a Runge-Kutta of order eight (\texttt{DOP853} called from SciPy's \texttt{solve\_ivp} function) with relative and absolute tolerance parameters respectively given by
+we will explain how this initial condition was chosen for some simulations and fitted for others. The integrator used is a Runge-Kutta of order eight (\texttt{DOP853} called from {\it SciPy}'s \texttt{solve\_ivp} function) with relative and absolute tolerance parameters respectively given by
 \texttt{rtol}$=5\times10^{-14}$ and \texttt{atol}$=0.5\times10^{-14}$.
 
 After having the stream's orbit integrated, we transform the orbit to both the ICRS and the GD-1 frame of coordinates. For the latter we used the \texttt{GD1Koposov10} class defined in the Gala package~\citep{gala,adrian_price_whelan_2020_4159870} which uses the transformation matrix defined
@@ -235,9 +235,10 @@ $\sigma_{D}= 1.5~\rm{kpc}$,
 $\sigma_{v_h} = 10~\rm{km/s}$ and
 $\sigma_{\tilde{\mu}_\alpha}= \sigma_{\delta}= 2~\rm{mas/yr}$.
 Thus $\chi^2_{\rm{stream}}$ measures the departure of the model from the stream observations.
-For some fits we will also consider the departure of the model from a mass constraint in the core
+For some fits we will also consider the departure of the model from a dark mass constraint in the core
 of the distribution:
 \begin{equation}
+   \label{m_core}
    \chi^2_{\rm{core}}=\frac{(m-m_{\rm{core}})^2}{\sigma_m^2},
 \end{equation}
 where $m_{\rm{core}}$ was defined in Sec.~\ref{sec:observables} and
@@ -247,21 +248,28 @@ $\sigma_m$ was tested between 10\% and 50\% of $m_{\rm{core}}$, so sometimes we 
    \chi^2_{\rm{full}}=\chi^2_{\rm{stream}}+\chi^2_{\rm{core}}.
 \end{equation}
 
+Note that in order to compute the estimated core mass of each model, $m$ in Eq.(\ref{m_core}),
+we must find the first local maximum of the expression for the circular velocity in GR:
+\begin{equation}
+   \label{v_circ_dm}
+   v_{\rm{DM}}(r)= c\sqrt{\frac{r}{2}\frac{d\nu(r)}{dr}}.
+\end{equation}
 
 \subsection{Optimization algorithms}
 \label{sec:optimization}
 
 Our objective consists in fitting our MW model by minimizing the $\chi^2$ function given by Eqs.~(\ref{chi2},\ref{chi2_full}).  In order to do so we use two optimization algorithms for different purposes
-that will be explained in Sec.~\ref{sec:results}
-One of them is SciPy's
+that will be explained in Sec.~\ref{sec:results}.
+One of them is {\it SciPy}'s
 \texttt{optimize.differential\_evolution} algorithm. This genetic architecture
 was used with metaparemeters given by
 \texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=100, \texttt{popsize}=50,
 \texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0. This method can be run in parallel with shared memory,
 so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
 
-The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the NLopt~\citep{NLopt} package
-for the Julia~\citep{bezanson2017julia} language.
+The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the
+{\it NLopt.jl}~\citep{NLopt} package
+for the {\sc Julia}~\citep{bezanson2017julia} language.
 We used default values for the all its metaparameters except for
 \texttt{reltol}=$5\times10^{-5}$.
 
@@ -280,6 +288,18 @@ $\tilde{\mu}_\alpha=-7.1$ mas/yr, $\mu_\delta=-12.5$ mas/yr and $v_h=-17.3$ km/s
 The corresponding orbit is displayed in the observable space in Fig.~\ref{fig:obs_pos}~(top: $\phi_2$, bottom: $D$) and Fig.~\ref{fig:obs_vel}~(top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$, bottom: $v_h$)
 with a dashed yellow line. The thick solid black line shows the corresponding observable $\eta$ data
 while the thin solid ones demarkate the corresponding regions at $1\sigma_\eta$.
+
+From previous works~\citep{arguelles_novel_2018,2022MNRAS.511L..35A} we know that the fermionic DM
+model parameters can be approximately grouped in two sets with different functionality. One group is formed
+by $\epsilon$ and $\beta_0$ that control the core of the distribution in the sense that
+for given values of $m_{\rm{core}}$ (as defined in Sec.~\ref{sec:observables}) and $\epsilon$, it is possible to find a value of $\beta_0$ in agreement; with a very small influence of the other two parameters: $\theta_0$ and $W_0$. This implies a partial degeneracy between $\epsilon$ and $\beta_0$.
+The other group is formed by $\theta_0$ and $W_0$, which have negligible effect on the core region but
+determine the distribution behaviour in the halo region.
+Then, we started with plausible fixed values for the pair $(\epsilon,\beta_0)=(56,1.25\times10^{5})$
+that satisfy approximately the $m_{\rm core}=3.5\times 10^5 M_\odot$ contraint, together with
+the fixed IC fitted for the NFW-MW model, and performed a genetic optimization in the windows:
+$\theta_0\in (35, 40)$  $W_0-\theta_0$ (35, 40), (25, 30)
+
 
 \begin{figure*}
    \centering
@@ -306,7 +326,12 @@ while the thin solid ones demarkate the corresponding regions at $1\sigma_\eta$.
 
 \begin{acknowledgements}
     Thank to people, institutions and codes used.
-    The figures presented where made with the AlgebraOfGraphics.jl\footnote{https://aog.makie.org/dev/} and Makie.jl~\citep{DanischKrumbiegel2021}
+    This work used computational resources from CCAD – Universidad Nacional de Córdoba (https://ccad.unc.edu.ar/), which are part of SNCAD – MinCyT, República Argentina.
+    MFM thanks Juan Ignacio Rodriguez for his great support with hardware and
+    software issues regarding IALP server and personal computers.
+    The figures presented where made with the
+    {\it AlgebraOfGraphics.jl}\footnote{https://aog.makie.org/dev/} and
+    {\it Makie.jl}~\citep{DanischKrumbiegel2021}
     packages.
 \end{acknowledgements}
 

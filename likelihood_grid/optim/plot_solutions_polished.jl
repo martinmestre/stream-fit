@@ -468,13 +468,13 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [15, 26, 21] .=> L"v_h~[\mathrm{kpc}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [15, 26, 21] .=> L"v_h~[\mathrm{km~s^{-1}}]";
               color = grp,
               linestyle = grp
           ) *
           visual(Lines, linewidth=lw)
       plt2 = data(df_obsmod) *
-      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [16] .=> L"v_h~[\mathrm{kpc}]";
+      mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [16] .=> L"v_h~[\mathrm{km~s^{-1}}]";
       ) *
       visual(Lines, linewidth=lw)
       f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),

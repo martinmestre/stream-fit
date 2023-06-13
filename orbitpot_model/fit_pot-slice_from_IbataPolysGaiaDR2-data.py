@@ -311,9 +311,12 @@ def invert_ic(u_0):
 
 
 # Taking the initial conditions from the Galpy fit with fixed MW2014 potential.
-ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
-              -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
+# ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
+#               -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
 
+# Taking the initial conditions from the refined Galpy fit with fixed MW2014 potential.
+ic = np.array([1.494388107329938578e+02, 3.680711127923125048e+01, 7.920109146332031891e+00,
+                -7.077083388218904147e+00, -1.253407370353136763e+01, -1.728629233817357402e+01])
 
 # Parameters
 param_file = 'param_fit_pot-slice_from_IbataPolysGaiaDR2-data_corr.txt'
@@ -324,17 +327,17 @@ beta_0 = 1.25e-5
 
 
 # Optimization
-# bounds = ((35, 40), (25, 30))
-# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-#                                       strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-8,
-#                                       atol=0.0, disp=True, polish=True, workers=-1)
-# param_fitted = opt.x
-# np.savetxt(param_file, param_fitted, delimiter=',')
-# w_0 = param_fitted
-# w_0 = np.loadtxt(param_file)
-ener_f = 180.0
-w_0, beta_0 = [38.659151633344315, 29.02076188196288], 0.00022625041108409515
-chi2(w_0, ener_f, beta_0, ic)
+bounds = ((35, 40), (25, 30))
+opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+                                      strategy='best2bin', maxiter=50, popsize=50, tol=5.0e-8,
+                                      atol=0.0, disp=True, polish=True, workers=-1)
+param_fitted = opt.x
+np.savetxt(param_file, param_fitted, delimiter=',')
+w_0 = param_fitted
+w_0 = np.loadtxt(param_file)
+# ener_f = 180.0
+# w_0, beta_0 = [38.659151633344315, 29.02076188196288], 0.00022625041108409515
+# chi2(w_0, ener_f, beta_0, ic)
 
 theta_0 = w_0[0]
 d_theta = w_0[1]
