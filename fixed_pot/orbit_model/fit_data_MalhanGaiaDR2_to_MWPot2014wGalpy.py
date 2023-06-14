@@ -184,6 +184,50 @@ def chi2(w_0):
 	print('chi^2 =',np.sum(sum))
 	return np.sum(sum)
 
+sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
+def chi2_stream(w_0):
+    """Chi^2 stream function."""
+    import wrap
+
+    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
+    cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
+    cfg.d_hel_spl = interp1d(phi_1, d_hel, kind='cubic')
+    cfg.v_hel_spl = interp1d(phi_1, v_hel,  kind='cubic')
+    cfg.mu_ra_spl = interp1d(phi_1, mu_ra, kind='cubic')
+    cfg.mu_dec_spl = interp1d(phi_1, mu_dec, kind='cubic')
+    cfg.phi_1_min = np.amin(phi_1.value)
+    cfg.phi_1_max = np.amax(phi_1.value)
+
+    sum = np.zeros(5)
+
+    y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['phi_2']
+    sigma2 = sigma_array[0]**2
+    sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['d_hel']
+    sigma2 = sigma_array[1]**2
+    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['mu_ra']
+    sigma2 = sigma_array[2]**2
+    sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['mu_dec']
+    sigma2 = sigma_array[3]**2
+    sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
+    y_dat = Iba_sky['v_hel']
+    sigma2 = sigma_array[4]**2
+    sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
+
+    print('chi^2_stream =',np.sum(sum))
+    return np.sum(sum)
+
 
 # Optimization
 #----------------
@@ -243,7 +287,7 @@ w_0 = np.loadtxt('param_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_refined.txt')
 print("w_0=",w_0)
 phi_1,phi_2,d_hel,mu_ra,mu_dec,v_hel = orbit_model(w_0[0],w_0[1],w_0[2],w_0[3],w_0[4],w_0[5])
 [ra,dec] = invert_ic([phi_1.value,phi_2.value])
-chi2(w_0)
+chi2_stream(w_0)
 
 
 
