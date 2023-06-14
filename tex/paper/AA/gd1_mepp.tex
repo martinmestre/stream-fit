@@ -283,23 +283,41 @@ Fermionic-MW. For that, we fitted the initial conditions in the (fixed) NFW-MW m
 Sec.~\ref{sec:MW_stream_models} by using the $\chi^2_{\rm{stream}}$ function defined in Eq.~(\ref{chi2})
 and the genetic algorithm specified in Sec.~\ref{sec:optimization}. This IC is not uniquely
 determined as any point along the stream is equally good, but we just need one solution. The IC
-found is given by approximately by $\alpha=149.4^{\circ}$, $\delta=36.8^{\circ}$, $D=7.9$ kpc,
-$\tilde{\mu}_\alpha=-7.1$ mas/yr, $\mu_\delta=-12.5$ mas/yr and $v_h=-17.3$ km/s.
+found is given by approximately by $\alpha=149.44^{\circ}$, $\delta=36.81^{\circ}$, $D=7.92$ kpc,
+$\tilde{\mu}_\alpha=-7.08$ mas/yr, $\mu_\delta=-12.53$ mas/yr and $v_h=-17.29$ km/s.
 The corresponding orbit is displayed in the observable space in Fig.~\ref{fig:obs_pos}~(top: $\phi_2$, bottom: $D$) and Fig.~\ref{fig:obs_vel}~(top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$, bottom: $v_h$)
 with a dashed yellow line. The thick solid black line shows the corresponding observable $\eta$ data
 while the thin solid ones demarkate the corresponding regions at $1\sigma_\eta$.
 
-From previous works~\citep{arguelles_novel_2018,2022MNRAS.511L..35A} we know that the fermionic DM
-model parameters can be approximately grouped in two sets with different functionality. One group is formed
+From previous works~\citep{arguelles_novel_2018,2019PDU....24..278A,2023ApJ...945....1K} we know that the fermionic DM model parameters can be approximately grouped in two sets with different functionality. One group is formed
 by $\epsilon$ and $\beta_0$ that control the core of the distribution in the sense that
-for given values of $m_{\rm{core}}$ (as defined in Sec.~\ref{sec:observables}) and $\epsilon$, it is possible to find a value of $\beta_0$ in agreement; with a very small influence of the other two parameters: $\theta_0$ and $W_0$. This implies a partial degeneracy between $\epsilon$ and $\beta_0$.
-The other group is formed by $\theta_0$ and $W_0$, which have negligible effect on the core region but
-determine the distribution behaviour in the halo region.
-Then, we started with plausible fixed values for the pair $(\epsilon,\beta_0)=(56,1.25\times10^{5})$
-that satisfy approximately the $m_{\rm core}=3.5\times 10^5 M_\odot$ contraint, together with
-the fixed IC fitted for the NFW-MW model, and performed a genetic optimization in the windows:
-$\theta_0\in (35, 40)$  $W_0-\theta_0$ (35, 40), (25, 30)
+for given values of $m_{\rm{core}}$ (Sec.~\ref{sec:observables}) and $\epsilon$, it is possible to find a value of $\beta_0$ in agreement; with a very small influence of the other two parameters: $\theta_0$ and $W_0$. This implies a partial degeneracy between $\epsilon$ and $\beta_0$.
+The other group is formed by $\theta_0$ and $W_0$, which have small effect on the core region but
+determine the distribution behaviour in the halo region. In fact, there is also an approximate
+degeneracy between these two variables in the sense that it is the parameter
+$\omega_0 = W_0-\theta_0$ who controls the halo profile, as will be further shown in this paper.
 
+As a starting point for our three-step multiparameter search, we took the result from~\citet{2020A&A...641A..34B}, that found that for $(\epsilon, \beta_0, \theta_0, W_0)=(56, 1.1977\times10^{-5}, 37.765, 66.3407)$
+their MW model (DM+barions) satisfies both the geodesic motion of S2 and G2 at Sagittarius A*, i.e. $m_{\rm core}=3.5\times 10^5 M_\odot$, and the rotation curve from~\citet{sofue_rotation_2013}.
+As a first step, we fixed values for the pair $(\epsilon,\beta_0)=(56,1.20\times10^{5})$ together with
+the fixed IC fitted for the NFW-MW model, and performed a genetic minimization of the
+$\chi^2_{\rm{stream}}$ function in the window:
+$\theta_0\in (35, 40)$  $\omega_0\in(25, 30)$. The algorithm converged to
+$(\theta_0, \omega_0)\approx (36.24, 27.46)$. As our solution failed in a little quantity to satisfy
+the core mass constraint, we performed a second step that consisted in adjusting simultaneously
+the values of $(\beta_0,\theta_0,\omega_0)$ by minimizing $\chi^2_{\rm{full}}$ with the
+\texttt{LN\_NELDERMEAD} algorithm. This gave us final values for the fermionic DM model parameters:
+$(\epsilon, \beta_0, \theta_0, W_0)\approx(56, 1.25\times10^{-5}, 36.22, 27.46)$.
+Finally, the third step consisted in fixing the Fermionic-MW parameters but floating the ICs of the orbit with the genetic scheme, which gave us very similar to the FMW-MW case:
+$\alpha=148.88^{\circ}$, $\delta=36.34^{\circ}$, $D=7.96$ kpc,
+$\tilde{\mu}_\alpha=-6.87$ mas/yr, $\mu_\delta=-12.49$ mas/yr and $v_h=-16.05$ km/s.
+Although the Fermionic-MW solution has a value of $\chi^2_{\rm{stream}}\approx 19.83$
+which is a little smaller than the value obtained for NFW-MW, $\chi^2_{\rm{stream}}\approx 27.95$,
+we have not performed any bayesian comparison between both models to determine which one is
+more consistent with the data.
+The corresponding orbit is displayed in the observable space in Figs.~\ref{fig:obs_pos}-\ref{fig:obs_vel}~
+with a dotted green line where it can be noticed that both the Fermionic and NFW models
+fit the GD-1 stream very well.
 
 \begin{figure*}
    \centering
