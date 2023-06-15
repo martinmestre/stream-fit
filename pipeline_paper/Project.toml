@@ -1,0 +1,10 @@
+[deps]
+AlgebraOfGraphics = "cbdf2221-f076-402e-a563-3d30da359d67"
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+CubicSplines = "9c784101-8907-5a6d-9be6-98f00873c89b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+Showoff = "992d4aef-0814-514b-bc4d-f2e9a6c4116f"

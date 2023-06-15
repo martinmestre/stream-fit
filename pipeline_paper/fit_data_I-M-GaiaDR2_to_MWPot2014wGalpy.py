@@ -263,7 +263,6 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
         (w_0[3]-dw[3],w_0[3]+dw[3]), (w_0[4]-dw[4],w_0[4]+dw[4]), (w_0[5]-dw[5],w_0[5]+dw[5]))
 # bounds =((130,220),(20,60),(7,12),(-20,0),(-14,-1),(-300,250) )
 # bounds =((0,360),(-90,90),(4,12),(-20,0),(-20,0),(-70,-20) )
-
 # A posteriori refinement:
 # w_0 = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
 #                 -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
@@ -271,16 +270,17 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 # bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
 #           (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=100,popsize=200,tol=5.0e-8,atol=0.5e-8,disp=True,polish=True,workers=-1)
+opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=100,popsize=200,
+                                    tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
 
 param_fitted = opt.x
 
-np.savetxt('param_fit_IbataPolysGaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
+np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
 
 
 # Test call:
-w_0 = np.loadtxt('param_fit_IbataPolysGaiaDR2_to_MWPot2014wGalpy.txt')
-# w_0=param_fitted
+w_0 = np.loadtxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt')
+
 
 
 print("w_0=",w_0)
@@ -332,7 +332,7 @@ ax5.set_ylabel(r'$\mu_\delta$ [mas yr$^{-1}$]', fontsize=20)
 plt.xlabel(r'$\phi_1$ [degrees]', fontsize=20)
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 plt.tight_layout()
-fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy_Polys.png")
+fig.savefig("plots/sky_fit_I-M-GaiaDR2_to_MWPot2014wGalpy_Polys.png")
 
 
 # Plots using RA
@@ -369,7 +369,7 @@ plt.xlabel('RA [degrees]')
 plt.xlim(130,230)
 plt.tight_layout()
 plt.show()
-fig.savefig("plots/sky_fit_MalhanGaiaDR2_to_MWPot2014wGalpy.png")
+fig.savefig("plots/sky_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.png")
 
 
 

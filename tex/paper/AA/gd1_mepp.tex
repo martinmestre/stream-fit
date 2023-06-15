@@ -281,9 +281,10 @@ We used default values for the all its metaparameters except for
 Initially, we searched for a good enough initial condition (IC) of the progenitor orbit for our
 Fermionic-MW. For that, we fitted the initial conditions in the (fixed) NFW-MW model defined in
 Sec.~\ref{sec:MW_stream_models} by using the $\chi^2_{\rm{stream}}$ function defined in Eq.~(\ref{chi2})
-and the genetic algorithm specified in Sec.~\ref{sec:optimization}. This IC is not uniquely
-determined as any point along the stream is equally good, but we just need one solution. The IC
-found is given by approximately by $\alpha=149.44^{\circ}$, $\delta=36.81^{\circ}$, $D=7.92$ kpc,
+and the genetic algorithm specified in Sec.~\ref{sec:optimization}. It should be said that the
+NFW-MW model was fitted by~\citet{2019MNRAS.486.2995M} with a set of Gaia DR2 data different from
+the polynomials used here. Any point along the stream is equally good as an IC and the one
+obtained is given approximately by $\alpha=149.44^{\circ}$, $\delta=36.81^{\circ}$, $D=7.92$ kpc,
 $\tilde{\mu}_\alpha=-7.08$ mas/yr, $\mu_\delta=-12.53$ mas/yr and $v_h=-17.29$ km/s.
 The corresponding orbit is displayed in the observable space in Fig.~\ref{fig:obs_pos}~(top: $\phi_2$, bottom: $D$) and Fig.~\ref{fig:obs_vel}~(top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$, bottom: $v_h$)
 with a dashed yellow line. The thick solid black line shows the corresponding observable $\eta$ data
@@ -317,7 +318,7 @@ fit the GD-1 stream very well.
 Although the Fermionic-MW solution has a value of $\chi^2_{\rm{stream}}\approx 19.83$
 which is a little smaller than the value obtained for NFW-MW, $\chi^2_{\rm{stream}}\approx 27.95$,
 we have not performed any statistically rigourous comparison between both models to determine which one is
-more consistent with the data.
+more consistent with the data. In fact, here we used a fixed NFW-MW model that was fitted by~\citet{2019MNRAS.486.2995M} with another set of Gaia DR2 observations, as has previously been stated.
 
 
 \begin{figure*}
