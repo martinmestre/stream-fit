@@ -88,6 +88,9 @@ dark matter (DM) halo.
 
 \section{Methodology}
 In this section we explain the observables and methods used in this research.
+The exact pipeline applied in order to obtain the results and plots of this paper
+can be found at the following GitHub repository:
+\url{https://github.com/martinmestre/stream-fit/blob/main/pipeline_paper/}.
 
 \subsection{Observables and assumed measurements}
 \label{sec:observables}
@@ -181,9 +184,7 @@ quantities as parameters:
 $m$, $\beta_0$, $\theta_0=(\alpha_0-1)/\beta_0$, and $W_0=(\epsilon_{c0}-1)/\beta_0$.
 
 Equations~\ref{sode}-\ref{geod_energy} are solved using
-a {\sc Python}~\citep{van1995python} script\footnote{
-\url{https://github.com/martinmestre/stream-fit/blob/main/likelihood_grid/optim/model_def.py}
-}
+a {\sc Python}~\citep{van1995python} script\footnote{\texttt{model\_def.py}}
 that makes use of the {\it NumPy}~\citep{2020SciPy-NMeth} and {\it SciPy}~\citep{harris2020array} libraries. We tried all the solvers available in the latter package but the only one that
 could properly integrate these equations was the \texttt{LSODA} algorithm. We used relative and absolute tolerance parameters respectively given by \texttt{rtol}$=5\times10^{-14}$ and \texttt{atol}$=0$.
 
@@ -281,13 +282,14 @@ We used default values for the all its metaparameters except for
 Initially, we searched for a good enough initial condition (IC) of the progenitor orbit for our
 Fermionic-MW. For that, we fitted the initial conditions in the (fixed) NFW-MW model defined in
 Sec.~\ref{sec:MW_stream_models} by using the $\chi^2_{\rm{stream}}$ function defined in Eq.~(\ref{chi2})
-and the genetic algorithm specified in Sec.~\ref{sec:optimization}. It should be said that the
-NFW-MW model was fitted by~\citet{2019MNRAS.486.2995M} with a set of Gaia DR2 data different from
-the polynomials used here. Any point along the stream is equally good as an IC and the one
-obtained is given approximately by $\alpha=149.44^{\circ}$, $\delta=36.81^{\circ}$, $D=7.92$ kpc,
-$\tilde{\mu}_\alpha=-7.08$ mas/yr, $\mu_\delta=-12.53$ mas/yr and $v_h=-17.29$ km/s.
-The corresponding orbit is displayed in the observable space in Fig.~\ref{fig:obs_pos}~(top: $\phi_2$, bottom: $D$) and Fig.~\ref{fig:obs_vel}~(top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$, bottom: $v_h$)
-with a dashed yellow line. The thick solid black line shows the corresponding observable $\eta$ data
+and the genetic algorithm specified in Sec.~\ref{sec:optimization}. The genetic algorithm
+needs to be provided with bounds for the variables so we used boxes with a centre in the middle point
+of the observable data, i.e. $\eta^{(50)}$ that corresponds to $\alpha=149.24^{\circ}$, $\delta=36.61^{\circ}$, $D=7.69$ kpc, $\tilde{\mu}_\alpha=-5.70$ mas/yr, $\mu_\delta=-12.48$ mas/yr and $v_h=-18.81$ km/s, and with generous sides of length equal to their absolute values (except for $\alpha$ where we used a side of lenght $\alpha/5$).
+
+It should be said that the NFW-MW model was fitted by~\citet{2019MNRAS.486.2995M} with a set of Gaia
+DR2 data different from the polynomials used here. Any point along the stream is equally good as an IC. The genetic algorithm converged to a solution given approximately by
+$\alpha=149.17^{\circ}$, $\delta=36.51^{\circ}$, $D=7.95$ kpc, $\tilde{\mu}_\alpha=-6.94$ mas/yr, $\mu_\delta=-12.49$ mas/yr and $v_h=-18.33$ km/s.
+The orbit that corresponds to this IC is displayed in the observable space in Fig.~\ref{fig:obs_pos}~(top: $\phi_2$, bottom: $D$) and Fig.~\ref{fig:obs_vel}~(top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$, bottom: $v_h$) with a dashed yellow line. The thick solid black line shows the corresponding observable $\eta$ data
 while the thin solid ones demarkate the corresponding regions at $1\sigma_\eta$.
 
 From previous works~\citep{arguelles_novel_2018,2019PDU....24..278A,2023ApJ...945....1K} we know that the fermionic DM model parameters can be approximately grouped in two sets with different functionality. One group is formed
@@ -300,8 +302,8 @@ $\omega_0 = W_0-\theta_0$ who controls the halo profile, as will be further show
 
 As a starting point for our three-step multiparameter search, we took the result from~\citet{2020A&A...641A..34B} who found that for $(\epsilon, \beta_0, \theta_0, W_0)=(56, 1.1977\times10^{-5}, 37.765, 66.3407)$
 their MW model (DM+barions) satisfies both the geodesic motion of S2 and G2 at Sagittarius A*, i.e. $m_{\rm core}=3.5\times 10^5 M_\odot$, and the rotation curve from~\citet{sofue_rotation_2013}.
-As a first step, we fixed values for the pair $(\epsilon,\beta_0)=(56,1.20\times10^{5})$ together with
-the fixed IC fitted for the NFW-MW model, and performed a genetic minimization of the
+As a first step, we fixed values for the pair $(\epsilon,\beta_0)=(56,1.2\times10^{5})$ and
+fixed the IC that was recently fitted for the NFW-MW model, in order to perform a genetic minimization of the
 $\chi^2_{\rm{stream}}$ function in the window:
 $(\theta_0,\omega_0)\in [35, 40]\times[25, 30]$. The algorithm converged to
 $(\theta_0, \omega_0)\approx (36.24, 27.46)$. As this solution failed in a little quantity to satisfy
