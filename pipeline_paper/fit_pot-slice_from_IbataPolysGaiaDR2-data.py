@@ -321,13 +321,13 @@ beta_0 = 1.20e-5
 
 
 # Optimization
-bounds = ((35, 40), (25, 30))
-opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
-                                      strategy='best2bin', maxiter=100, popsize=100, tol=5.0e-8,
-                                      atol=0.0, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
+# bounds = ((35, 40), (25, 30))
+# opt = optimize.differential_evolution(chi2, bounds, args=(ener_f, beta_0, ic),
+#                                       strategy='best2bin', maxiter=100, popsize=100, tol=5.0e-8,
+#                                       atol=0.0, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
 
 
@@ -339,8 +339,9 @@ phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], 
                                                                          ic[5], pot_list)
 
 print('Model parameters:')
-print('theta_0, W_0, beta_0 =', theta_0, W_0, beta_0)
+print('theta_0, W_0, beta_0, d_theta =', theta_0, W_0, beta_0, d_theta)
 print('IC:', ic)
+chi2(w_0, ener_f, beta_0, ic)
 
 # Plot in galactocentric coordinates
 fig = plt.figure(figsize=(10, 10))
