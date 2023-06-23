@@ -70,9 +70,9 @@ println("MEPP solutions computed.")
 
 # %%
 # Initial conditions needed for future use.
-# Taking the initial conditions from the Galpy fit with fixed MW2014 potential.
-ic_galpy = [1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
-    -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01]
+# The initial conditions from the Galpy fit with fixed MW2014 potential comes
+# comes in the file "for_julia_plot.txt"
+
 # Taking initial condition from an optimization with fixed potential ("fit_orbit_..._fixedpot.py")
 ic = [148.87671997, 36.34168516, 7.95627538, -6.87147041, -12.48727587, -16.05002458]
 r☼ = 8.122
@@ -85,7 +85,7 @@ m_core = Vector{Float64}(undef, length(ϵ))
 χ²stream = Vector{Float64}(undef, length(ϵ))
 
 println("i ::: β ::: r_core ::: m_core ::: χ²stream")
-for i = 1:length(ϵ)
+for i ∈ eachindex(ϵ)
       halo = potentials.RAR(param[i])
       temp = stream.get_core_GR(halo)
       r_core[i] = temp[1]
