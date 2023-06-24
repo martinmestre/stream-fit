@@ -1,11 +1,13 @@
 """Optimization trials."""
 
 # %%
+using Pkg
+Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
 using PyCall
-using GalacticOptim
-using GalacticOptimJL
-using GalacticNLopt
+using Optimization
+using OptimizationNLopt
+
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -41,7 +43,7 @@ end
 ic = [149.16883497, 36.50694499, 7.94771853, -6.94192661, -12.48844894, -18.32838854]
 r☼ = 8.122
 
-θ₀, Δθ₀, βᵣ₀ =  3.612769971239480782e+01, 2.739433669170758989e+01, 1.2e-5
+θ₀, Δθ₀, βᵣ₀ =  3.612769971239480782e+01, 2.739433669170758989e+01, 1.2
 ϵ = 56.0
 # %%
 outfile = "param_optim_polish_chi2full.txt"
@@ -49,8 +51,8 @@ outfile = "param_optim_polish_chi2full.txt"
 p = [ϵ]
 x₀ = [θ₀, Δθ₀, βᵣ₀]
 lb = [0.9θ₀, 0.9Δθ₀, 0.9βᵣ₀]
-ub = [1.1θ₀, 1.1Δθ₀, 1.1βᵣ₀]
-prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼)
+ub = [1.1θ₀, 1.1Δθ₀, 1.3βᵣ₀]
+prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
 sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
 x₀ = sol.u
 χ² = sol.minimum
