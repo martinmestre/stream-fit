@@ -7,7 +7,7 @@ using AlgebraOfGraphics, CairoMakie
 using PyCall
 using Optimization
 using OptimizationNLopt
-
+using DelimitedFiles
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -40,18 +40,22 @@ end
 
 function main()
     # %%
+    infile = "param_fit_pot-slice_from_IbataPolysGaiaDR2-data.txt"
+    outfile = "param_optim_polish_chi2full.txt"
+
     # Initial conditions from Galpy's MWPotential2014 model (param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt):
     ic = [149.16883497, 36.50694499, 7.94771853, -6.94192661, -12.48844894, -18.32838854]
     r☼ = 8.122
-    #36.224542166107774, 27.46389908753495, 1.2472408164492195
-    θ₀, Δθ₀, βᵣ₀ =  3.612769971239480782e+01, 2.739433669170758989e+01, 1.2e-5
+    θ₀, Δθ₀ = open(readdlm, infile)
+    βᵣ₀ =  1.2  # it goes without the factor 10^(-5).
     ϵ = 56.0
     # %%
 
     p = [ϵ]
     x₀ = [θ₀, Δθ₀, βᵣ₀]
-    lb = [0.9θ₀, 0.9Δθ₀, 0.9βᵣ₀]
-    ub = [1.1θ₀, 1.1Δθ₀, 1.1βᵣ₀]
+    println("x₀=$x₀")
+    lb = [0.99θ₀, 0.99Δθ₀, βᵣ₀]
+    ub = [1.99θ₀, 1.99Δθ₀, 1.1βᵣ₀]
     prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
     sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
     x₀ = sol.u
