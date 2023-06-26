@@ -157,7 +157,7 @@ def model(param):
     alpha_0 = 1.0+beta_0*theta_0
     eps_0 = 1.0 + beta_0*W_0
     rho_0 = density(n_eos, alpha_0, beta_0, eps_0)
-
+    print("rho_0 = ", rho_0)
     u_0 = [z_0, nu_0]
     t_0 = np.log(np.sqrt(6.0*tau*rho_rel/rho_0))
     t_f = np.log(max_r/cm2kpc/R)

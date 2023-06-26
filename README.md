@@ -9,4 +9,4 @@ python fit_pot-slice_from_IbataPolysGaiaDR2-data.py
 output: "param_fit_pot-slice_from_IbataPolysGaiaDR2-data.txt"
 
 julia optim_polish_chi2full.jl
-output: "param_polish_chi2full.txt"
+output: "param_optim_polish_chi2full.txt"
