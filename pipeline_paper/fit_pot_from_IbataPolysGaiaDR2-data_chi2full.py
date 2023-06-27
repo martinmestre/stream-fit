@@ -475,13 +475,13 @@ beta_0 = 1.20e-5
 
 
 #Optimization
-# bounds = ((35, 40), (25, 30), (1.2e-5, 1.3e-5))
-# opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
-#                                       strategy='best2bin', maxiter=100, popsize=100, tol=5.0e-8,
-#                                       atol=0.0, disp=True, polish=True, workers=-1)
-# param_fitted = opt.x
-# np.savetxt(param_file, param_fitted, delimiter=',')
-# w_0 = param_fitted
+bounds = ((35, 40), (25, 30), (1.2e-5, 1.3e-5))
+opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
+                                      strategy='best2bin', maxiter=100, popsize=100, tol=5.0e-8,
+                                      atol=0.0, disp=True, polish=True, workers=-1)
+param_fitted = opt.x
+np.savetxt(param_file, param_fitted, delimiter=',')
+w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
 
 
@@ -491,7 +491,7 @@ beta_0 = w_0[2]
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
 phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4],
-                                                                         ic[5], pot_list, r_sun)
+                                                                         ic[5], pot_list)
 
 print('Model parameters:')
 print('theta_0, W_0, beta_0, d_theta =', theta_0, W_0, beta_0, d_theta)
