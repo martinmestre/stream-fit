@@ -19,7 +19,7 @@ The second run is to polish the solution; edit like this:
 ```
 bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
 opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
-                                      strategy='best2bin', maxiter=100, popsize=100, tol=5.0e-8,
+                                      strategy='best2bin', maxiter=200, popsize=200, tol=5.0e-8,
                                       atol=0.0, disp=True, polish=True, workers=-1)
 ```
 output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
