@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --name=grid_pot
+#SBATCH --job-name=chi2full
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mmestre@fcaglp.unlp.edu.ar
 #SBATCH --partition=multi
@@ -30,4 +30,4 @@
 
 . /etc/profile
 
-python grid_pot.py
+python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py
