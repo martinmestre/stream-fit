@@ -15,7 +15,7 @@ opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun
                                       strategy='best2bin', maxiter=200, popsize=200, tol=5.0e-8,
                                       atol=0.0, disp=True, polish=True, workers=-1)
 ```
-The second run edit like this:
+The second run is to polish the solution; edit like this:
 ```
 bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
 opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
