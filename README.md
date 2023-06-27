@@ -1,12 +1,12 @@
 # Pipeline of the paper about the GD-1 stream on a MW with a fermionic DM halo.
 
-##In order to reproduce the paper results run the following pipeline:
+### In order to reproduce the paper results run the following pipeline:
 
-##python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py
+### python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py
 
 output: "observable_orbit_NFW-MW.txt", "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
 
-##python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py
+### python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py
 
 First run (can be skipped) edit like this:
 ```
@@ -25,6 +25,6 @@ opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun
 output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 
 
-##julia optim_polish_chi2full.jl
+### julia optim_polish_chi2full.jl
 
 output: "param_optim_polish_chi2full.txt"
