@@ -1,6 +1,6 @@
 # Pipeline of the paper about the GD-1 stream on a MW with a fermionic DM halo.
 
-### In order to reproduce the paper results run the following pipeline:
+The results in the paper are a consequence of analyzing the ouputs of following pipeline:
 
 ### python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py
 
