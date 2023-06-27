@@ -3,7 +3,6 @@
 
 The results in the paper are a consequence of analyzing the ouputs of following pipeline:
 
-### cd pipeline_paper
 
 ### python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py
 
