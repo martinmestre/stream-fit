@@ -52,8 +52,8 @@ n_grid = 500
 r_sun = 8.122  # kpc   (Gravity Collaboration 2018.)
 ener_f = 56.0  # keV
 bounds = ((35.25, 37.25), (26.5, 28.5), (1.0e-5, 1.5e-5))  # For (theta_0, W_0-theta_0, beta_0)
-ic = np.array([1.493370985649168858e+02, 3.669966976308609219e+01, 7.917039545144660018e+00,
-              -7.050282547954606294e+00, -1.254565799483599520e+01, -1.636083097847286538e+01])
+ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
+ic = np.loadtxt(ic_file)
 n_job = mp.cpu_count()
 print('n_cpu = ', n_job)
 beta_lim = np.linspace(1.25e-5, 1.26e-5, n_beta)
