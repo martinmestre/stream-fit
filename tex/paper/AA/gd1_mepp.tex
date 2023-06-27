@@ -264,9 +264,9 @@ that will be explained in Sec.~\ref{sec:results}.
 One of them is {\it SciPy}'s
 \texttt{optimize.differential\_evolution} algorithm. This genetic architecture
 was used with metaparemeters given by
-\texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=100, \texttt{popsize}=50,
+\texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=200, \texttt{popsize}=200,
 \texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0. This method can be run in parallel with shared memory,
-so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
+so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. halving and doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
 
 The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the
 {\it NLopt.jl}~\citep{NLopt} package
@@ -283,8 +283,8 @@ Initially, we searched for a good enough initial condition (IC) of the progenito
 Fermionic-MW. For that, we fitted the initial conditions in the (fixed) NFW-MW model defined in
 Sec.~\ref{sec:MW_stream_models} by using the $\chi^2_{\rm{stream}}$ function defined in Eq.~(\ref{chi2})
 and the genetic algorithm specified in Sec.~\ref{sec:optimization}. The genetic algorithm
-needs to be provided with bounds for the variables so we used boxes with a centre in the middle point
-of the observable data, i.e. $\eta^{(50)}$ that corresponds to $\alpha=149.24^{\circ}$, $\delta=36.61^{\circ}$, $D=7.69$ kpc, $\tilde{\mu}_\alpha=-5.70$ mas/yr, $\mu_\delta=-12.48$ mas/yr and $v_h=-18.81$ km/s, and with generous sides of length equal to their absolute values (except for $\alpha$ where we used a side of lenght $\alpha/5$).
+needs to be provided with bounds for the variables so we used boxes with a centre close to the middle point
+of the observable data, i.e. $\eta^{(51)}$ that corresponds to $\alpha=149.24^{\circ}$, $\delta=36.61^{\circ}$, $D=7.69$ kpc, $\tilde{\mu}_\alpha=-5.70$ mas/yr, $\mu_\delta=-12.48$ mas/yr and $v_h=-18.81$ km/s, and with generous sides of length equal to their absolute values (except for $\alpha$ where we used a side of lenght $\alpha/5$).
 
 It should be said that the NFW-MW model was fitted by~\citet{2019MNRAS.486.2995M} with a set of Gaia
 DR2 data different from the polynomials used here. Any point along the stream is equally good as an IC. The genetic algorithm converged to a solution given approximately by
@@ -298,7 +298,7 @@ for given values of $m_{\rm{core}}$ (Sec.~\ref{sec:observables}) and $\epsilon$,
 The other group is formed by $\theta_0$ and $W_0$, which have small effect on the core region but
 determine the distribution behaviour in the halo region. Additionally, there is also an approximate
 degeneracy between these two variables in the sense that it is the parameter
-$\omega_0 = W_0-\theta_0$ who controls the halo profile, as will be further shown in this paper.
+$\omega_0 = W_0-\theta_0$ which mainly controls the halo profile, as will be further shown in this paper.
 
 As a starting point for our three-step multiparameter search, we took the result from~\citet{2020A&A...641A..34B} who found that for $(\epsilon, \beta_0, \theta_0, W_0)=(56, 1.1977\times10^{-5}, 37.765, 66.3407)$
 their MW model (DM+barions) satisfies both the geodesic motion of S2 and G2 at Sagittarius A*, i.e. $m_{\rm core}=3.5\times 10^5 M_\odot$, and the rotation curve from~\citet{sofue_rotation_2013}.
@@ -313,12 +313,9 @@ $\tilde{\mu}_\alpha=-6.87$ mas/yr, $\mu_\delta=-12.49$ mas/yr and $v_h=-16.05$ k
 The corresponding orbit is displayed in the observable space in Figs.~\ref{fig:obs_pos}-\ref{fig:obs_vel}~
 with a dotted green line where it can be noticed that both the Fermionic-MW and NFW-MW models
 fit the GD-1 stream very well.
-Although the Fermionic-MW solution has a value of $\chi^2_{\rm{stream}}\approx 19.83$
-which is a little smaller than the value obtained for NFW-MW, $\chi^2_{\rm{stream}}\approx 27.95$,
-we have not performed any statistically rigourous comparison between both models to determine which one is
-more consistent with the data. In fact, here we used a fixed NFW-MW model that was fitted by~\citet{2019MNRAS.486.2995M} with another set of Gaia DR2 observations, as has previously been stated.
-
-
+We have not performed any statistically rigourous comparison between both models to determine which one is
+more consistent with the data. In fact, here we used a fixed NFW-MW model that was fitted by~\citet{2019MNRAS.486.2995M} with another set of Gaia DR2 observations, as has previously been stated.\\
+%
 \begin{figure*}
    \centering
    \includegraphics[width=0.8\textwidth]{figures/observables_position.pdf}
@@ -333,8 +330,17 @@ more consistent with the data. In fact, here we used a fixed NFW-MW model that w
    \caption{Stream fits in observable space: proper motion (top: $\tilde{\mu}_\alpha$, middle: $\mu_\delta$) and heliocentric velocity (bottom: $v_h$).}
    \label{fig:obs_vel}
 \end{figure*}
+%
+We would like to give a glimpse of how badly behaved is the $\chi^2_{\rm{stream}}$ function so we have evaluated it for fixed values of $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in a bidimensional grid
+spanning the box $(\theta_0, \omega_0)\in[35.25, 37.25]\times[26.5, 28.5]$.
+Fig.~\ref{fig:chi2stream} shows this grid colored by the value of their corresponding $\chi^2_{\rm{stream}}$.
 
-
+\begin{figure}
+   \centering
+   \includegraphics[width=0.8\textwidth]{figures/}
+   \caption{$\chi^2_{\rm{stream}}$ function for }
+   \label{fig:chi2stream}
+\end{figure*}
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -346,9 +352,9 @@ more consistent with the data. In fact, here we used a fixed NFW-MW model that w
     Thank to people, institutions and codes used.
     This work used computational resources from CCAD – Universidad Nacional de Córdoba (https://ccad.unc.edu.ar/), which are part of SNCAD – MinCyT, República Argentina.
     MFM thanks Juan Ignacio Rodriguez for his great support with hardware and
-    software issues regarding IALP server and personal computers.
+    software issues regarding the IALP server and personal computers.
     The figures presented where made with the
-    {\it AlgebraOfGraphics.jl}\footnote{https://aog.makie.org/dev/} and
+    {\it AlgebraOfGraphics.jl}~(https://aog.makie.org/dev/) and
     {\it Makie.jl}~\citep{DanischKrumbiegel2021}
     packages.
 \end{acknowledgements}
