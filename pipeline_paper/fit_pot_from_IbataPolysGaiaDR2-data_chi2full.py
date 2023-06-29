@@ -476,13 +476,13 @@ beta_0 = 1.20e-5
 
 #Optimization
 # bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
-bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5))
-opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
-                                      strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
-                                      atol=0.0, disp=True, polish=True, workers=-1)
-param_fitted = opt.x
-np.savetxt(param_file, param_fitted, delimiter=',')
-w_0 = param_fitted
+# bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5))
+# opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
+#                                       strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
+#                                       atol=0.0, disp=True, polish=True, workers=-1)
+# param_fitted = opt.x
+# np.savetxt(param_file, param_fitted, delimiter=',')
+# w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
 
 
@@ -510,7 +510,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
-fig.savefig("plots/orbit_pot-slice_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/orbit_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
 plt.show()
 
 # Plots in the sky using the GD-1 frame
@@ -561,5 +561,5 @@ ax6.set_ylabel(r'$d_{\rm{Gal}}$ [kpc]')
 
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
-fig.savefig("plots/sky_pot-slice_from_IbataPolysGaiaDR2-data.png")
+fig.savefig("plots/sky_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
 plt.show()

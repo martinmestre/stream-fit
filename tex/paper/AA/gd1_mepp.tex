@@ -243,7 +243,7 @@ of the distribution:
    \chi^2_{\rm{core}}=\frac{(m-m_{\rm{core}})^2}{\sigma_m^2},
 \end{equation}
 where $m_{\rm{core}}$ was defined in Sec.~\ref{sec:observables} and
-$\sigma_m$ was tested between 10\% and 50\% of $m_{\rm{core}}$, so sometimes we will use the following compound function:
+$\sigma_m$ was fixed in 1\% of $m_{\rm{core}}$, so sometimes we will use the following compound function:
 \begin{equation}
    \label{chi2_full}
    \chi^2_{\rm{full}}=\chi^2_{\rm{stream}}+\chi^2_{\rm{core}}.
@@ -265,7 +265,7 @@ One of them is {\it SciPy}'s
 \texttt{optimize.differential\_evolution} algorithm. This genetic architecture
 was used with metaparemeters given by
 \texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=200, \texttt{popsize}=200,
-\texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0. This method can be run in parallel with shared memory,
+\texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0, unless otherwise stated. This method can be run in parallel with shared memory,
 so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. halving and doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
 
 The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the
@@ -305,9 +305,14 @@ their MW model (DM+barions) satisfies both the geodesic motion of S2 and G2 at S
 As a first step, we fixed values for $\epsilon=56$ and
 fixed the IC that was recently fitted for the NFW-MW model, in order to perform a genetic minimization of the
 $\chi^2_{\rm{full}}$ function in the window:
-$(\theta_0,\omega_0, \beta_0)\in [35, 40]\times[25, 30]\times[10^{-5}, 1.5\times10^{-5}]$. The algorithm converged to $(\theta_0, \omega_0, \beta_0)\approx (¿?)$ with a value of $\chi^2_{\rm{stream}}\approx ?$ and  $\chi^2_{\rm{core}}\approx ?\times10^{-6}$.
-We polished this result by running again the genetic algorithm in a smaller window given by $(\theta_0,\omega_0, \beta_0)\in [35, 37]\times[26, 28]\times[1.2\times 10^{-5}, 1.3\times10^{-5}]$ converging
-to $(\theta_0, \omega_0, \beta_0)\approx (36.06, 27.34, 1.258\times10^{-5})$ with a value of $\chi^2_{\rm{stream}}\approx 21.96$ and  $\chi^2_{\rm{core}}\approx 6.05\times10^{-6}$.
+$(\theta_0,\omega_0, \beta_0)\in [35, 40]\times[25, 30]\times[10^{-5}, 1.5\times10^{-5}]$. Using values of \texttt{maxiter}=\texttt{popsize}=400, the algorithm converged to
+$(\theta_0, \omega_0, \beta_0)\approx (36.0665,27.3471 , 1.25713\times10^{-5})$
+ with a value of $\chi^2_{\rm{stream}}\approx 21.9585$ and  $\chi^2_{\rm{core}}\approx 1.117$.
+ Although the stream fit is good (as will later be shown), the associated value of the core mass was
+ $m\approx 3.537\times 10^6 M\odot$ which implies that there is room for improvement.
+We took this result to shrink the window to $(\theta_0,\omega_0, \beta_0)\in [35, 37]\times[26, 28]\times[1.2\times 10^{-5}, 1.3\times10^{-5}]$ and re-run the genetic algorith (second step), converging
+to $(\theta_0, \omega_0, \beta_0)\approx (36.0661, 27.3468,1.25769\times10^{-5})$ with a value of $\chi^2_{\rm{stream}}\approx 21.9585$ and  $\chi^2_{\rm{core}}\approx 1.344\times10^{-5}$ which corresponds to
+ a much precise value of the core mass, $m\approx 3.5001 M\odot$. It can be noticed the great sensitivity of the core mass depence on the model parameters because a change in the fifth significant digit of the parameters propagates to a change of in  the third significant digit of $m$.
 Finally, the third step consisted in fixing the Fermionic-MW parameters while floating the ICs of the orbit with the genetic scheme, which gave us very similar to the FMW-MW case:
 $\alpha=148.88^{\circ}$, $\delta=36.34^{\circ}$, $D=7.96$ kpc,
 $\tilde{\mu}_\alpha=-6.87$ mas/yr, $\mu_\delta=-12.49$ mas/yr and $v_h=-16.05$ km/s.

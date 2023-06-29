@@ -275,7 +275,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.tight_layout()
 # plt.show()
-fig.savefig("plots/orbit_orbit_from_IbataPolysGaiaDR2-data_fixedpot_ener360.png")
+fig.savefig("plots/orbit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
 
 
 # Plots in the sky using the GD-1 frame
@@ -318,4 +318,4 @@ plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
 # plt.tight_layout()
 
 # plt.show()
-fig.savefig("plots/sky_orbit_from_IbataPolysGaiaDR2-data_fixedpot_ener360.png")
+fig.savefig("plots/sky_orbit_from_IbataPolysGaiaDR2-data_fixedpot.png")
