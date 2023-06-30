@@ -248,7 +248,7 @@ bounds = ((w_ic[0]-dw[0], w_ic[0]+dw[0]), (w_ic[1]-dw[1], w_ic[1]+dw[1]), (w_ic[
 # Optimization
 ic_output_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 opt = optimize.differential_evolution(chi2, bounds, args=([pot_list]), strategy='best2bin',
-                                      maxiter=200, popsize=200, tol=5.0e-8,
+                                      maxiter=400, popsize=400, tol=5.0e-8,
                                       atol=0.0, disp=True, polish=True, workers=-1)
 w_ic = opt.x
 np.savetxt(ic_output_file, w_ic, delimiter=',')
