@@ -15,6 +15,7 @@ import stream
 
 def worker(theta_0, d_theta, beta_0):
     """Parallel task."""
+    print(theta_0, d_theta, beta_0)
     log_like = stream.log_likelihood(theta_0, d_theta, beta_0, ener_f, ic, r_sun)
     return log_like
 
@@ -48,22 +49,22 @@ def save_hdf5(result, file):
 
 # Parameters
 n_beta = 1
-n_grid = 500
+n_grid = 1000
 r_sun = 8.122  # kpc   (Gravity Collaboration 2018.)
 ener_f = 56.0  # keV
-bounds = ((35.25, 37.25), (26.5, 28.5))  # For (theta_0, W_0-theta_0, beta_0)
+bounds = ((34.0, 38.0), (25, 30))  # For (theta_0, W_0-theta_0, beta_0)
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = np.loadtxt(ic_file)
 n_job = mp.cpu_count()
 print('n_cpu = ', n_job)
-beta_lim = np.linspace(1.25e-5, 1.26e-5, n_beta)
+beta_lim = np.linspace(1.258e-5, 1.268e-5, n_beta)
 
 
 if __name__ == "__main__":
 
     for beta in beta_lim:
-        likelihood_file = 'likelihood_beta0_{:.2e}.txt'.format(beta)
-        h5_file = 'model_beta0_{:.2e}.hdf5'.format(beta)
+        likelihood_file = 'likelihood_beta0_{:.3e}.txt'.format(beta)
+        h5_file = 'model_beta0_{:.3e}.hdf5'.format(beta)
 
         args_iter = list(iter.product(np.linspace(bounds[0][0], bounds[0][1], n_grid),
                                       np.linspace(bounds[1][0], bounds[1][1], n_grid),
@@ -76,7 +77,7 @@ if __name__ == "__main__":
         print('results=', ll)
 
         # Save models to a HDF5 file
-        save_hdf5(results, h5_file)
+        # save_hdf5(results, h5_file)
 
         # Open likelhood file
         f = open(likelihood_file, 'wt')

@@ -303,27 +303,27 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['phi_2']
-    sigma2 = 0.5**2
+    sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 1.5**2
+    sigma2 = sigma_array[1]**2
     sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 4.0
+    sigma2 = sigma_array[2]**2
     sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 4.0
+    sigma2 = sigma_array[3]**2
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['v_hel']
-    sigma2 = 100.0
+    sigma2 = sigma_array[4]**2
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     halo = pot_list[3]
@@ -357,27 +357,27 @@ def chi2_stream_potlist(pot_list, ic, r_sun):
 
     y_mod = wrap.phi_2_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['phi_2']
-    sigma2 = 0.5**2
+    sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['d_hel']
-    sigma2 = 1.5**2
+    sigma2 = sigma_array[1]**2
     sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
-    sigma2 = 4.0
+    sigma2 = sigma_array[2]**2
     sum[2] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_dec_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_dec']
-    sigma2 = 4.0
+    sigma2 = sigma_array[3]**2
     sum[3] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.v_hel_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['v_hel']
-    sigma2 = 100.0
+    sigma2 = sigma_array[4]**2
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     halo = pot_list[3]
@@ -387,3 +387,13 @@ def chi2_stream_potlist(pot_list, ic, r_sun):
     print("chi2_stream_pot_list = ", np.sum(sum), "  r_core = ", r_core,
           "  m_core = ", mass_core/1.e6, "x10⁶ M_sun")
     return np.sum(sum)
+
+
+
+def log_likelihood(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
+    """Likelihood."""
+    ll = chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun)
+    ll *= -1.0
+    print('loglikelihood(', theta_0, d_theta, beta_0, ') = ', ll)
+    return theta_0, d_theta, beta_0, ll
+
