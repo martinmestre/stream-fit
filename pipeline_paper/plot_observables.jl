@@ -15,8 +15,9 @@
 # ---
 
 # %%
-"""Plot observables"""
-
+"""Plot solutions in observable space."""
+using Pkg
+Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
 using PyCall
 using CSV
@@ -102,7 +103,7 @@ d☼ₘ = fd☼(ϕ₁ₒ)
 μ_raₘ = fμ_ra(ϕ₁ₒ)
 μ_decₘ = fμ_dec(ϕ₁ₒ)
 v☼ₘ = fv☼(ϕ₁ₒ)
-
+# %%
 df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ, d☼ᵢ,
                     μ_raₒ, μ_raₛ, μ_raᵢ, μ_decₒ, μ_decₛ, μ_decᵢ,
                     v☼ₒ, v☼ₛ, v☼ᵢ,

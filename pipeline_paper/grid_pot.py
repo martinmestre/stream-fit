@@ -49,7 +49,7 @@ def save_hdf5(result, file):
 
 # Parameters
 n_beta = 1
-n_grid = 1000
+n_grid = 500
 r_sun = 8.122  # kpc   (Gravity Collaboration 2018.)
 ener_f = 56.0  # keV
 bounds = ((34.0, 38.0), (25, 30))  # For (theta_0, W_0-theta_0, beta_0)

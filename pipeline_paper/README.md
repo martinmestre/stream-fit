@@ -1,13 +1,18 @@
-# Pipeline of the paper about the GD-1 stream on a MW with a fermionic DM halo.
+# Pipeline of the paper about the GD-1 stream on a MW with a fermionic DM halo
 
 The results in the paper are a consequence of analyzing the ouputs of following pipeline:
 
+## Fit the initial conditions (IC) of the orbit for the NFW-MW model
+```
+python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py
+```
 
-```python fit_data_I-M-GaiaDR2_to_MWPot2014wGalpy.py```
+Output: "observable_orbit_NFW-MW.txt", "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
 
-output: "observable_orbit_NFW-MW.txt", "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
-
-```python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py```
+## Fit the parameters of the Fermionic-MW model using the IC from NFW-MW
+```
+python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py
+```
 
 First run (can be skipped) edit like this:
 ```
@@ -24,14 +29,34 @@ opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun
                                       atol=0.0, disp=True, polish=True, workers=-1)
 ```
 
-output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
+Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 
+## Make the plot for both MW model orbits in observable space
 
-```python grid_pot.py```
+```
+julia plot_observables.jl
+```
+Output: "observables_xxx.pdf"
+
+## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $\theta_0$-$\omega_0$ plane
+```
+python grid_chi2stream.py
+```
 
 To run in a large/fast cluster.
-output: "likelihood_beta0_1.258e-05.txt"
 
-```julia optim_polish_chi2full.jl```
+Output: "chi2stream_beta0_1.258e-05.txt"
 
-output: "param_optim_polish_chi2full.txt"
+## Make $\chi^2_{\rm{Stream}}$ function plot
+
+```
+julia plot_chi2stream.jl
+```
+
+## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
+
+```
+julia optim_polish_chi2full.jl
+```
+
+Output: "param_optim_polish_chi2full.txt"

@@ -219,7 +219,7 @@ m_core_const = 3.5e6  # M_sun
 
 def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     """Chi^2 stream function."""
-    print("chi2strea, params = ",theta_0, d_theta, beta_0, ener_f, r_sun)
+    print("chi2_stream, params = ",theta_0, d_theta, beta_0, ener_f, r_sun)
     import wrap
     W_0 = theta_0 + d_theta
     print("params = ",theta_0, d_theta, beta_0)
