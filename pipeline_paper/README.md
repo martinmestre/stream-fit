@@ -38,7 +38,7 @@ julia plot_observables.jl
 ```
 Output: "observables_xxx.pdf"
 
-## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $\theta_0$-$\omega_0$ plane
+## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0)$ plane
 ```
 python grid_chi2stream.py
 ```
@@ -51,6 +51,12 @@ Output: "chi2stream_beta0_1.258e-05.txt"
 
 ```
 julia plot_chi2stream.jl
+```
+
+## Compute and plot rotation curves: observations, Fermionic-MW and NFW-MW.
+
+```
+julia rotation_curves.jl
 ```
 
 ## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
