@@ -60,6 +60,7 @@ Output: "paper_plots/chi2stream.pdf"
 ```
 julia rotation_curves.jl
 ```
+Output: ""
 
 ## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
 
