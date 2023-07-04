@@ -68,7 +68,7 @@ def get_core(halo):
 
 
 def v_circ_GR(r, halo):
-    """GR circula velocity for the rar model. Better to use this one instead of the Newtonian."""
+    """GR circular velocity for the rar model. Better to use this one instead of the Newtonian."""
     c = 2.997925e5  # km s^-1
     return np.sqrt(0.5*c*c*r*halo.dnu_wrap(r))
 

@@ -119,6 +119,7 @@ lw = 4
 
 # Sky position plot
 let
+      set_aog_theme!()
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 37)
