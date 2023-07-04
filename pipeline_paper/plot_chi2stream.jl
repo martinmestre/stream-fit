@@ -49,7 +49,7 @@ matriz = readdlm(chi2_file);
 # %%
 # Looking at the Likelihood in the parameter 2D slice.
 set_aog_theme!()
-update_theme!(fontsize=30)
+update_theme!(fontsize=40)
 bool = χ² .< 10^4
 df = (x=θ[bool], y=ω[bool], z=χ²[bool])
 plt = data(df) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * visual(Scatter, markersize=1, colormap=:viridis)
@@ -72,7 +72,7 @@ a
 # %%
 # Test plots. Looking at the Likelihood in the parameter 2D slice.
 set_aog_theme!()
-update_theme!(fontsize=30)
+update_theme!(fontsize=40)
 η = ω - h.(θ)
 bool = χ² .< 1000
 df_tilt = (x=θ[bool], y=η[bool], z=χ²[bool])

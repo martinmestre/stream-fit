@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -16,6 +17,7 @@
 
 # %%
 """Plot solutions in observable space."""
+
 using Pkg
 Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
@@ -33,10 +35,6 @@ importLib = pyimport("importlib")
 stream = pyimport("stream")
 potentials = pyimport("potential_classes")
 importLib.reload(stream)
-# %%
-
-
-
 # %%
 # Parameters and initial conditions.
 param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
@@ -102,7 +100,7 @@ fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1,:][boolϕ₁], temp[
 d☼ₘ = fd☼(ϕ₁ₒ)
 μ_raₘ = fμ_ra(ϕ₁ₒ)
 μ_decₘ = fμ_dec(ϕ₁ₒ)
-v☼ₘ = fv☼(ϕ₁ₒ)
+v☼ₘ = fv☼(ϕ₁ₒ);
 # %%
 df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ, d☼ᵢ,
                     μ_raₒ, μ_raₛ, μ_raᵢ, μ_decₒ, μ_decₛ, μ_decᵢ,
@@ -113,7 +111,7 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :μ_raₒ, :μ_raₛ, :μ_raᵢ, :μ_decₒ, :μ_decₛ, :μ_decᵢ,
                     :v☼ₒ, :v☼ₛ, :v☼ᵢ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
-                    :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ])
+                    :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ]);
 # %%
 labels = ["Observed±σ", "NFW-MW", "Fermionic-MW" ]
 lw = 4
@@ -123,7 +121,7 @@ lw = 4
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
-      fig = Figure(resolution = size_pt, fontsize = 24)
+      fig = Figure(resolution = size_pt, fontsize = 37)
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
@@ -136,7 +134,6 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [3,4] .=> L"ϕ_2~[°]";
       ) *
       visual(Lines, linewidth=lw)
-      println("plt=",plt+plt2)
       f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
@@ -170,7 +167,7 @@ end
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
-      fig = Figure(resolution = size_pt, fontsize = 24)
+      fig = Figure(resolution = size_pt, fontsize = 37)
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
@@ -215,7 +212,7 @@ end
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
-      fig = Figure(resolution = size_pt, fontsize = 24)
+      fig = Figure(resolution = size_pt, fontsize = 37)
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
@@ -260,7 +257,7 @@ end
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
-      fig = Figure(resolution = size_pt, fontsize = 24)
+      fig = Figure(resolution = size_pt, fontsize = 37)
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
@@ -305,7 +302,7 @@ end
 let
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
-      fig = Figure(resolution = size_pt, fontsize = 24)
+      fig = Figure(resolution = size_pt, fontsize = 37)
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
@@ -345,3 +342,5 @@ let
       save("paper_plots/observables_helvel.pdf", fig, pt_per_unit = 1)
       println("plot done.")
 end
+
+# %%
