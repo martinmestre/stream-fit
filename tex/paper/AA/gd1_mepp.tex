@@ -346,17 +346,28 @@ The color palette corresponds to points with $\chi^2_{\rm{stream}}<10^4$, the re
 It can be noticed that the minimum values of the function are located along a thin and finite {\it valley}, implying that the solution of the fitting problem is locally degenerated along
 a straight line in the $(\theta_0, \omega_0)$-plane. In spite of this, it was possible
 to fit the Fermionic-MW model with a quality as good as in the NFW-MW model.
+As an additional check, we have fitted a line to the red points (i.e. the valley) obtaining
+$h(x)\approx 0.7989+0.7361x$, substracted this line to $\omega$ and made a plot of $\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.02,0.02]$. The result can be seen in Fig.~\ref{fig:chi2stream_tilted}, where it is noticeable that
+the variance along $\omega_0-h(\theta_0)$ is two orders of magnitude smaller than the variance along $\theta_0$.
+
 %
 \begin{figure*}
    \centering
-   \includegraphics[width=0.8\textwidth]{figures/chi2stream.pdf}
+   \includegraphics[width=0.7
+   \textwidth]{figures/chi2stream.pdf}
    \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in
    the window $(\theta_0, \omega_0)\in[34, 38]\times[25, 29]$. The color palette corresponds to points
    with $\chi^2_{\rm{stream}}<10^4$, the red points correspond $\chi^2_{\rm{stream}}<50$ and the black point corresponds to our fitted solution. It can be noticed that
    the minimum values of the function are located along a thin and finite {\it valley}.}
    \label{fig:chi2stream}
 \end{figure*}
-
+\begin{figure*}
+   \centering
+   \includegraphics[width=0.7\textwidth]{figures/chi2stream_tilted.pdf}
+   \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in
+   the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.02,0.02]$. The color palette corresponds to points with $\chi^2_{\rm{stream}}<10^4$, the red points correspond $\chi^2_{\rm{stream}}<50$ and the black point corresponds to our fitted solution. }
+   \label{fig:chi2stream_tilted}
+\end{figure*}
 As a way to compare our stream results with a more classical MW observable, lets compute the rotation curves
 for both models and plot them together with two independent rotation curve observations.
 

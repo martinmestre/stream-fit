@@ -23,6 +23,7 @@ Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
 using PyCall
 using DelimitedFiles
+using GLM
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 stream = pyimport("stream")
@@ -38,11 +39,11 @@ matriz = readdlm(chi2_file);
 
 
 # %%
-θ = matriz[:,1]
-ω = matriz[:,2]
-β = matriz[:,3]
+θ = matriz[:, 1]
+ω = matriz[:, 2]
+β = matriz[:, 3]
 #χ²= matriz[:,4] # for chi2stream file
-χ²= -matriz[:,4]; #for likelihood file
+χ² = -matriz[:, 4]; #for likelihood file
 
 
 # %%
@@ -51,14 +52,38 @@ set_aog_theme!()
 update_theme!(fontsize=30)
 bool = χ² .< 10^4
 df = (x=θ[bool], y=ω[bool], z=χ²[bool])
-plt = data(df)* mapping(:x,:y; color=:z=>L"χ²_{\textrm{stream}}")*visual(Scatter, markersize=1)
+plt = data(df) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * visual(Scatter, markersize=1, colormap=:viridis)
 bool = χ² .< 50
 df_crest = (x=θ[bool], y=ω[bool], z=χ²[bool])
-plt_crest = data(df_crest)* mapping(:x,:y)*visual(Scatter, markersize=5,color=:red)
+plt_crest = data(df_crest) * mapping(:x, :y) * visual(Scatter, markersize=5, color=:red)
 sol = (36.0661, 27.3468)
-fig = draw(plt+plt_crest, axis=(xlabel=L"θ_0", ylabel=L"ω_0"))
-scatter!(sol,color=:black, markersize=15)
-save("paper_plots/chi2stream.pdf", fig, pt_per_unit = 1)
+fig = draw(plt + plt_crest, axis=(xlabel=L"θ_0", ylabel=L"ω_0"))
+scatter!(sol, color=:black, markersize=15)
+save("paper_plots/chi2stream.pdf", fig, pt_per_unit=1)
+fig
+
+# %%
+# Linear Fit to the valley.
+linearRegressor = lm(@formula(y~x), df_crest)
+a=coef(linearRegressor)
+h(x)=a[1]+a[2]*x
+a
+
+# %%
+# Test plots. Looking at the Likelihood in the parameter 2D slice.
+set_aog_theme!()
+update_theme!(fontsize=30)
+η = ω - h.(θ)
+bool = χ² .< 1000
+df_tilt = (x=θ[bool], y=η[bool], z=χ²[bool])
+plt = data(df_tilt) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * visual(Scatter, markersize=10, colormap=:viridis)
+bool = χ² .< 50
+df_crest = (x=θ[bool], y=η[bool], z=χ²[bool])
+plt_crest = data(df_crest) * mapping(:x, :y) * visual(Scatter, markersize=10, color=:red)
+sol = (36.0661, 27.3468- h(36.0661))
+fig = draw(plt + plt_crest, axis=(xlabel=L"θ_0", ylabel=L"ω_0-h(θ_0)",limits=((35,37),(sol[2]-0.02, sol[2]+0.02))))
+scatter!(sol, color=:black, markersize=15)
+save("paper_plots/chi2stream_tilted.pdf", fig, pt_per_unit=1)
 display(fig)
 
 # %%
