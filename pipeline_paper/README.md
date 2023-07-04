@@ -36,7 +36,7 @@ Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 ```
 julia plot_observables.jl
 ```
-Output: "observables_xxx.pdf"
+Output: "paper_plots/bservables_xxx.pdf"
 
 ## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0)$ plane
 ```
@@ -52,6 +52,8 @@ Output: "chi2stream_beta0_1.258e-05.txt"
 ```
 julia plot_chi2stream.jl
 ```
+
+Output: "paper_plots/chi2stream.pdf"
 
 ## Compute and plot rotation curves: observations, Fermionic-MW and NFW-MW.
 
