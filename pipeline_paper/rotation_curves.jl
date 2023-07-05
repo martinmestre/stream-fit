@@ -51,7 +51,6 @@ r☼ = 8.122
 
 orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 # %%
-
 # Fermionic-MW solution and rotation curve
 pot_list = stream.pot_model(ϵ, θ, W, β)
 halo = pot_list[4]
@@ -70,7 +69,7 @@ function malhan_vcirc(r)
     return sqrt(v0*v0+v1*v1+v2*v2)*220.0
 end
 v_nfw = [malhan_vcirc(x) for x in r];
-df_models = DataFrame(r=r, v_f=v_f, v_nfw=v_nfw)
+df_models = DataFrame(r=r, v_nfw=v_nfw, v_f=v_f)
 
  # %%
  # Reading rotation curve observables
@@ -80,7 +79,9 @@ df_models = DataFrame(r=r, v_f=v_f, v_nfw=v_nfw)
  df_Sof20 = DataFrame(CSV.File("data_rotcurves/vel_Sofue20.txt"; delim=" ", ignorerepeated=true))
  df_Eilers = DataFrame(CSV.File("data_rotcurves/vel_Eilers.txt"; delim=" ", ignorerepeated=true))
 # asym_error = DataFrame([v_Eilers.e_down, v_Eilers.e_up])
-
+df_Sof13.r = df_Sof13.r/1.0e3
+df_Sof13.err_r =  df_Sof13.err_r/1.0e3
+df_Sof13
 
 # %%
 labels = ["Fermionic-MW","NFW-MW"]
@@ -89,45 +90,51 @@ lw = 4
 
 # Plot
 let
-    set_aog_theme!()
-    size_inches = (6.2*2, 3*2)
-    size_pt = 72 .* size_inches
-    fig = Figure(resolution = size_pt, fontsize = 37)
-    gridpos = fig[1, 1]
-    grp = dims(1) => renamer(labels) => ""
-    plt = data(df_models) *
-        mapping(:r => L"r~[\textrm{kpc}]", [2,3] .=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-            color = grp,
-            linestyle = grp
-        ) *
-        visual(Lines, linewidth=lw)
-    f = draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
+      set_aog_theme!()
+      size_inches = (6.2*2, 3*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 37)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => ""
+      plt = data(df_models) *
+          mapping(:r => L"r~[\textrm{kpc}]", [2,3] .=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=lw)
+      errorMap = mapping(:r, :v, (:r, :err_r) => ((x,y) -> x - y),
+          (:r, :err_r) => ((x,y) -> x + y),
+          ) * visual(Violin,color = (:grey, 0.7));
+      plt_Sof13 = data(df_Sof13)*errorMap
+      f = draw!(gridpos, plt+plt_Sof13, axis=(;limits=((0,40),(0,300)),
           xgridvisible=false, ygridvisible=false))
-    legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
-    ax = Axis(gridpos)
-    errorbars!(ax, df_Sof13.r, df_Sof13.v, df_Sof13.err_r, df_Sof13.err_v; whiskerwidth = 12)
-    # Lines re-styling
-    amber_aog = "#ffa700"
-    green_aog = "#107A78"
-    lineas = fig.content[1].scene.plots
-    lineas[1].linestyle = :dash
-    lineas[2].linestyle = :dot
-    lineas[1].color = amber_aog
-    lineas[2].color = green_aog
+      # ax = f[1,1].axis
+      # errorbars!(ax,df_Sof13.r, df_Sof13.v, df_Sof13.err_r; whiskerwidth = 10, direction=:x)
+      # errorbars!(ax,df_Sof13.r, df_Sof13.v, df_Sof13.err_v; whiskerwidth = 10, direction=:y)
+      legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+      # Lines re-styling
+      amber_aog = "#ffa700"
+      green_aog = "#107A78"
+      lineas = fig.content[1].scene.plots
+      lineas[1].linestyle = :dash
+      lineas[2].linestyle = :dot
+      lineas[1].color = amber_aog
+      lineas[2].color = green_aog
 
-    leg = fig.content[2]
-    _lines = leg.blockscene.children[1].plots[2:3]
-    for l in _lines
-          l.linewidth = 4
-    end
-    _lines[1].linestyle = :dash
-    _lines[2].linestyle = :dot
-    _lines[1].color = amber_aog
-    _lines[2].color = green_aog
+      leg = fig.content[2]
+      _lines = leg.blockscene.children[1].plots[2:3]
+      for l in _lines
+            l.linewidth = 4
+      end
+      _lines[1].linestyle = :dash
+      _lines[2].linestyle = :dot
+      _lines[1].color = amber_aog
+      _lines[2].color = green_aog
 
-    display(fig)
-    save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
-    println("plot done.")
+      display(fig)
+      save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
+      println("plot done.")
 end
 
 # %%
+df_Sof13.err_v
