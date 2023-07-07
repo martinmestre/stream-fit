@@ -139,7 +139,7 @@ for l in _lines
 end
 _lines[1].linestyle = :dash
 _lines[2].linestyle = :dot
-deleteat!(leg.blockscene.children[1].plots,3)
+deleteat!(leg.blockscene.children[1].plots,[5,7])
 # _lines[1].color = amber_aog
 # _lines[2].color = green_aog
 
