@@ -98,11 +98,10 @@ df_obs = vcat(df_Sof13, df_Sof20, df_Eilers, cols=:union)
 
 
 # %%
-labels = ["Fermionic-MW","NFW-MW"]
-lw = 4
-# %%
 
 # Plot
+labels = ["Fermionic-MW","NFW-MW"]
+lw = 4
 
 set_aog_theme!()
 size_inches = (6.2*2, 3*2)
@@ -112,16 +111,18 @@ gridpos = fig[1, 1]
 grp = dims(1) => renamer(labels) => ""
 plt_model = data(df_model) *
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-        color = :grp => ""
+        color = :grp => "",
+        marker = :grp => ""
     ) *
     visual(Lines, linewidth=lw)
 plt_obs = data(df_obs) *
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-        color = :grp => ""
+        color = :grp => "",
+        marker = :grp => ""
     ) *
-    (visual(Scatter)+visual(Lines))
+    (visual(Scatter))
 f = draw!(gridpos, plt_model+plt_obs, axis=(;limits=((0,40),(0,300)),
-    xgridvisible=false, ygridvisible=false))          
+    xgridvisible=false, ygridvisible=false))
 legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
 # Lines re-styling
 amber_aog = "#ffa700"
@@ -139,7 +140,7 @@ for l in _lines
 end
 _lines[1].linestyle = :dash
 _lines[2].linestyle = :dot
-deleteat!(leg.blockscene.children[1].plots,[5,7])
+#deleteat!(leg.blockscene.children[1].plots,[5,7])
 # _lines[1].color = amber_aog
 # _lines[2].color = green_aog
 
@@ -148,7 +149,33 @@ save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("plot done.")
 
 
+
 # %%
-maximum([1,2,3])
+n = 20
+df_a = DataFrame(grp=fill("a", n), x=collect(1:n), y=fill(2, n))
+df_b = DataFrame(grp=fill("b", n), x=collect(1:n), y=fill(4, n))
+
+set_aog_theme!()
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+fig = Figure(resolution = size_pt, fontsize = 30)
+gridpos = fig[1, 1]
+plt_a = data(df_a) *
+    mapping(:x => L"x", :y=> L"y"; color = :grp => "", marker=:grp=> "", linestyle = :grp => "") *
+    visual(Lines, linewidth=lw)
+plt_b = data(df_b) *
+    mapping(:x => L"x", :y=> L"y"; color = :grp => "", marker=:grp=>"", linestyle= :grp => "") *
+    visual(Scatter)
+f = draw!(gridpos, plt_b+plt_a, axis=(;limits=((0,n),(0,5)),
+    xgridvisible=false, ygridvisible=false))
+legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+leg = fig.content[2]
+leg_items = leg.blockscene.children[1].plots
+display(leg_items)
+deleteat!(leg_items,[3,4])
+display(fig)
+
+# %%
+1:10
 
 # %%
