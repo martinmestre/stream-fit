@@ -112,43 +112,49 @@ grp = dims(1) => renamer(labels) => ""
 plt_model = data(df_model) *
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
         color = :grp => "",
+        linestyle = :grp => "",
         marker = :grp => ""
     ) *
     visual(Lines, linewidth=lw)
 plt_obs = data(df_obs) *
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
         color = :grp => "",
+        linestyle = :grp => "",
         marker = :grp => ""
     ) *
     (visual(Scatter))
 f = draw!(gridpos, plt_model+plt_obs, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
-legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom, 
+        margin=(20, 10, 0, 10), patchsize=(40,25), nbanks=3)
 # Lines re-styling
 amber_aog = "#ffa700"
 green_aog = "#107A78"
 lineas = fig.content[1].scene.plots
-lineas[1].linestyle = :dash
-lineas[2].linestyle = :dot
+# lineas[1].linestyle = :dash
+# lineas[2].linestyle = :dot
 # lineas[1].color = amber_aog
 # lineas[2].color = green_aog
 
 leg = fig.content[2]
-_lines = leg.blockscene.children[1].plots[2:3]
+_lines = leg.blockscene.children[1].plots
 for l in _lines
     l.linewidth = 4
 end
-_lines[1].linestyle = :dash
-_lines[2].linestyle = :dot
-#deleteat!(leg.blockscene.children[1].plots,[5,7])
+# _lines[1].linestyle = :dash
+# _lines[2].linestyle = :dot
+deleteat!(_lines,[2,5,7,8,10])
 # _lines[1].color = amber_aog
 # _lines[2].color = green_aog
 
 display(fig)
 save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("plot done.")
+_lines
 
 
+# %%
+fig.content[2].blockscene.children[1]
 
 # %%
 n = 20
