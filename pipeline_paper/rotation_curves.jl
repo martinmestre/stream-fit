@@ -127,15 +127,16 @@ plt_err = mapping(:r,:v,:err_v)*
         (data(df_Eilers)*visual(Errorbars,color=RGBf(0.0,0.4470588235294118,0.6980392156862745))+
         data(df_Sof13)*visual(Errorbars,color=RGBf(0.8,0.4745098039215686,0.6549019607843137))+
         data(df_Sof20)*visual(Errorbars,color=RGBf(0.33725490196078434,0.7058823529411765,0.9137254901960784)))
-f = draw!(gridpos, plt_model+plt_obs, axis=(;limits=((0,40),(0,300)),
+f=draw!(gridpos, plt_obs, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
+draw!(gridpos, plt_err, axis=(;limits=((0,40),(0,300)),
+    xgridvisible=false, ygridvisible=false)) 
+draw!(gridpos, plt_model, axis=(;limits=((0,40),(0,300)),
+xgridvisible=false, ygridvisible=false))
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom, 
         margin=(20, 10, 0, 10), patchsize=(40,25), nbanks=3)
-rgb_colors = []
-draw!(gridpos, plt_err, axis=(;limits=((0,40),(0,300)),
-        xgridvisible=false, ygridvisible=false)) 
-draw!(gridpos, plt_model+plt_obs, axis=(;limits=((0,40),(0,300)),
-        xgridvisible=false, ygridvisible=false))
+# draw!(gridpos, plt_err, axis=(;limits=((0,40),(0,300)),
+#         xgridvisible=false, ygridvisible=false)) 
 # Lines re-styling
 amber_aog = "#ffa700"
 green_aog = "#107A78"
@@ -153,7 +154,7 @@ end
 println("_lines=$_lines")
 # _lines[1].linestyle = :dash
 # _lines[2].linestyle = :dot
-deleteat!(_lines,[2,5,7,8,10])
+# deleteat!(_lines,[3,4,6,9,11])
 # _lines[1].color = amber_aog
 # _lines[2].color = green_aog
 
