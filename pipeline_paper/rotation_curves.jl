@@ -106,72 +106,57 @@ lw = 4
 set_aog_theme!()
 size_inches = (6.2*2, 3*2)
 size_pt = 72 .* size_inches
-fig = Figure(resolution = size_pt, fontsize = 30)
+fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]
 grp = dims(1) => renamer(labels) => ""
 plt_model = data(df_model) *
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
         color = :grp => "",
-        linestyle = :grp => "",
-        marker = :grp => ""
+        marker = :grp => "",
+        linestyle = :grp => ""
     ) *
     visual(Lines, linewidth=lw)
-plt_obs = data(df_obs) *
+plt_obs = data(df_obs) *(
     mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
         color = :grp => "",
-        linestyle = :grp => "",
-        marker = :grp => ""
-    ) *
-    (visual(Scatter))
-plt_err = mapping(:r,:v,:err_v)*
-        (data(df_Eilers)*visual(Errorbars,color=RGBf(0.0,0.4470588235294118,0.6980392156862745))+
-        data(df_Sof13)*visual(Errorbars,color=RGBf(0.8,0.4745098039215686,0.6549019607843137))+
-        data(df_Sof20)*visual(Errorbars,color=RGBf(0.33725490196078434,0.7058823529411765,0.9137254901960784)))
-f=draw!(gridpos, plt_obs, axis=(;limits=((0,40),(0,300)),
+        marker = :grp => "",
+        linestyle = :grp => ""
+    )*visual(Scatter)
+    + 
+    mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", :err_v; color = :grp => "",
+        marker = :grp => "", linestyle = :grp=>""
+    )*visual(Errorbars))
+
+f=draw!(gridpos, plt_obs+plt_model, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
-draw!(gridpos, plt_err, axis=(;limits=((0,40),(0,300)),
-    xgridvisible=false, ygridvisible=false)) 
-draw!(gridpos, plt_model, axis=(;limits=((0,40),(0,300)),
-xgridvisible=false, ygridvisible=false))
+
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom, 
-        margin=(20, 10, 0, 10), patchsize=(40,25), nbanks=3)
-# draw!(gridpos, plt_err, axis=(;limits=((0,40),(0,300)),
-#         xgridvisible=false, ygridvisible=false)) 
-# Lines re-styling
-amber_aog = "#ffa700"
-green_aog = "#107A78"
+        margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
+
+
 lineas = fig.content[1].scene.plots
-# lineas[1].linestyle = :dash
-# lineas[2].linestyle = :dot
-# lineas[1].color = amber_aog
-# lineas[2].color = green_aog
 
 leg = fig.content[2]
 _lines = leg.blockscene.children[1].plots
 for l in _lines
     l.linewidth = 4
 end
-println("_lines=$_lines")
-# _lines[1].linestyle = :dash
-# _lines[2].linestyle = :dot
-# deleteat!(_lines,[3,4,6,9,11])
-# _lines[1].color = amber_aog
-# _lines[2].color = green_aog
 
+println("_lines=$_lines")
+deleteat!(_lines,[3,4,5,6,8,9,12,13,15,16])
 display(fig)
 save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("plot done.")
-for l in lineas
-    display(l.color)
-end
+
 
 # %%
-fig.content[2].blockscene.children[1]
+fig.content[2].blockscene.children[1].plots
+
 
 # %%
 n = 20
 df_a = DataFrame(grp=fill("a", n), x=collect(1:n), y=fill(2, n))
-df_b = DataFrame(grp=fill("b", n), x=collect(1:n), y=fill(4, n))
+df_b = DataFrame(grp=fill("b", n), x=collect(1:n), y=fill(3, n), z=fill(0.3, n))
 
 set_aog_theme!()
 size_inches = (6.2*2, 3*2)
@@ -181,17 +166,18 @@ gridpos = fig[1, 1]
 plt_a = data(df_a) *
     mapping(:x => L"x", :y=> L"y"; color = :grp => "", marker=:grp=> "", linestyle = :grp => "") *
     visual(Lines, linewidth=lw)
-plt_b = data(df_b) *
+plt_b = data(df_b) *(
     mapping(:x => L"x", :y=> L"y"; color = :grp => "", marker=:grp=>"", linestyle= :grp => "") *
-    visual(Scatter)
-f = draw!(gridpos, plt_b+plt_a, axis=(;limits=((0,n),(0,5)),
+    visual(Scatter))
+    # + mapping(:x => L"x",:y=> L"y",:z;color=:grp=> "", marker=:grp=> "", linestyle = :grp => "")*visual(Errorbars))
+f = draw!(gridpos, plt_a+plt_b, axis=(;limits=((0,n),(0,4)),
     xgridvisible=false, ygridvisible=false))
-legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(20,10))
+
+display(fig)
 leg = fig.content[2]
 leg_items = leg.blockscene.children[1].plots
 display(leg_items)
-deleteat!(leg_items,[3,4])
-display(fig)
 
 # %%
 1:10
