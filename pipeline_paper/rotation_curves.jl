@@ -87,14 +87,15 @@ rename!(df_Sof20, [:Radius, :Velocity, :Error] .=> [:r, :v, :err_v])
 insertcols!(df_Sof13, 1, :grp=>fill("Sofue 2013",nrow(df_Sof13)))
 insertcols!(df_Sof20, 1, :grp=>fill("Sofue 2020",nrow(df_Sof20)))
 insertcols!(df_Eilers, 1, :grp=>fill("Eilers 2019",nrow(df_Eilers)))
-insertcols!(df_Sof20, 4, :err_r=>fill(missing,nrow(df_Sof20)))
-insertcols!(df_Eilers, 4, :err_r=>fill(missing,nrow(df_Eilers)))
-insertcols!(df_Eilers, 5, :err_v=>df_Eilers.e_up)
 println(names(df_Sof13))
 println(names(df_Sof20))
 println(names(df_Eilers))
-df_Eilers.err_v==df_Eilers.e_up
 df_obs = vcat(df_Sof13, df_Sof20, df_Eilers, cols=:union)
+for col in eachcol(df_obs)
+    replace!(col,missing=>0)
+end
+# show(df_obs, allrows=true, allcols=true);
+
 
 
 # %%
@@ -104,33 +105,31 @@ labels = ["Fermionic-MW","NFW-MW"]
 lw = 4
 
 set_aog_theme!()
-size_inches = (6.2*2, 3*2)
+size_inches = (6.2*2, 4*2)
 size_pt = 72 .* size_inches
 fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]
-grp = dims(1) => renamer(labels) => ""
-plt_model = data(df_model) *
-    mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-        color = :grp => "",
-        marker = :grp => "",
-        linestyle = :grp => ""
-    ) *
-    visual(Lines, linewidth=lw)
-plt_obs = data(df_obs) *(
-    mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-        color = :grp => "",
-        marker = :grp => "",
-        linestyle = :grp => ""
-    )*visual(Scatter)
-    + 
-    mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", :err_v; color = :grp => "",
-        marker = :grp => "", linestyle = :grp=>""
-    )*visual(Errorbars))
 
-f=draw!(gridpos, plt_obs+plt_model, axis=(;limits=((0,40),(0,300)),
+rv_map = mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
+                 color = :grp => "", marker = :grp => "", linestyle = :grp => "") 
+rv_ev_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+                  :err_v; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
+rv_ev_ud_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+                    :e_down, :e_up; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
+rv_er_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+                    :err_r; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
+
+plt_model = data(df_model) * rv_map * visual(Lines, linewidth=lw)
+plt_obs   = data(df_obs)   * rv_map * visual(Scatter)
+plt_ev    = data(df_obs)   * rv_ev_map * visual(Errorbars)
+plt_ev_ud =  data(df_obs)   * rv_ev_ud_map * visual(Errorbars)
+plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
+
+plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
+f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
 
-legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom, 
+legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
 
 
@@ -156,7 +155,7 @@ fig.content[2].blockscene.children[1].plots
 # %%
 n = 20
 df_a = DataFrame(grp=fill("a", n), x=collect(1:n), y=fill(2, n))
-df_b = DataFrame(grp=fill("b", n), x=collect(1:n), y=fill(3, n), z=fill(0.3, n))
+df_b = DataFrame(grp=fill("b", n), x=collect(1:n), y=fill(3, n), z=fill(0, n))
 
 set_aog_theme!()
 size_inches = (6.2*2, 3*2)
@@ -178,8 +177,3 @@ display(fig)
 leg = fig.content[2]
 leg_items = leg.blockscene.children[1].plots
 display(leg_items)
-
-# %%
-1:10
-
-# %%
