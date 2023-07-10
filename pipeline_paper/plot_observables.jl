@@ -113,7 +113,7 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
                     :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ]);
 # %%
-labels = ["Observed±σ", "NFW-MW", "Fermionic-MW" ]
+labels = ["Observed±σ", "Fermionic-MW", "NFW-MW"]
 lw = 4
 # %%
 
@@ -126,7 +126,7 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [2, 22, 17] .=> L"ϕ_2~[°]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [2, 17, 22] .=> L"ϕ_2~[°]";
               color = grp,
               linestyle = grp
           ) *

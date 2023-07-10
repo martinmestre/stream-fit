@@ -132,9 +132,14 @@ f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
 
-
+# Lines re-styling
 lineas = fig.content[1].scene.plots
+println("lineas=$lineas")
+for l in lineas
+    l.linestyle = :dash
+end
 
+# Legend re-styling
 leg = fig.content[2]
 _lines = leg.blockscene.children[1].plots
 for l in _lines
@@ -145,7 +150,27 @@ println("_lines=$_lines")
 deleteat!(_lines,[3,4,5,6,8,9,12,13,15,16])
 display(fig)
 save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
-println("plot done.")
+println("first plot done.")
+
+
+fig = Figure(resolution = size_pt, fontsize = 37)
+gridpos = fig[1, 1]
+f=draw!(gridpos, plt, axis=(;limits=((5,20),(220,270)),
+    xgridvisible=false, ygridvisible=false))
+
+legend!(gridpos, f; tellwidth=false, halign=:left, valign=:top, 
+        margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=2, framevisible=true, labelsize=25)
+leg = fig.content[2]
+_lines = leg.blockscene.children[1].plots
+for l in _lines
+    l.linewidth = 4
+end
+println("_lines=$_lines")
+deleteat!(_lines,[3,4,5,6,8,9,12,13,15,16])
+display(fig)
+save("paper_plots/rotation_curves_zoom.pdf", fig, pt_per_unit = 1)
+println("Second plot done.")
+
 
 
 # %%
@@ -177,3 +202,9 @@ display(fig)
 leg = fig.content[2]
 leg_items = leg.blockscene.children[1].plots
 display(leg_items)
+
+# %%
+# MWE
+
+
+# %%
