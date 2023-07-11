@@ -213,6 +213,29 @@ Iba_mura_np = Iba_sky['mu_ra'].to_numpy()
 Iba_mudec_np = Iba_sky['mu_dec'].to_numpy()
 sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
 
+
+def gal_distance(R_sun, z_sun):
+    Iba_coord_GD1 = GD1_class.GD1Koposov10(phi1=Iba_sky['phi_1']*u.degree, phi2=Iba_sky['phi_2']*u.degree)
+    Iba_coord_ICRS = Iba_coord_GD1.transform_to(coord.ICRS)
+    Iba_sky['ra'] = Iba_coord_ICRS.ra.value
+    Iba_sky['dec'] = Iba_coord_ICRS.dec.value
+    Iba_coord_ICRS = coord.ICRS(ra=Iba_sky['ra']*u.degree,
+                                dec=Iba_sky['dec']*u.degree,
+                                distance=Iba_sky['d_hel']*u.kpc,
+                                pm_ra_cosdec=Iba_sky['mu_ra']*u.mas/u.yr,
+                                pm_dec=Iba_sky['mu_dec']*u.mas/u.yr,
+                                radial_velocity=Iba_sky['v_hel']*u.km/u.s)
+    frame = coord.Galactocentric(galcen_distance=R_sun*u.kpc, z_sun=z_sun*u.kpc)
+    Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
+    # Iba_coord_Gal = Iba_coord_Gal[11:90] without cropping
+    Iba_d_gal = np.zeros(len(Iba_coord_Gal.x.value))
+    Iba_R_gal = np.zeros(len(Iba_coord_Gal.x.value))
+    for i in range(0, len(Iba_coord_Gal.x.value)):
+        Iba_d_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2
+                           + Iba_coord_Gal.z[i].value**2)
+        Iba_R_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2)
+    return Iba_d_gal, Iba_R_gal, Iba_coord_Gal.z
+
 # Core constraint
 m_core_const = 3.5e6  # M_sun
 

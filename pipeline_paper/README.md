@@ -71,7 +71,7 @@ Output: "chi2stream.pdf", "chi2stream_tilted.pdf"
 julia rotation_curves.jl
 ```
 
-Output: "rotation_curves.pdf", "rotation_curves.pdf"
+Output: "rotation_curves.pdf"
 
 ## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
 

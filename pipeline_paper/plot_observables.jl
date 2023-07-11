@@ -80,6 +80,15 @@ d☼ᵢ = d☼ₒ - Δd☼
 v☼ₛ = v☼ₒ + Δv☼
 v☼ᵢ = v☼ₒ - Δv☼
 
+# Print Galactocentric distance array of Ibata polinomials.
+Iba_gal_dist, Iba_R_dist, Iba_z = stream.gal_distance(r☼,0.0)
+println("The Galactocentric distance satisfies:")
+println("$(minimum(Iba_gal_dist)) kpc < Iba_gal_dist < $(maximum(Iba_gal_dist)) kpc")
+println("The Galactocentric projected distance satisfies:")
+println("$(minimum(Iba_R_dist)) kpc < Iba_R_dist < $(maximum(Iba_R_dist)) kpc")
+println("The z variable satisfies:")
+println("$(minimum(Iba_z)) kpc < Iba_z < $(maximum(Iba_z)) kpc")
+
 # MEPP solution.
 pot_list = stream.pot_model(ϵ, θ, W, β)
 temp = stream.orbit_model(ic..., pot_list, r☼)

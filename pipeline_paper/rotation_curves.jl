@@ -111,12 +111,12 @@ fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]
 
 rv_map = mapping(:r => L"r~[\textrm{kpc}]", :v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]";
-                 color = :grp => "", marker = :grp => "", linestyle = :grp => "") 
-rv_ev_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+                 color = :grp => "", marker = :grp => "", linestyle = :grp => "")
+rv_ev_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]",
                   :err_v; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
-rv_ev_ud_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+rv_ev_ud_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]",
                     :e_down, :e_up; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
-rv_er_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]", 
+rv_er_map = mapping(:r=> L"r~[\textrm{kpc}]",:v=> L"v_{\textrm{circ}}~[\textrm{km s}^{-1}]",
                     :err_r; color =   :grp => "", marker = :grp => "", linestyle = :grp=>"")
 
 plt_model = data(df_model) * rv_map * visual(Lines, linewidth=lw)
@@ -128,7 +128,8 @@ plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
 plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
 f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
-
+ax = f[1,1].axis
+vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.1))
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
 
@@ -157,8 +158,9 @@ fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]
 f=draw!(gridpos, plt, axis=(;limits=((5,20),(220,270)),
     xgridvisible=false, ygridvisible=false))
-
-legend!(gridpos, f; tellwidth=false, halign=:left, valign=:top, 
+ax = f[1,1].axis
+vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.1))
+legend!(gridpos, f; tellwidth=false, halign=:left, valign=:top,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=2, framevisible=true, labelsize=25)
 leg = fig.content[2]
 _lines = leg.blockscene.children[1].plots
