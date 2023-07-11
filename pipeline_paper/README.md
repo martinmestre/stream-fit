@@ -1,6 +1,7 @@
 # Pipeline of the paper about the GD-1 stream on a MW with a fermionic DM halo
 
-The results in the paper are a consequence of analyzing the ouputs of following pipeline:
+The results in the paper are a consequence of analyzing the ouputs of following pipeline.
+All the plots are placed inside the directory "paper_plots".
 
 ## Fit the initial conditions (IC) of the orbit for the NFW-MW model
 ```
@@ -36,7 +37,7 @@ Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 ```
 julia plot_observables.jl
 ```
-Output: "paper_plots/bservables_xxx.pdf"
+Output: "observables_xxx.pdf"
 
 ## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0)$ plane
 ```
@@ -47,13 +48,22 @@ To run in a large/fast cluster.
 
 Output: "chi2stream_beta0_1.258e-05.txt"
 
+## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0-h(\theta_0))$ plane (zoomed in version).
+```
+python grid_chi2stream_tilted.py
+```
+
+To run in a large/fast cluster.
+
+Output: "chi2stream_tilted_beta0_1.258e-05.txt"
+
 ## Make $\chi^2_{\rm{Stream}}$ function plot
 
 ```
 julia plot_chi2stream.jl
 ```
 
-Output: "paper_plots/chi2stream.pdf", "paper_plots/chi2stream_tilted.pdf"
+Output: "chi2stream.pdf", "chi2stream_tilted.pdf"
 
 ## Compute and plot rotation curves: observations, Fermionic-MW and NFW-MW.
 
@@ -61,7 +71,7 @@ Output: "paper_plots/chi2stream.pdf", "paper_plots/chi2stream_tilted.pdf"
 julia rotation_curves.jl
 ```
 
-Output: "paper_plots/rotation_curves.pdf"
+Output: "rotation_curves.pdf", "rotation_curves.pdf"
 
 ## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
 
