@@ -124,12 +124,14 @@ plt_obs   = data(df_obs)   * rv_map * visual(Scatter)
 plt_ev    = data(df_obs)   * rv_ev_map * visual(Errorbars)
 plt_ev_ud =  data(df_obs)   * rv_ev_ud_map * visual(Errorbars)
 plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
+plt_water = data(DataFrame(x=[12],y=[16]))*mapping(:x,:y)*visual(VSpan,color=(:black,0.1))
 
-plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
+plt = plt_water+plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
 f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
 vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.1))
+
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
 
