@@ -130,7 +130,7 @@ plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
 f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
-vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.1))
+vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.15))
 
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
@@ -161,7 +161,7 @@ gridpos = fig[1, 1]
 f=draw!(gridpos, plt, axis=(;limits=((5,20),(220,270)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
-vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.1))
+vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.15))
 legend!(gridpos, f; tellwidth=false, halign=:left, valign=:top,
         margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=2, framevisible=true, labelsize=25)
 leg = fig.content[2]

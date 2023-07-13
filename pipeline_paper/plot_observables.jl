@@ -122,7 +122,7 @@ df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ,
                     :ϕ₂, :d☼, :μ_ra, :μ_dec, :v☼,
                     :ϕ₂ₘ, :d☼ₘ, :μ_raₘ, :μ_decₘ, :v☼ₘ]);
 # %%
-labels = ["Observed±σ", "Fermionic-MW", "NFW-MW"]
+labels = ["Observed", "Fermionic-MW", "NFW-MW"]
 lw = 4
 # %%
 
@@ -144,15 +144,19 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [3,4] .=> L"ϕ_2~[°]";
       ) *
       visual(Lines, linewidth=lw)
-      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(-4, 1)),
+      plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:ϕ₂ₛ=>"",:ϕ₂ᵢ=>"")*visual(Band,color=(:black,0.15))
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
             xgridvisible=false, ygridvisible=false))
+
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-4, 1)),
+      xgridvisible=false, ygridvisible=false))
 
       # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
-      lineas[4].linewidth = 2
-      lineas[5].linewidth = 2
+      # lineas[4].linewidth = 2
+      # lineas[5].linewidth = 2
       lineas[2].linestyle = :dash
       lineas[3].linestyle = :dot
 
@@ -190,15 +194,18 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [9,10] .=> L"\tilde{μ}_{α}~[\mathrm{mas}~\mathrm{yr}^{-1}]";
       ) *
       visual(Lines, linewidth=lw)
-      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:μ_raₛ=>"",:μ_raᵢ=>"")*visual(Band,color=(:black,0.15))
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-10,1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
-
+      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-10, 1)),
+      xgridvisible=false, ygridvisible=false))
+      
       # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
-      lineas[4].linewidth = 2
-      lineas[5].linewidth = 2
+      # lineas[4].linewidth = 2
+      # lineas[5].linewidth = 2
       lineas[2].linestyle = :dash
       lineas[3].linestyle = :dot
 
@@ -235,15 +242,19 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [12,13] .=> L"μ_δ~[\mathrm{mas}~\mathrm{yr}^{-1}]";
       ) *
       visual(Lines, linewidth=lw)
-      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:μ_decₛ=>"",:μ_decᵢ=>"")*visual(Band,color=(:black,0.15))
+      
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-16, 1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-16, 1)),
+            xgridvisible=false, ygridvisible=false))
 
       # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
-      lineas[4].linewidth = 2
-      lineas[5].linewidth = 2
+      # lineas[4].linewidth = 2
+      # lineas[5].linewidth = 2
       lineas[2].linestyle = :dash
       lineas[3].linestyle = :dot
 
@@ -280,15 +291,19 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [6,7] .=> L"D~[\mathrm{kpc}]";
       ) *
       visual(Lines, linewidth=lw)
-      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:d☼ₛ=>"",:d☼ᵢ=>"")*visual(Band,color=(:black,0.15))
+      
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(6, 13.5)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(6, 13.5)),
+      xgridvisible=false, ygridvisible=false))
 
       # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
-      lineas[4].linewidth = 2
-      lineas[5].linewidth = 2
+      # lineas[4].linewidth = 2
+      # lineas[5].linewidth = 2
       lineas[2].linestyle = :dash
       lineas[3].linestyle = :dot
 
@@ -316,7 +331,7 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [15, 26, 21] .=> L"v_h~[\mathrm{km~s^{-1}}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [14, 26, 21] .=> L"v_h~[\mathrm{km~s^{-1}}]";
               color = grp,
               linestyle = grp
           ) *
@@ -325,16 +340,19 @@ let
       mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [16] .=> L"v_h~[\mathrm{km~s^{-1}}]";
       ) *
       visual(Lines, linewidth=lw)
-      f = draw!(gridpos, plt+plt2, axis=(;limits=((-90,10),(nothing, nothing)),
+      plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:v☼ₛ=>"",:v☼ᵢ=>"")*visual(Band,color=(:black,0.25))
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-310, 310)),
             xgridvisible=false, ygridvisible=false))
 
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-310, 310)),
+      xgridvisible=false, ygridvisible=false))
 
        # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
-      lineas[1].linewidth = 2
-      lineas[4].linewidth = 2
+      # lineas[1].linewidth = 2
+      # lineas[4].linewidth = 2
       lineas[2].linestyle = :dash
       lineas[3].linestyle = :dot
 
