@@ -94,7 +94,7 @@ df_obs = vcat(df_Sof13, df_Sof20, df_Eilers, cols=:union)
 for col in eachcol(df_obs)
     replace!(col,missing=>0)
 end
-# show(df_obs, allrows=true, allcols=true);
+
 
 
 
@@ -124,9 +124,9 @@ plt_obs   = data(df_obs)   * rv_map * visual(Scatter)
 plt_ev    = data(df_obs)   * rv_ev_map * visual(Errorbars)
 plt_ev_ud =  data(df_obs)   * rv_ev_ud_map * visual(Errorbars)
 plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
-plt_water = data(DataFrame(x=[12],y=[16]))*mapping(:x,:y)*visual(VSpan,color=(:black,0.1))
 
-plt = plt_water+plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
+
+plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
 f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
