@@ -63,7 +63,7 @@ Output: "chi2stream_tilted_beta0_1.258e-05.txt"
 julia plot_chi2stream.jl
 ```
 
-Output: "chi2stream.pdf", "chi2stream_tilted.pdf"
+Output: "chi2stream_contourf.pdf", "chi2stream_tilted_contourf.pdf"
 
 ## Compute and plot rotation curves: observations, Fermionic-MW and NFW-MW.
 
