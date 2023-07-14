@@ -291,7 +291,7 @@ of the observable data, i.e. $\eta^{(51)}$ that corresponds to $\alpha=149.24^{\
 It should be said that the NFW-MW model was fitted by~\citet{2019MNRAS.486.2995M} with a set of Gaia
 DR2 data different from the polynomials used here. Any point along the stream is equally good as an IC. The genetic algorithm converged to a solution given approximately by
 $\alpha=149.17^{\circ}$, $\delta=36.51^{\circ}$, $D=7.95$ kpc, $\tilde{\mu}_\alpha=-6.94$ mas/yr, $\mu_\delta=-12.49$ mas/yr and $v_h=-18.33$ km/s with a value of $\chi^2_{\rm{stream}}\approx 17.52$.
-The orbit that corresponds to this IC is displayed in the observable space in Fig.~\ref{fig:obs_astrometry}~(top: $\phi_2$, middle: $\tilde{\mu}_\alpha$, bottom: $\mu_\delta$) and Fig.~\ref{fig:obs_radial}~(top: $D$, bottom: $v_h$) with a dotted (green) line. The thick solid (black) line shows the corresponding observable $\eta$ data while the thin solid ones demarkate the corresponding regions at $1\sigma_\eta$.
+The orbit that corresponds to this IC is displayed in the observable space in Fig.~\ref{fig:obs_astrometry}~(top: $\phi_2$, middle: $\tilde{\mu}_\alpha$, bottom: $\mu_\delta$) and Fig.~\ref{fig:obs_radial}~(top: $D$, bottom: $v_h$) with a dotted (green) line. The solid (black) line shows the corresponding observable $\eta$ data while the shaded (grey) area demarkates the corresponding $1\sigma_\eta$ regions.
 \begin{figure*}
    \centering
    \includegraphics[width=0.9\textwidth]{figures/observables_position.pdf}
@@ -344,28 +344,26 @@ more consistent with the data. In fact, here we used a fixed NFW-MW model that w
 %
 We would like to give a glimpse of the behaviour of the $\chi^2_{\rm{stream}}$ function so we have evaluated it for fixed values of $(\epsilon, \beta_0)=(56, 1.258\times10^{-5})$ in a bidimensional grid
 spanning the box $(\theta_0, \omega_0)\in[34, 38]\times[25, 30]$.
-Fig.~\ref{fig:chi2stream} shows this grid coloured by the value of their corresponding $\chi^2_{\rm{stream}}$.
-The colour palette corresponds to points with $\chi^2_{\rm{stream}}<10^4$, the red points correspond $\chi^2_{\rm{stream}}<50$ and the black point corresponds to our fitted solution.
-It can be noticed that the minimum values of the function are located along a thin and finite {\it valley}, implying that the solution of the fitting problem is locally degenerated along
+Fig.~\ref{fig:chi2stream} shows a contourplot of this grid coloured by the value of their corresponding $\chi^2_{\rm{stream}}$ and the black point corresponds to our fitted solution.
+It can be noticed that the minimum values of the function are located along a thin and finite {\it valley}, implying that the solution of the fitting problem is locally degenerate along
 a straight line in the $(\theta_0, \omega_0)$-plane. In spite of this, it was possible
 to fit the Fermionic-MW model with a quality as good as in the NFW-MW model.
-As an additional check, we have fitted a line to the red points (i.e. the valley) obtaining
-$h(x)\approx 0.7989+0.7361x$, substracted this line to $\omega$ and made a plot of $\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.02,0.02]$. The result can be seen in Fig.~\ref{fig:chi2stream_tilted}, where the red curve corresponds to the contour $\chi^2_{\rm{stream}}=50$. It is noticeable that the variance along $\omega_0-h(\theta_0)$ is two orders of magnitude smaller than the variance along $\theta_0$.
+As an additional check, we have fitted a line to those points that satisfy $\chi^2_{\rm{stream}}<50$
+obtaining $h(x)\approx 0.7989+0.7361x$, substracted this line to $\omega_0$ and made a plot of $\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.258\times10^{-5})$ in the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.011,0.011]$. The result can be seen in the contour plot of
+Fig.~\ref{fig:chi2stream_tilted}. It is noticeable that the variance along $\omega_0-h(\theta_0)$ is two orders of magnitude smaller than the variance along $\theta_0$.
 %
 \begin{figure}
    \centering
-   \includegraphics[width=0.49\textwidth]{figures/chi2stream.pdf}
-   \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in
-   the window $(\theta_0, \omega_0)\in[34, 38]\times[25, 29]$. The colour palette corresponds to points
-   with $\chi^2_{\rm{stream}}<10^4$, the red points correspond $\chi^2_{\rm{stream}}<50$ and the black point corresponds to our fitted solution. It can be noticed that
-   the minimum values of the function are located along a thin and finite {\it valley}.}
+   \includegraphics[width=0.49\textwidth]{figures/chi2stream_contourf.pdf}
+   \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.258\times10^{-5})$ in
+   the window $(\theta_0, \omega_0)\in[34, 38]\times[25.5,28.2]$. The black point corresponds to our fitted solution. It can be noticed that    the minimum values of the function are located along a thin and finite {\it valley}.}
    \label{fig:chi2stream}
 \end{figure}
 \begin{figure}
    \centering
-   \includegraphics[width=0.49\textwidth]{figures/chi2stream_tilted.pdf}
-   \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.25\times10^{-5})$ in
-   the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.02,0.02]$. The colour palette corresponds to points with $\chi^2_{\rm{stream}}<10^4$, the red points correspond $\chi^2_{\rm{stream}}<50$ and the black point corresponds to our fitted solution. }
+   \includegraphics[width=0.49\textwidth]{figures/chi2stream_tilted_contourf.pdf}
+   \caption{$\chi^2_{\rm{stream}}$ function for $(\epsilon, \beta_0)=(56, 1.258\times10^{-5})$ in
+   the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.011,0.011]$. }
    \label{fig:chi2stream_tilted}
 \end{figure}
 
@@ -383,7 +381,7 @@ assumes $R_\odot=8,122$~kpc and a Galactocentric sun velocity $v_\odot$ = $(11.1
 in order to estimate a value of $v_c(R_\odot)=229\pm0.2$ km/s.
 
 According to GD-1 observables, the present Galactocentric distance projected onto the plane $z=0$,
-belongs to the interval $11.5 \lesssim D_g \lesssim 16.4$ (kpc), displayed as a vertical grey band in
+belongs to the interval $11.5 \lesssim D_g \lesssim 16.4$ (kpc), displayed as a vertical shaded (grey) band in
 Fig.~\ref{fig:rotcurve}.
 Although the GD-1 stream orbit location corresponds to $z\in [2.6, 9.7]$ kpc and thus explores the non-sphericality of the full MW models (due to baryons/NFW axisymmetry), the fact that both models approximately agree in their circular velocity values in the GD-1 region gives support to the idea of using stellar streams as Galactic
 accelerometers~\citep{Ibata_2016}.
