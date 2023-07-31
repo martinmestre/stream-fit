@@ -475,14 +475,14 @@ beta_0 = 1.20e-5
 
 
 #Optimization
-# bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
+bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
 # bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5))
-# opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
-#                                       strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
-#                                       atol=0.0, disp=True, polish=True, workers=-1)
-# param_fitted = opt.x
-# np.savetxt(param_file, param_fitted, delimiter=',')
-# w_0 = param_fitted
+opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
+                                      strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
+                                      atol=0.0, disp=True, polish=True, workers=-1)
+param_fitted = opt.x
+np.savetxt(param_file, param_fitted, delimiter=',')
+w_0 = param_fitted
 w_0 = np.loadtxt(param_file)
 
 

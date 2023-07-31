@@ -49,7 +49,8 @@ ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = readdlm(ic_file)
 r☼ = 8.122
 
-orbit_nfw_file = "observable_orbit_NFW-MW.txt"
+#orbit_nfw_file = "observable_orbit_NFW-MW.txt"
+
 # %%
 # Fermionic-MW solution and rotation curve
 pot_list = stream.pot_model(ϵ, θ, W, β)
