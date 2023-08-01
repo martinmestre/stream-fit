@@ -76,7 +76,7 @@ Output: "rotation_curves.pdf"
 ## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV
 
 ```
-julia optim_polish_chi2full.jl
+julia optim_sequentially_fermionmass.jl
 ```
 
-Output: "param_optim_polish_chi2full.txt"
+Output: "param_optim_sequentially_fermionmass_polished.txt"

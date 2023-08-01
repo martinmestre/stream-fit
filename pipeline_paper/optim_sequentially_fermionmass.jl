@@ -25,7 +25,7 @@ using PyCall
 using Optimization, OptimizationNLopt
 using DelimitedFiles
 using CSV
-using DataFrames
+using DataFrames, DataFramesMeta
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -36,7 +36,7 @@ u = pyimport("astropy.units")
 importLib.reload(stream)
 # %%
 
-# Initial parameters, initial orbit conditions and output file.
+"""Initial parameters, initial orbit conditions and output file."""
 
 const param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
 const θ₀, ω₀, β₀ = readdlm(param_file)
@@ -48,10 +48,13 @@ const ic = readdlm(ic_file)
 const r☼ = 8.122
 
 const sol_file = "param_optim_sequentially_fermionmass.txt"
+const polished_file = "param_optim_sequentially_fermionmass_polished.txt"
 
 # %%
-# Loop in ϵ.
 
+"""Loop in ϵ."""
+
+"""χ² wrap."""
 function χ²Full(x, p)
     θ = x[1]
     ω = x[2]
@@ -60,6 +63,8 @@ function χ²Full(x, p)
     return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
 end
 
+"""Optimizing sequentially by increasing the fermion mass smoothly and using
+as initial parameter condition the solution of the previous mass case."""
 function main(E, θ₀, ω₀, β₀, ic, r☼)
     θ, ω, βᵣ = θ₀, ω₀, β₀*10^5
     for ϵ ∈ E
@@ -83,11 +88,41 @@ function main(E, θ₀, ω₀, β₀, ic, r☼)
         end
     end
 end
-
-
-
-
 # %%
-main(E, θ₀, ω₀, β₀, ic, r☼)
+"""Very long run."""
+# main(E, θ₀, ω₀, β₀, ic, r☼)
+# %%
+
+"""Polishing for a handfull of fermion mass values."""
+function polish(E, in_file, out_file)
+    mat = readdlm(in_file)
+    df=DataFrame(ϵ=mat[:,1],θ=mat[:,2],ω=mat[:,3],βᵣ=mat[:,4]*10^5,χ²=mat[:,5],χ²s=mat[:,6],χ²c=mat[:,7])
+    for ϵ ∈ E
+        open(out_file, "a") do f
+            df_s = @subset(df, :ϵ .== ϵ)
+            θ, ω, βᵣ = df_s.θ[1], df_s.ω[1], df_s.βᵣ[1]
+            p = [ϵ]
+            x₀ = [θ, ω, βᵣ]
+            @show x₀
+            lb = [0.99θ, 0.99ω, 0.9βᵣ]
+            ub = [1.01θ, 1.01ω, 1.1βᵣ]
+            prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
+            x₀ = sol.u
+            χ² = sol.minimum
+            θ = x₀[1]
+            ω = x₀[2]
+            βᵣ = x₀[3]
+            χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+            χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+            println(f, ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println(ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+        end
+    end
+end
+# %%
+
+Eₚ = [56.0, 57.0,60.0]
+polish(Eₚ, sol_file, polished_file)
 
 # %%

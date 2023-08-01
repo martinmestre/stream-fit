@@ -307,10 +307,9 @@ def chi2_core(theta_0, d_theta, beta_0, ener_f):
 
 def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     """Chi^2 full (stream+core) function."""
-    print("params = ",theta_0, d_theta, beta_0, ener_f, r_sun)
     import wrap
     W_0 = theta_0 + d_theta
-    print("params = ",theta_0, d_theta, beta_0)
+
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
     phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
         ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list, r_sun)
@@ -357,9 +356,7 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     # print('Newton: ', r_core, mass_core)
     sum[5] = (mass_core - m_core_const)**2/(0.01*m_core_const)**2
 
-    print(theta_0, d_theta, beta_0, ener_f,  '--- chi2_full = ', np.sum(sum))
-    print('with ::: chi2_stream = ', np.sum(sum[0:5]), ' ::: chi2_core =', sum[5])
-    print("and  ::: r_core = ", r_core, " ::: m_core = ", mass_core/1.e6, "x10⁶ M_sun")
+    print(theta_0, d_theta, beta_0, ener_f,  " chi2_full=", np.sum(sum), "chi2_stream=", np.sum(sum[0:5]), "chi2_core=", sum[5], "r_core=", r_core, "m_core=", mass_core/1.e6, "x10⁶ M_sun")
     return np.sum(sum)
 
 
