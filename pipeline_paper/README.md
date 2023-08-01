@@ -80,3 +80,5 @@ julia optim_sequentially_fermionmass.jl
 ```
 
 Output: "param_optim_sequentially_fermionmass.txt", "param_optim_sequentially_fermionmass_polished.txt"
+
+The second txt file contains the solutions used to make the corresponding figure of density profiles.
