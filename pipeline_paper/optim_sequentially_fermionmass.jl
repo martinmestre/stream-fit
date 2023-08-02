@@ -120,8 +120,8 @@ function polish(E, in_file, out_file)
             p = [ϵ]
             x₀ = [θ, ω, βᵣ]
             @show x₀
-            lb = [0.99θ, 0.99ω, 0.9βᵣ]
-            ub = [1.01θ, 1.01ω, 1.1βᵣ]
+            lb = [0.995θ, 0.995ω, 0.9βᵣ]
+            ub = [1.005θ, 1.005ω, 1.1βᵣ]
             prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
             sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-6)
             x₀ = sol.u
@@ -179,6 +179,7 @@ function polish_in2steps(E, in_file, out_file)
         end
     end
 end
+
 # %%
 
 Eₚ = [60.0]
