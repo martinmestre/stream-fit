@@ -68,7 +68,7 @@ function χ²Stream(x, p)
     ω = x[2]
     β = p[1]/10.0^5
     ϵ = p[2]
-    return stream.chi2_stream(θ, ω, β, ϵ, ic, r☼)
+    return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
 end
 
 function χ²Core(x, p)
@@ -76,7 +76,7 @@ function χ²Core(x, p)
     ω = p[2]
     β = x[1]/10.0^5
     ϵ = p[3]
-    return stream.chi2_core(θ, ω, β, ϵ)
+    return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
 end
 
 """Optimizing sequentially by increasing the fermion mass smoothly and using
@@ -145,20 +145,20 @@ function polish_in2steps(E, in_file, out_file)
         open(out_file, "a") do f
             df_s = @subset(df, :ϵ .== ϵ)
             θ, ω, βᵣ = df_s.θ[1], df_s.ω[1], df_s.βᵣ[1]
-            p = [θ, ω, ϵ]
-            x₀ = [βᵣ]
-            @show x₀
-            lb = [0.9βᵣ]
-            ub = [1.1βᵣ]
-            prob = OptimizationProblem(χ²Core, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
-            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
-            x₀ = sol.u
-            χ² = sol.minimum
-            βᵣ = x₀[1]
-            χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
-            χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
-            println(f, "step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
-            println("step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            # p = [θ, ω, ϵ]
+            # x₀ = [βᵣ]
+            # @show x₀
+            # lb = [0.9βᵣ]
+            # ub = [1.1βᵣ]
+            # prob = OptimizationProblem(χ²Core, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            # # sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
+            # x₀ = sol.u
+            # χ² = sol.minimum
+            # βᵣ = x₀[1]
+            # χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+            # χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+            # println(f, "step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            # println("step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
 
             p = [βᵣ, ϵ]
             x₀ = [θ, ω]
@@ -166,7 +166,7 @@ function polish_in2steps(E, in_file, out_file)
             lb = [0.99θ, 0.99ω]
             ub = [1.01θ, 1.01ω]
             prob = OptimizationProblem(χ²Stream, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
-            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
+            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-7)
             x₀ = sol.u
             χ² = sol.minimum
             θ = x₀[1]
@@ -239,6 +239,7 @@ function polish_in3steps(E, in_file, out_file)
     end
 end
 # %%
+
 function test(E, in_file)
     mat = readdlm(in_file)
     df=DataFrame(ϵ=mat[:,1],θ=mat[:,2],ω=mat[:,3],βᵣ=mat[:,4]*10^5,χ²=mat[:,5],χ²s=mat[:,6],χ²c=mat[:,7])
