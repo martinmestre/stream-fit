@@ -58,7 +58,7 @@ const polished_file = "param_optim_sequentially_fermionmass_polished.txt"
 function χ²Full(x, p)
     θ = x[1]
     ω = x[2]
-    β = x[3] * 1.e-5
+    β = x[3]/10.0^5
     ϵ = p[1]
     return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
 end
@@ -66,17 +66,17 @@ end
 function χ²Stream(x, p)
     θ = x[1]
     ω = x[2]
-    β = p[1] * 1.e-5
+    β = p[1]/10.0^5
     ϵ = p[2]
-    return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
+    return stream.chi2_stream(θ, ω, β, ϵ, ic, r☼)
 end
 
 function χ²Core(x, p)
     θ = p[1]
     ω = p[2]
-    β = x[1] * 1.e-5
+    β = x[1]/10.0^5
     ϵ = p[3]
-    return stream.chi2_full(θ, ω, β, ϵ, ic, r☼)
+    return stream.chi2_core(θ, ω, β, ϵ)
 end
 
 """Optimizing sequentially by increasing the fermion mass smoothly and using
@@ -137,7 +137,7 @@ function polish(E, in_file, out_file)
     end
 end
 
-"""Polishing for a handfull of fermion mass values using a two steps approach."""
+"""Polishing for a handfull of fermion mass values using a two-step approach."""
 function polish_in2steps(E, in_file, out_file)
     mat = readdlm(in_file)
     df=DataFrame(ϵ=mat[:,1],θ=mat[:,2],ω=mat[:,3],βᵣ=mat[:,4]*10^5,χ²=mat[:,5],χ²s=mat[:,6],χ²c=mat[:,7])
@@ -150,22 +150,22 @@ function polish_in2steps(E, in_file, out_file)
             @show x₀
             lb = [0.9βᵣ]
             ub = [1.1βᵣ]
-            prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            prob = OptimizationProblem(χ²Core, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
             sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
             x₀ = sol.u
             χ² = sol.minimum
             βᵣ = x₀[1]
             χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
             χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
-            println(f, "step1", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
-            println("step1", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println(f, "step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println("step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
 
             p = [βᵣ, ϵ]
             x₀ = [θ, ω]
             @show x₀
             lb = [0.99θ, 0.99ω]
             ub = [1.01θ, 1.01ω]
-            prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            prob = OptimizationProblem(χ²Stream, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
             sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
             x₀ = sol.u
             χ² = sol.minimum
@@ -173,16 +173,89 @@ function polish_in2steps(E, in_file, out_file)
             ω = x₀[2]
             χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
             χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
-            println(f,"step2", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
-            println("step2", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println(f,"step#2 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println("step#2 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
 
         end
     end
 end
 
-# %%
+"""Polishing for a handfull of fermion mass values using a three-step approach."""
+function polish_in3steps(E, in_file, out_file)
+    mat = readdlm(in_file)
+    df=DataFrame(ϵ=mat[:,1],θ=mat[:,2],ω=mat[:,3],βᵣ=mat[:,4]*10^5,χ²=mat[:,5],χ²s=mat[:,6],χ²c=mat[:,7])
+    for ϵ ∈ E
+        open(out_file, "a") do f
+            df_s = @subset(df, :ϵ .== ϵ)
+            θ, ω, βᵣ = df_s.θ[1], df_s.ω[1], df_s.βᵣ[1]
+            p = [θ, ω, ϵ]
+            x₀ = [βᵣ]
+            @show x₀
+            lb = [0.9βᵣ]
+            ub = [1.1βᵣ]
+            prob = OptimizationProblem(χ²Core, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
+            x₀ = sol.u
+            χ² = sol.minimum
+            βᵣ = x₀[1]
+            χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+            χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+            println(f, "step# 1", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println("step#1 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
 
-Eₚ = [60.0]
+            p = [βᵣ, ϵ]
+            x₀ = [θ, ω]
+            @show x₀
+            lb = [0.99θ, 0.99ω]
+            ub = [1.01θ, 1.01ω]
+            prob = OptimizationProblem(χ²Stream, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
+            x₀ = sol.u
+            χ² = sol.minimum
+            θ = x₀[1]
+            ω = x₀[2]
+            χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+            χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+            println(f,"step#2 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println("step#2 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+
+            p = [ϵ]
+            x₀ = [θ, ω, βᵣ]
+            @show x₀
+            lb = [0.999θ, 0.999ω, 0.99βᵣ]
+            ub = [1.001θ, 1.001ω, 1.01βᵣ]
+            prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
+            sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-6)
+            x₀ = sol.u
+            χ² = sol.minimum
+            θ = x₀[1]
+            ω = x₀[2]
+            βᵣ = x₀[3]
+            χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+            χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+            println(f, "step# 3", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+            println("step#3 ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ², "  ",  χ²s, "  ", χ²c)
+        end
+    end
+end
+# %%
+function test(E, in_file)
+    mat = readdlm(in_file)
+    df=DataFrame(ϵ=mat[:,1],θ=mat[:,2],ω=mat[:,3],βᵣ=mat[:,4]*10^5,χ²=mat[:,5],χ²s=mat[:,6],χ²c=mat[:,7])
+    for ϵ ∈ E
+        df_s = @subset(df, :ϵ .== ϵ)
+        θ, ω, βᵣ = df_s.θ[1], df_s.ω[1], df_s.βᵣ[1]
+        p = [θ, ω, ϵ]
+        x₀ = [βᵣ]
+        @show x₀, p
+        χ²Core_value = χ²Core(x₀, p)
+        χ²s = stream.chi2_stream(θ, ω, βᵣ/10^5, ϵ, ic, r☼)
+        χ²c = stream.chi2_core(θ, ω, βᵣ/10^5, ϵ)
+        println("test ", ϵ, "  ", θ, "  ", ω, "  ", βᵣ/10^5, "  ", χ²Core_value, "  ",  χ²s, "  ", χ²c)
+    end
+end
+# %%
+Eₚ = [56.0]
 # polish_in2steps(Eₚ, sol_file, polished_file)
 
 # %%
