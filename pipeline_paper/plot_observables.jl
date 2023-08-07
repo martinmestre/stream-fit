@@ -49,6 +49,11 @@ ic = readdlm(ic_file)
 r☼ = 8.122
 
 orbit_nfw_file = "observable_orbit_NFW-MW.txt"
+
+# param_file = "param_test.txt"
+# ϵ, θ, Δθ, β = readdlm(param_file)
+# W = θ+Δθ
+# param = [ϵ, θ, W, β]
 # %%
 
 
