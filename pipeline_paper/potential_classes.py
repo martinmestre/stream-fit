@@ -44,7 +44,7 @@ class RAR:
     def __init__(self, param):
         """Init."""
         self.param = param
-        r, mass, nu, dnu = model_def.model(self.param)
+        r, mass, nu, dnu, rho = model_def.model(self.param)
         isnan = np.argwhere(np.isnan(mass))
         if (np.any(isnan)):
             k = np.argwhere(np.isnan(mass))[0][0]
@@ -53,6 +53,7 @@ class RAR:
         r_s = r[0:k]
         mass_s = mass[0:k]
         nu_s = nu[0:k]
+        rho_s = rho[0:k]
         print('radio=', r_s[-1], ' kpc')
         print('masa=', mass_s[-1]/1.e11, ' x10^11 solar masses')
         self.r_max = np.amax(r_s)
@@ -61,6 +62,8 @@ class RAR:
         self.nu_spline = InterpolatedUnivariateSpline(r_s, nu_s, k=4)
         # self.dnu_spline = self.nu_spline.derivative(1)
         self.dnu_integral_spl = InterpolatedUnivariateSpline(r_s, dnu, k=4)
+        self.rho_s = rho_s
+        self.rho_spl = InterpolatedUnivariateSpline(r_s, rho_s, k=4)
 
     def mass_wrap(self, r):
         """Wrap."""

@@ -85,8 +85,15 @@ def model(param):
         P = pressure(n_eos, alpha_r, beta_r, eps_r)
 
         d_nu = (np.exp(u[0]) + np.exp(2.0*t)*P/(rho_rel*c*c))/(1.0-np.exp(u[0]))
-
         return d_nu
+
+    def density_astro_kpc(nu):
+        """Density to ."""
+        exponential = np.exp(-0.5*(nu-nu_0))
+        alpha_r = alpha_0*exponential
+        beta_r = beta_0*exponential
+        eps_r = eps_0*exponential
+        return density(n_eos, alpha_r, beta_r, eps_r)*to_astro_kpc
 
     def tov(t, u):
         """
@@ -127,6 +134,7 @@ def model(param):
     cm2pc = cm2kpc*kpc2pc
     g2Msun = 1.0/1.98847e33
     to_astro = g2Msun/(cm2pc**3)
+    to_astro_kpc = g2Msun/(cm2kpc**3)
     pi = np.pi
     c = 2.99792458e+10
     G = 6.67430e-8
@@ -174,10 +182,12 @@ def model(param):
     mass = psi*M/R*r
     exponential = np.exp(-0.5*(nu-nu_0))
     beta = beta_0*exponential
+    rho = [density_astro_kpc(nu[i]) for i in range(0, len(sol.t))]
 
     # Shift the metric:
     nu_origin = 2.0*np.log(np.sqrt(1.0-psi[-1])*beta[-1]/beta[0])
     nu = nu + nu_origin*np.ones(len(nu))
+    print("nu_origin=", nu_origin)
 
     # In astrophysical units
     r = r*cm2kpc  # kpc
@@ -189,6 +199,7 @@ def model(param):
 
     dnu_dr = [dnu_dt(sol.t[i], [z[i], nu[i]])/r[i] for i in range(1, len(sol.t))]
 
+
     # Uncomment only if we need to check the Density.
     # mass_spline = InterpolatedUnivariateSpline(r, mass, k=4)  # Allows easy computation of derivatives
     # def rho_spline(r):
@@ -197,4 +208,4 @@ def model(param):
     #     return deriv(r)/(4.0*np.pi*r*r)
     # rho = rho_spline(r)
 
-    return r, mass, nu, dnu_dr
+    return r, mass, nu, dnu_dr, rho
