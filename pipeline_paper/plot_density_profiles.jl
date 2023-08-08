@@ -105,7 +105,9 @@ end
 df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
 
 let
-      set_aog_theme!
+      set_aog_theme!()
+      update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+      topspinecolor=:darkgray, rightspinecolor=:darkgray,))
       size_inches = (5.2*2, 3.5*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 24)
@@ -123,8 +125,7 @@ let
       f = draw!(gridpos, plt, axis=(
             limits=((1.e-10, 10^2),(1, nothing)),
             xscale=log10, yscale=log10, xgridvisible=false, ygridvisible=false,
-            xticks = (xtickpos, xticknames)))
-            #xticks = LogTicks(LinearTicks(6))))
+            xticks = (xtickpos, xticknames), yticksmirrored = true))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
       leg = fig.content[2]
       _lines = leg.blockscene.children[1].plots[2:5]
@@ -138,8 +139,8 @@ let
       limits=((1.e-10/rₛ, 10^2/rₛ),(1, nothing)), xlabel=L"$r$ [Schwarzschild radius]",
       xscale=log10, yscale=log10, xgridvisible=false, ygridvisible=false,
       xticks = (xtickpos, xticknames))
-       hidespines!(ax2)
-       hideydecorations!(ax2)
+      hidespines!(ax2)
+      hideydecorations!(ax2)
       display(fig)
       save("paper_plots/density_profiles.pdf", fig, pt_per_unit = 1)
       println("ρ(r) plot done.")
