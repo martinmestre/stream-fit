@@ -34,6 +34,7 @@ stream = pyimport("stream")
 potentials = pyimport("potential_classes")
 u = pyimport("astropy.units")
 importLib.reload(stream)
+importLib.reload(potentials)
 # %%
 
 """Initial parameters, initial orbit conditions and output file."""
@@ -41,7 +42,7 @@ importLib.reload(stream)
 const param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
 const θ₀, ω₀, β₀ = readdlm(param_file)
 const ϵ₀ = 56.0
-const E = range(ϵ₀, 370.0, step=0.1)
+const E = range(ϵ₀, 380.0, step=1)
 
 const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = readdlm(ic_file)
@@ -88,8 +89,8 @@ function main(E, θ₀, ω₀, β₀, ic, r☼)
         open(sol_file, "a") do f
             p = [ϵ]
             x₀ = [θ, ω, βᵣ]
-            lb = [0.995θ, 0.995ω, 0.95βᵣ]
-            ub = [1.005θ, 1.005ω, 1.05βᵣ]
+            lb = [0.9θ, 0.9ω, 0.9βᵣ]
+            ub = [1.1θ, 1.1ω, 1.1βᵣ]
             @show(x₀)
             prob = OptimizationProblem(χ²Full, x₀, p, ic=ic, r☼=r☼, lb=lb, ub=ub)
             sol = solve(prob, NLopt.LN_NELDERMEAD(), reltol=5.0e-5)
