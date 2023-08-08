@@ -107,7 +107,7 @@ df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
 let
       set_aog_theme!()
       update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
-      topspinecolor=:darkgray, rightspinecolor=:darkgray,))
+      topspinecolor=:darkgray, rightspinecolor=:darkgray))
       size_inches = (5.2*2, 3.5*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 24)
@@ -118,7 +118,7 @@ let
               color = grp,
               linestyle = grp
           ) *
-          visual(Lines, linewidth=5)
+          visual(Lines, linewidth=3)
       exp_rng=range(-9,1,step=2)
       xtickpos = (e->10.0.^e).(exp_rng)
       xticknames=replace.(Showoff.showoff(10. .^(exp_rng), :scientific),"1.0×"=> "" )
@@ -128,10 +128,22 @@ let
             xticks = (xtickpos, xticknames), yticksmirrored = true))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
       leg = fig.content[2]
-      _lines = leg.blockscene.children[1].plots[2:5]
-      for l in _lines
+      lineas = leg.blockscene.children[1].plots[2:6]
+      for l in lineas
             l.linewidth = 4
       end
+      ls = [:dashdotdot, :dash, :dot, :solid, :dashdot]
+      for i ∈ eachindex(lineas)
+        lineas[i].linestyle = ls[i]
+      end
+
+
+      lineas = fig.content[1].scene.plots
+      for i ∈ eachindex(lineas)
+        lineas[i].linestyle = ls[i]
+      end
+
+
       exp_rng=range(0,10,step=2)
       xtickpos = (e->10.0.^e).(exp_rng)
       xticknames=replace.(Showoff.showoff(10. .^(exp_rng), :scientific),"1.0×"=> "" )

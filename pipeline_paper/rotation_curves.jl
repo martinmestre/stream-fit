@@ -34,6 +34,7 @@ potentials = pyimport("potential_classes")
 galpy_pots =  pyimport("galpy.potential")
 u = pyimport("astropy.units")
 importLib.reload(stream)
+importLib.reload(potentials)
 
 # %%
 # Parameters and initial conditions.
@@ -49,7 +50,6 @@ ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = readdlm(ic_file)
 r☼ = 8.122
 
-#orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 
 # %%
 # Fermionic-MW solution and rotation curve
@@ -106,6 +106,9 @@ labels = ["Fermionic-MW","NFW-MW"]
 lw = 4
 
 set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
 size_inches = (6.2*2, 4*2)
 size_pt = 72 .* size_inches
 fig = Figure(resolution = size_pt, fontsize = 37)
@@ -133,8 +136,8 @@ f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
 ax = f[1,1].axis
 vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.15))
 
-legend!(gridpos, f; tellwidth=false, halign=:left, valign=:bottom,
-        margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=3, framevisible=true, labelsize=25)
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:bottom,
+        margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=2, framevisible=false, labelsize=25)
 
 # Lines re-styling
 lineas = fig.content[1].scene.plots
@@ -155,7 +158,7 @@ deleteat!(_lines,[3,4,5,6,8,9,12,13,15,16])
 display(fig)
 save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("first plot done.")
-
+# %%
 
 fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]

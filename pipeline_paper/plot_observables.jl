@@ -35,6 +35,8 @@ importLib = pyimport("importlib")
 stream = pyimport("stream")
 potentials = pyimport("potential_classes")
 importLib.reload(stream)
+importLib.reload(potentials)
+
 # %%
 # Parameters and initial conditions.
 param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
@@ -134,6 +136,9 @@ lw = 4
 # Sky position plot
 let
       set_aog_theme!()
+      update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+      topspinecolor=:darkgray, rightspinecolor=:darkgray,
+      xticksmirrored = true, yticksmirrored = true))
       size_inches = (6.2*2, 3*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 37)
@@ -205,7 +210,7 @@ let
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
       draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-10, 1)),
       xgridvisible=false, ygridvisible=false))
-      
+
       # Lines re-styling
       lineas = fig.content[1].scene.plots
       lineas[1].color = "black"
@@ -248,7 +253,7 @@ let
       ) *
       visual(Lines, linewidth=lw)
       plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:μ_decₛ=>"",:μ_decᵢ=>"")*visual(Band,color=(:black,0.15))
-      
+
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-16, 1)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
@@ -297,7 +302,7 @@ let
       ) *
       visual(Lines, linewidth=lw)
       plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:d☼ₛ=>"",:d☼ᵢ=>"")*visual(Band,color=(:black,0.15))
-      
+
       f = draw!(gridpos, plt, axis=(;limits=((-90,10),(6, 13.5)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
