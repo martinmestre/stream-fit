@@ -20,7 +20,7 @@ dec_spl = 0
 r_aux = 0
 
 # Model parameters
-g = 4.300923924e-6
+g = 4.300923924e-6  # kpc (km/s)^2 M_sun^{-1}
 
 # NFW (halo)
 H_0 = 0.0674

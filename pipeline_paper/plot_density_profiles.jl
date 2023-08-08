@@ -77,8 +77,15 @@ end
 # Compute MEPP selected solutions.
 rar = [potentials.RAR(param[i]) for i = 1:length(ϵ)]
 println("MEPP solutions computed.")
-
 # %%
+
+# Black hole constants needed.
+G = 4.300923924e-6  # kpc (km/s)^2 M_sun^(-1)
+c = 2.997925e5  # km s^(-1)
+M_bh = 4.075e6  # M_sun
+rₛ = 2.0*G*M_bh / c^2
+# %%
+
 # Suggestion from Ian Weaver (Julia slack)
 r = rar[2].r_s
 
@@ -98,8 +105,8 @@ end
 df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
 
 let
-
-      size_inches = (4.2*2, 3*2)
+      set_aog_theme!
+      size_inches = (5.2*2, 3.5*2)
       size_pt = 72 .* size_inches
       fig = Figure(resolution = size_pt, fontsize = 24)
       gridpos = fig[1, 1]
@@ -124,6 +131,15 @@ let
       for l in _lines
             l.linewidth = 4
       end
+      exp_rng=range(0,10,step=2)
+      xtickpos = (e->10.0.^e).(exp_rng)
+      xticknames=replace.(Showoff.showoff(10. .^(exp_rng), :scientific),"1.0×"=> "" )
+      ax2 = Axis(fig[1, 1], xticklabelcolor = :black, xaxisposition = :top,
+      limits=((1.e-10/rₛ, 10^2/rₛ),(1, nothing)), xlabel=L"$r$ [Schwarzschild radius]",
+      xscale=log10, yscale=log10, xgridvisible=false, ygridvisible=false,
+      xticks = (xtickpos, xticknames))
+       hidespines!(ax2)
+       hideydecorations!(ax2)
       display(fig)
       save("paper_plots/density_profiles.pdf", fig, pt_per_unit = 1)
       println("ρ(r) plot done.")
