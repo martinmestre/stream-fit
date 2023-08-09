@@ -21,8 +21,7 @@
 using Pkg
 Pkg.activate(".")
 using PyCall
-using GCMAES
-using MPI
+using Evolutionary
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
@@ -47,6 +46,7 @@ const sol_file = "param_optim_pot.txt"
 
 
 # %%
+println("threads=", Threads.nthreads())
 
 """Loop in ϵ."""
 
@@ -61,16 +61,18 @@ end
 
 """Main function."""
 function main()
-    lb = [36, 25, 1.0]
-    ub = [40, 30, 1.5]
-    x₀ = (lb+ub)/2
-    σ₀ = 0.1
-    xmin, fmin, status = @mpirun GCMAES.minimize(χ²Full, x₀, σ₀, lb, ub, maxiter = 300)
-    open(sol_file,"a") do io
-        println(io, "xmin = $(xmin)")
-    end
-    println("xmin = $(xmin) with fmin = $(fmin)")
-    println("status=$status")
+    lb = [35, 37, 1.0]
+    ub = [25, 30, 1.5]
+    x₀ = [36., 27., 1.25]
+    res = Evolutionary.optimize(χ²Full, x₀, DE(populationSize=100),
+                                Evolutionary.Options(iterations=100,
+                                                     abstol=5.e-5,
+                                                     reltol=5.e-5,
+                                                     parallelization=:thread))
+    # open(sol_file,"a") do io
+    #     println(io, "xmin = $(xmin)")
+    # end
+    return res
 end
 
 
@@ -78,7 +80,8 @@ end
 
 """Running."""
 m = 56.0
-main()
+res = main()
+display(res)
 # %%
 
 
