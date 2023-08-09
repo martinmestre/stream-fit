@@ -465,7 +465,8 @@ def invert_ic(u_0):
 
 
 # Taking the initial conditions from the Galpy fit with fixed MW2014 potential and Ibata polinomials-data.
-ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
+#ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
+ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt" # for m = 100, 200, 360, etc
 ic = np.loadtxt(ic_file)
 # Parameters
 param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_m200.txt"

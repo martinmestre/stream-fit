@@ -465,17 +465,18 @@ def invert_ic(u_0):
 
 
 # Taking the initial conditions from the Galpy fit with fixed MW2014 potential and Ibata polinomials-data.
-# ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
-ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt" # for m = 100, 200, 360, etc
+#ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
+ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt" # aftermath polish
 ic = np.loadtxt(ic_file)
 # Parameters
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_m100.txt"
+param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
 r_sun = 8.122  # Gravity Collaboration (2018)
-ener_f = 100.0  # keV
+ener_f = 56.0  # keV
+beta_0 = 1.20e-5
 
 
 #Optimization
-bounds = ((36, 45), (25, 30), (1.0e-5, 0.01))
+bounds = ((35, 40), (25, 30), (0.0001, 0.01))
 # bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5))
 opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
                                       strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
