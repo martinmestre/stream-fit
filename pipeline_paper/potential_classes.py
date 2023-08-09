@@ -53,6 +53,7 @@ class RAR:
         r_s = r[0:k]
         mass_s = mass[0:k]
         nu_s = nu[0:k]
+        dnu_s = dnu[0:k]
         rho_s = rho[0:k]
         print('radio=', r_s[-1], ' kpc')
         print('masa=', mass_s[-1]/1.e11, ' x10^11 solar masses')
@@ -61,7 +62,7 @@ class RAR:
         self.mass_spline = InterpolatedUnivariateSpline(r_s, mass_s, k=4)
         self.nu_spline = InterpolatedUnivariateSpline(r_s, nu_s, k=4)
         # self.dnu_spline = self.nu_spline.derivative(1)
-        self.dnu_integral_spl = InterpolatedUnivariateSpline(r_s, dnu, k=4)
+        self.dnu_integral_spl = InterpolatedUnivariateSpline(r_s, dnu_s, k=4)
         self.rho_s = rho_s
         self.rho_spl = InterpolatedUnivariateSpline(r_s, rho_s, k=4)
 

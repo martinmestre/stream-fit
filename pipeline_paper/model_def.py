@@ -182,12 +182,13 @@ def model(param):
     mass = psi*M/R*r
     exponential = np.exp(-0.5*(nu-nu_0))
     beta = beta_0*exponential
-    rho = [density_astro_kpc(nu[i]) for i in range(0, len(sol.t))]
+    rho = np.array([density_astro_kpc(nu[i]) for i in range(0, len(sol.t))])
+
 
     # Shift the metric:
     nu_origin = 2.0*np.log(np.sqrt(1.0-psi[-1])*beta[-1]/beta[0])
     nu = nu + nu_origin*np.ones(len(nu))
-    print("nu_origin=", nu_origin)
+
 
     # In astrophysical units
     r = r*cm2kpc  # kpc
@@ -196,9 +197,11 @@ def model(param):
     r = r[bool_r]
     mass = mass[bool_r]
     nu = nu[bool_r]
+    r_t = sol.t[bool_r]
+    z = z[bool_r]
+    rho = rho[bool_r]
 
-    dnu_dr = [dnu_dt(sol.t[i], [z[i], nu[i]])/r[i] for i in range(1, len(sol.t))]
-
+    dnu_dr = np.array([dnu_dt(r_t[i], [z[i], nu[i]])/r[i] for i in range(0, len(r))])
 
     # Uncomment only if we need to check the Density.
     # mass_spline = InterpolatedUnivariateSpline(r, mass, k=4)  # Allows easy computation of derivatives
