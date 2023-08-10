@@ -56,7 +56,7 @@ function main(m, ic, r☼)
     #                                                  reltol=5.e-5,
     #                                                  parallelization=:thread))
     prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-    sol = Optimization.solve(prob, NOMADOpt(); reltol=5.e-5)
+    sol = Optimization.solve(prob, NOMADOpt(); reltol=5.e-5, maxiters=500)
     # open(sol_file,"a") do io
     #     println(io, "xmin = $(xmin)")
     # end
