@@ -18,38 +18,35 @@ importLib.reload(stream)
 importLib.reload(potentials)
 # %%
 
-println("threads=", Threads.nthreads())
+println("Threads=", Threads.nthreads())
 
 """Loop in ϵ."""
 
+"""Anti-normalization function."""
+function back_orig(x, a, b)
+    return (b-a).*x + a
+end
+
 """χ² wrap."""
 function χ²Full(x, p)
-    θ = x[1]
-    ω = x[2]
-    β = x[3]
     m = p[1]
     ic = p[2]
     r☼ = p[3]
+    lb = p[4]
+    ub = p[5]
+    θ, ω, β = back_orig(x, lb, ub)
     return stream.chi2_full(θ, ω, β, m, ic, r☼)
 end
 
 
 """Main function."""
-function main(m, ic, r☼)
-    # lb = [41., 28., 0.001] # for m = 360
-    # ub = [45., 31., 0.005]
-    # lb = [39., 28., 0.0005]  # for m = 300
-    # ub = [42., 31., 0.003 ]
-    # lb = [38., 28., 0.0001] # for m = 200
-    # ub = [40., 30., 0.0006]
-    # lb = [36., 27., 4.0e-5] # for m=100
-    # ub = [38., 29., 7.0e-5]
-    lb = [34., 26., 1.0e-5] # for m=56
-    ub = [38., 30., 1.5e-5]
+function worker(m, ic, r☼, lb, ub, reltol, maxiters)
     x₀ = 0.5*(lb+ub)
-    p = [m, ic, r☼]
-    prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-    sol = Optimization.solve(prob, NOMADOpt(); reltol=5.e-5, maxiters=1000)
+    p = (m, ic, r☼, lb, ub)
+    len = length(lb)
+    prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
+    @show prob
+    sol = Optimization.solve(prob, NOMADOpt(); reltol=reltol, maxiters=maxiters)
     return sol
 end
 # %%
@@ -58,16 +55,21 @@ end
 
 const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = readdlm(ic_file)
-const r☼ = 8.122
-# %%
 
-"""Running."""
+"""Metaparameters."""
 const m = 56.0
 const sol_file = "param_optim_pot_m$(Int(m)).txt"
-@show m sol_file
-sol = main(m, ic, r☼)
-@show sol
-writedlm(sol_file, sol.u)
+const r☼ = 8.122
+const lb = [35., 26., 1.e-5]
+const ub = [37., 28., 2.e-5]
+const reltol = 5.0e-5
+const maxiters = 2
+@show m sol_file r☼ reltol maxiters
+
+"""Running."""
+sol = worker(m, ic, r☼, lb, ub, reltol, maxiters)
+# @show sol
+# writedlm(sol_file, sol.u)
 # %%
 
 
