@@ -41,9 +41,9 @@ end
 
 """Main function."""
 function worker(m, ic, r☼, lb, ub, reltol, maxiters)
-    x₀ = 0.5*(lb+ub)
-    p = (m, ic, r☼, lb, ub)
     len = length(lb)
+    x₀ = 0.5*ones(len)
+    p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
     @show prob
     sol = Optimization.solve(prob, NOMADOpt(); reltol=reltol, maxiters=maxiters)
