@@ -39,8 +39,8 @@ function χ²Full(x, p)
 end
 
 
-"""Main function."""
-function worker(m, ic, r☼, lb, ub, reltol, maxiters)
+"""Worker function."""
+function worker(m, ic, r☼, reltol, maxiters, lb, ub)
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
@@ -48,6 +48,29 @@ function worker(m, ic, r☼, lb, ub, reltol, maxiters)
     @show prob
     sol = Optimization.solve(prob, NOMADOpt(); reltol=reltol, maxiters=maxiters)
     return sol
+end
+
+"""Build grid."""
+function build_grid(g_lb, g_ub, n_grid)
+    n_full = n_grid^3
+    lb_a = Vector{Vector{Float64}}(undef,n_full)
+    ub_a = Vector{Vector{Float64}}(undef,n_full)
+    x₀_a = Vector{Vector{Float64}}(undef,n_full)
+    c₁ = collect(range(g_lb[1], g_ub[1], n_grid))
+    c₂ = collect(range(g_lb[2], g_ub[3], n_grid))
+    c₃ = collect(range(g_lb[3], g_ub[3], n_grid))
+        for i ∈ 1:n_grid
+            for j ∈ 1:n_grid
+                for k ∈ 1:n_grid
+                    n = (i-1)*n_grid^2+(j-1)*n_grid+k
+                    lb_a[n] = [c₁[i], c₂[j], c₃[k]]
+                    x₀_a[n] = []
+    return lb_a, ub_a, x₀_a
+end
+
+"""Parallel function."""
+function cooperative(m, ic, r☼, reltol, maxiters, g_lb, g_ub, n_grid)
+    t_lb, t_ub = build_grid(g_lb, g_ub, ngrid)
 end
 # %%
 
@@ -60,8 +83,8 @@ const ic = readdlm(ic_file)
 const m = 56.0
 const sol_file = "param_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
-const lb = [35., 26., 1.e-5]
-const ub = [37., 28., 2.e-5]
+const glob_lb = [35., 25., 1.e-5]
+const glob_ub = [45., 31., 0.005]
 const reltol = 5.0e-5
 const maxiters = 2
 @show m sol_file r☼ reltol maxiters
