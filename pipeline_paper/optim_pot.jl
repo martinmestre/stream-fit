@@ -56,15 +56,16 @@ function build_grid(g_lb, g_ub, n_grid)
     lb_a = Vector{Vector{Float64}}(undef,n_full)
     ub_a = Vector{Vector{Float64}}(undef,n_full)
     x₀_a = Vector{Vector{Float64}}(undef,n_full)
-    c₁ = collect(range(g_lb[1], g_ub[1], n_grid))
-    c₂ = collect(range(g_lb[2], g_ub[3], n_grid))
-    c₃ = collect(range(g_lb[3], g_ub[3], n_grid))
+    c₁ = collect(range(g_lb[1], g_ub[1], n_grid+1))
+    c₂ = collect(range(g_lb[2], g_ub[3], n_grid+1))
+    c₃ = collect(range(g_lb[3], g_ub[3], n_grid+1))
         for i ∈ 1:n_grid
             for j ∈ 1:n_grid
                 for k ∈ 1:n_grid
                     n = (i-1)*n_grid^2+(j-1)*n_grid+k
                     lb_a[n] = [c₁[i], c₂[j], c₃[k]]
-                    x₀_a[n] = []
+                    ub_a[n] = [c₁[i+1], c₂[j+1], c₃[k+1]]
+                    x₀_a[n] = 0.5*(lb_a[n]+ub_a[n])
     return lb_a, ub_a, x₀_a
 end
 
