@@ -35,43 +35,52 @@ function χ²Full(x, p)
     lb = p[4]
     ub = p[5]
     θ, ω, β = back_orig(x, lb, ub)
+    @show  θ, ω, β
     return stream.chi2_full(θ, ω, β, m, ic, r☼)
 end
 
 
 """Worker function."""
-function worker(m, ic, r☼, reltol, maxiters, lb, ub)
+function worker(m, ic, r☼, maxiters, lb, ub)
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
-    @show prob
-    sol = Optimization.solve(prob, NOMADOpt(); reltol=reltol, maxiters=maxiters)
+    println("prob=$prob")
+    sol = Optimization.solve(prob, NOMADOpt(); maxiters=maxiters)
     return sol
 end
 
 """Build grid."""
-function build_grid(g_lb, g_ub, n_grid)
+function build_grid(lb_g, ub_g, n_grid)
     n_full = n_grid^3
     lb_a = Vector{Vector{Float64}}(undef,n_full)
     ub_a = Vector{Vector{Float64}}(undef,n_full)
     x₀_a = Vector{Vector{Float64}}(undef,n_full)
-    c₁ = collect(range(g_lb[1], g_ub[1], n_grid+1))
-    c₂ = collect(range(g_lb[2], g_ub[3], n_grid+1))
-    c₃ = collect(range(g_lb[3], g_ub[3], n_grid+1))
-        for i ∈ 1:n_grid
-            for j ∈ 1:n_grid
-                for k ∈ 1:n_grid
-                    n = (i-1)*n_grid^2+(j-1)*n_grid+k
-                    lb_a[n] = [c₁[i], c₂[j], c₃[k]]
-                    ub_a[n] = [c₁[i+1], c₂[j+1], c₃[k+1]]
-                    x₀_a[n] = 0.5*(lb_a[n]+ub_a[n])
+    c₁ = collect(range(lb_g[1], ub_g[1], n_grid+1))
+    c₂ = collect(range(lb_g[2], ub_g[2], n_grid+1))
+    c₃ = collect(range(lb_g[3], ub_g[3], n_grid+1))
+    for i ∈ 1:n_grid
+        for j ∈ 1:n_grid
+            for k ∈ 1:n_grid
+                n = (i-1)*n_grid^2+(j-1)*n_grid+k
+                lb_a[n] = [c₁[i], c₂[j], c₃[k]]
+                ub_a[n] = [c₁[i+1], c₂[j+1], c₃[k+1]]
+                x₀_a[n] = 0.5*(lb_a[n]+ub_a[n])
+            end
+        end
+    end
     return lb_a, ub_a, x₀_a
 end
 
 """Parallel function."""
-function cooperative(m, ic, r☼, reltol, maxiters, g_lb, g_ub, n_grid)
-    t_lb, t_ub = build_grid(g_lb, g_ub, ngrid)
+function cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
+    lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
+    Threads.@threads for i in eachindex(x₀_a)
+        println("i=$i $(Threads.threadid())")
+        println("lb_ub = , $(lb_a[i]) -- $(ub_a[i])")
+        worker(m, ic, r☼, maxiters, lb_a[i], ub_a[i])
+    end
 end
 # %%
 
@@ -81,20 +90,23 @@ const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = readdlm(ic_file)
 
 """Metaparameters."""
-const m = 56.0
+const m = 300.0
 const sol_file = "param_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
-const glob_lb = [35., 25., 1.e-5]
-const glob_ub = [45., 31., 0.005]
-const reltol = 5.0e-5
-const maxiters = 2
-@show m sol_file r☼ reltol maxiters
+const lb_g = [35., 25., 1.e-5]
+const ub_g = [45., 31., 0.005]
+const maxiters = 1000
+const n_grid = 2
+@show m sol_file r☼ maxiters
 
 """Running."""
-sol = worker(m, ic, r☼, lb, ub, reltol, maxiters)
-# @show sol
-# writedlm(sol_file, sol.u)
+lb_l = [40., 29., 0.001]
+ub_l = [41., 30., 0.002]
+sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
+@show sol
+writedlm(sol_file, sol.u)
 # %%
+# cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
 
 
 
