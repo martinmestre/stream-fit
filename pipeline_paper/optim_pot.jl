@@ -3,7 +3,7 @@
 using Pkg
 Pkg.activate(".")
 using PyCall
-using Optimization, OptimizationNOMAD
+using Optimization, OptimizationNLopt
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
@@ -47,7 +47,7 @@ function worker(m, ic, r☼, maxiters, lb, ub)
     p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
     println("prob=$prob")
-    sol = Optimization.solve(prob, NOMADOpt(); maxiters=maxiters)
+    sol = Optimization.solve(prob, NLopt.GD_STOGO_RAND(); maxiters=maxiters, abstol=5.e-7, reltol=5.e-7)
     return sol
 end
 
@@ -100,11 +100,11 @@ const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-lb_l = [40., 29., 0.001]
-ub_l = [41., 30., 0.002]
+lb_l = [40.6, 29.5, 0.001]
+ub_l = [40.7, 29.6, 0.0015]
 sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
 @show sol
-writedlm(sol_file, sol.u)
+writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 # %%
 # cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
 
