@@ -3,10 +3,14 @@
 using Pkg
 Pkg.activate(".")
 using PyCall
-using Optimization, OptimizationNLopt
+using Optimization, OptimizationOptimisers
+using FiniteDiff
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
+# includet("MyGIL.jl")
+# using .MyGIL
+
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -40,14 +44,27 @@ function χ²Full(x, p)
 end
 
 
+function χ²Full_parallel(x, p)
+    println("sizes=",size(x,1), size(x,2))
+    len = size(x,1)
+    fitness = zeros(len)
+    Threads.@threads for i in 1:size(x,1)
+        MyGIL.pylock() do
+            @show χ²Full(x[i,:], p)
+            fitness[i] = χ²Full(x[i,:], p)
+        end
+    end
+    return fitness
+end
+
 """Worker function."""
 function worker(m, ic, r☼, maxiters, lb, ub)
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
-    prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
+    prob = OptimizationProblem(χ²Full_parallel, x₀, p, lb=zeros(len), ub=ones(len))
     println("prob=$prob")
-    sol = Optimization.solve(prob, NLopt.GD_STOGO_RAND(); maxiters=maxiters, abstol=5.e-7, reltol=5.e-7)
+    sol = Optimization.solve(prob, ECA(); maxiters=maxiters, reltol=5.e-7, parallel_evaluation=true, use_initial=true)
     return sol
 end
 
@@ -100,9 +117,19 @@ const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-lb_l = [40.6, 29.5, 0.001]
-ub_l = [40.7, 29.6, 0.0015]
-sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
+lb_l = [40., 29., 0.001]
+ub_l = [41., 30., 0.002]
+# xᵢ=[40.654391903440164, 29.52500686293749, 0.0013010438131347817]
+# lb_l = xᵢ-[0.01, 0.01, 0.0001]
+# ub_l = xᵢ+[0.01, 0.01, 0.0001]
+# sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
+len = length(lb_l)
+x₀ = 0.5*ones(len)
+p = (m, ic, r☼, lb_l, ub_l)
+optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
+prob = OptimizationProblem(χ²Full, x₀, p)
+println("prob=$prob")
+sol = Optimization.solve(prob, Optimisers.Descent())
 @show sol
 writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 # %%
