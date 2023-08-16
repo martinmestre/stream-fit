@@ -102,13 +102,20 @@ function build_grid(lb_g, ub_g, n_grid)
     return lb_a, ub_a, x₀_a
 end
 
+struct Result
+    miniumum::Float64
+    minimizer::Vector{Float64}
+end
+
 """Parallel function."""
-function cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
+function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
+    n_full = n_grid^3
+    res = Vector{Result}(undef,n_full)
     Threads.@threads for i in eachindex(x₀_a)
         println("i=$i $(Threads.threadid())")
-        println("lb_ub = , $(lb_a[i]) -- $(ub_a[i])")
-        worker(m, ic, r☼, maxiters, lb_a[i], ub_a[i])
+        println("lb -- ub = , $(lb_a[i]) -- $(ub_a[i])")
+        res[i] = worker(m, ic, r☼, lb_a[i], ub_a[i])
     end
 end
 # %%
@@ -124,28 +131,15 @@ const sol_file = "param_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
 const lb_g = [35., 25., 1.e-5]
 const ub_g = [45., 31., 0.005]
-const maxiters = 1000
+const maxiters = 500
 const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-lb_l = [40.4, 29.4, 0.001]
-ub_l = [40.7, 29.7, 0.0016]
-# xᵢ=[40.654391903440164, 29.52500686293749, 0.0013010438131347817]
-# lb_l = xᵢ-[0.01, 0.01, 0.0001]
-# ub_l = xᵢ+[0.01, 0.01, 0.0001]
-sol = worker(m, ic, r☼, lb_l, ub_l)
-# len = length(lb_l)
-# x₀ = 0.5*ones(len)
-# p = (m, ic, r☼, lb_l, ub_l)
-# optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
-# prob = OptimizationProblem(χ, x₀, p)
-# println("prob=$prob")
-# sol = Optimization.solve(prob, Optimisers.Descent())
-@show sol
-writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
-# %%
-# cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
+# sol = worker(m, ic, r☼, lb_l, ub_l)
+res = cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
 
+@show res
+# writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 
 
