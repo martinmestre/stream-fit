@@ -3,14 +3,15 @@
 using Pkg
 Pkg.activate(".")
 using PyCall
-using Optimization, OptimizationOptimisers
 using FiniteDiff
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
 # includet("MyGIL.jl")
 # using .MyGIL
-
+using Nonconvex
+Nonconvex.@load NOMAD
+using NonconvexNOMAD
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -57,14 +58,25 @@ function χ²Full_parallel(x, p)
     return fitness
 end
 
+function gen_closure(g, p)
+   f(x) = g(x, p)
+   return f
+end
+
+
 """Worker function."""
-function worker(m, ic, r☼, maxiters, lb, ub)
+function worker(m, ic, r☼, lb, ub)
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
-    prob = OptimizationProblem(χ²Full_parallel, x₀, p, lb=zeros(len), ub=ones(len))
-    println("prob=$prob")
-    sol = Optimization.solve(prob, ECA(); maxiters=maxiters, reltol=5.e-7, parallel_evaluation=true, use_initial=true)
+    χ² = gen_closure(χ²Full,p)
+    model = Model(χ²)
+    addvar!(model, zeros(len), ones(len))
+    @show model
+    alg = NOMADAlg()
+    @show fieldnames(NOMADOptions)
+    options = NOMADOptions(min_mesh_size=0.0)
+    sol = optimize(model, alg, x₀, options=options)
     return sol
 end
 
@@ -117,19 +129,19 @@ const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-lb_l = [40., 29., 0.001]
-ub_l = [41., 30., 0.002]
+lb_l = [40.4, 29.4, 0.001]
+ub_l = [40.7, 29.7, 0.0016]
 # xᵢ=[40.654391903440164, 29.52500686293749, 0.0013010438131347817]
 # lb_l = xᵢ-[0.01, 0.01, 0.0001]
 # ub_l = xᵢ+[0.01, 0.01, 0.0001]
-# sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
-len = length(lb_l)
-x₀ = 0.5*ones(len)
-p = (m, ic, r☼, lb_l, ub_l)
-optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
-prob = OptimizationProblem(χ, x₀, p)
-println("prob=$prob")
-sol = Optimization.solve(prob, Optimisers.Descent())
+sol = worker(m, ic, r☼, lb_l, ub_l)
+# len = length(lb_l)
+# x₀ = 0.5*ones(len)
+# p = (m, ic, r☼, lb_l, ub_l)
+# optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
+# prob = OptimizationProblem(χ, x₀, p)
+# println("prob=$prob")
+# sol = Optimization.solve(prob, Optimisers.Descent())
 @show sol
 writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 # %%
