@@ -9,9 +9,7 @@ using CSV
 using DataFrames, DataFramesMeta
 # includet("MyGIL.jl")
 # using .MyGIL
-using Nonconvex
-Nonconvex.@load NOMAD
-using NonconvexNOMAD
+using NOMAD
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -63,21 +61,25 @@ function gen_closure(g, p)
    return f
 end
 
+function bb(x, p)
+    χ² = χ²Full(x, p)
+    c = -1.0
+    success = true
+    count_eval = true
+    bb_outputs = [χ²;c]
+    return (success, count_eval, bb_outputs)
+end
 
 """Worker function."""
 function worker(m, ic, r☼, lb, ub)
+    local p
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
-    χ² = gen_closure(χ²Full,p)
-    model = Model(χ²)
-    addvar!(model, zeros(len), ones(len))
-    @show model
-    alg = NOMADAlg()
-    @show fieldnames(NOMADOptions)
-    options = NOMADOptions(min_mesh_size=0.0)
-    sol = optimize(model, alg, x₀, options=options)
-    return sol
+    bb_c(x) = bb(x,p)
+    prob = NomadProblem(3, 2, ["OBJ", "EB"], bb_c, lower_bound=zeros(len), upper_bound=ones(len))
+    result = solve(prob, x₀)
+    return result
 end
 
 """Build grid."""
@@ -102,16 +104,11 @@ function build_grid(lb_g, ub_g, n_grid)
     return lb_a, ub_a, x₀_a
 end
 
-struct Result
-    miniumum::Float64
-    minimizer::Vector{Float64}
-end
-
 """Parallel function."""
 function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
     n_full = n_grid^3
-    res = Vector{Result}(undef,n_full)
+    res = Vector{Float64}(undef, n_full)
     Threads.@threads for i in eachindex(x₀_a)
         println("i=$i $(Threads.threadid())")
         println("lb -- ub = , $(lb_a[i]) -- $(ub_a[i])")
@@ -136,10 +133,13 @@ const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-# sol = worker(m, ic, r☼, lb_l, ub_l)
+# lb_l = [40.3, 29.3, 0.001]
+# ub_l = [40.7, 29.7, 0.0016]
+# res = worker(m, ic, r☼, lb_l, ub_l)
 res = cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
 
 @show res
+@show typeof(res)
 # writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 
 
