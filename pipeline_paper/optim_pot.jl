@@ -1,4 +1,4 @@
-"""Perform optimization for ϵ ∈ [56, 370] sequentially."""
+"""Perform optimization for any fermion mass (ϵ)."""
 
 using Pkg
 Pkg.activate(".")
@@ -127,7 +127,7 @@ len = length(lb_l)
 x₀ = 0.5*ones(len)
 p = (m, ic, r☼, lb_l, ub_l)
 optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
-prob = OptimizationProblem(χ²Full, x₀, p)
+prob = OptimizationProblem(χ, x₀, p)
 println("prob=$prob")
 sol = Optimization.solve(prob, Optimisers.Descent())
 @show sol
