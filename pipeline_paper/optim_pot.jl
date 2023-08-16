@@ -108,12 +108,13 @@ end
 function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
     n_full = n_grid^3
-    res = Vector{Float64}(undef, n_full)
+    # res = Vector{Float64}(undef, n_full)
     Threads.@threads for i in eachindex(x₀_a)
         println("i=$i $(Threads.threadid())")
         println("lb -- ub = , $(lb_a[i]) -- $(ub_a[i])")
-        res[i] = worker(m, ic, r☼, lb_a[i], ub_a[i])
+        res = worker(m, ic, r☼, lb_a[i], ub_a[i])
     end
+    res
 end
 # %%
 
