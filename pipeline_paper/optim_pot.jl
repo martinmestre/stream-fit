@@ -7,8 +7,8 @@ using FiniteDiff
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
-# includet("MyGIL.jl")
-# using .MyGIL
+includet("MyGIL.jl")
+using .MyGIL
 using NOMAD
 # %%
 
@@ -32,6 +32,7 @@ end
 
 """χ² wrap."""
 function χ²Full(x, p)
+    local χ²
     m = p[1]
     ic = p[2]
     r☼ = p[3]
@@ -39,7 +40,10 @@ function χ²Full(x, p)
     ub = p[5]
     θ, ω, β = back_orig(x, lb, ub)
     @show  θ, ω, β
-    return stream.chi2_full(θ, ω, β, m, ic, r☼)
+    MyGIL.pylock() do
+        χ² = stream.chi2_full(θ, ω, β, m, ic, r☼)
+    end
+    return χ²
 end
 
 
@@ -108,13 +112,14 @@ end
 function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
     n_full = n_grid^3
-    # res = Vector{Float64}(undef, n_full)
+    typo = NamedTuple{(:x_best_feas, :bbo_best_feas, :x_best_inf, :bbo_best_inf), Tuple{Vector{Float64}, Vector{Float64}, Nothing, Nothing}}
+    res = Vector{typo}(undef, n_full)
     Threads.@threads for i in eachindex(x₀_a)
         println("i=$i $(Threads.threadid())")
         println("lb -- ub = , $(lb_a[i]) -- $(ub_a[i])")
-        res = worker(m, ic, r☼, lb_a[i], ub_a[i])
+        res[i] = worker(m, ic, r☼, lb_a[i], ub_a[i])
     end
-    res
+    return res
 end
 # %%
 
@@ -134,8 +139,8 @@ const n_grid = 2
 @show m sol_file r☼ maxiters
 
 """Running."""
-# lb_l = [40.3, 29.3, 0.001]
-# ub_l = [40.7, 29.7, 0.0016]
+lb_l = [40.0, 28.0, 0.001]
+ub_l = [42.0, 30.0, 0.003]
 # res = worker(m, ic, r☼, lb_l, ub_l)
 res = cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
 
