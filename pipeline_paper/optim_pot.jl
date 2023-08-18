@@ -1,4 +1,7 @@
-"""Perform optimization for ϵ ∈ [56, 370] sequentially."""
+"""Perform optimization for any fermion mass (ϵ) by running in parallel
+for a grid in a global region of paramter space.
+Using Jagger.jl
+"""
 
 using Pkg
 Pkg.activate(".")
@@ -8,8 +11,7 @@ using FiniteDiff
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
-# includet("MyGIL.jl")
-# using .MyGIL
+using Jagger
 
 # %%
 
