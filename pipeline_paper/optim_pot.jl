@@ -51,7 +51,7 @@ function worker(i, m, ic, r☼, lb, ub)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
-    sol = Optimization.solve(prob, NOMADOpt())
+    sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false)
     @show "i= $i", "id= $(myid())", "u= $(sol.u)", "χ²= $(sol.objective)"
     return sol
 end
