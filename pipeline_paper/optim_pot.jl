@@ -82,11 +82,8 @@ end
 """Parallel function."""
 function cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
-    Threads.@threads for i in eachindex(x₀_a)
-        println("i=$i $(Threads.threadid())")
-        println("lb_ub = , $(lb_a[i]) -- $(ub_a[i])")
-        worker(m, ic, r☼, maxiters, lb_a[i], ub_a[i])
-    end
+    pars(i) = [m, ic, r☼, maxiters, lb_a[i], ub_a[i]]
+    res = pmap(i->worker(pars(i)...), eachindex(x₀_a))
 end
 # %%
 
