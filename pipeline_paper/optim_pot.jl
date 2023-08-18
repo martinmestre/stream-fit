@@ -1,20 +1,20 @@
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
-Using Jagger.jl
+Using Distributed.jl
 """
 
 using Pkg
 Pkg.activate(".")
+
 using PyCall
 using Optimization, OptimizationNOMAD
 using FiniteDiff
 using DelimitedFiles
 using CSV
 using DataFrames, DataFramesMeta
-using Jagger
+using Distributed
 
 # %%
-
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 importLib = pyimport("importlib")
 stream = pyimport("stream")
@@ -47,13 +47,13 @@ end
 
 
 """Worker function."""
-function worker(m, ic, r☼, maxiters, lb, ub)
+function worker(m, ic, r☼, lb, ub)
     len = length(lb)
     x₀ = 0.5*ones(len)
     p = (m, ic, r☼, lb, ub)
-    prob = OptimizationProblem(χ²Full_parallel, x₀, p, lb=zeros(len), ub=ones(len))
+    prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
     println("prob=$prob")
-    sol = Optimization.solve(prob, NOMADOpt())
+    sol = Optimization.solve(prob, NOMADOpt(); maxiters=2)
     return sol
 end
 
@@ -79,11 +79,13 @@ function build_grid(lb_g, ub_g, n_grid)
     return lb_a, ub_a, x₀_a
 end
 
+
 """Parallel function."""
-function cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
+function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
-    pars(i) = [m, ic, r☼, maxiters, lb_a[i], ub_a[i]]
+    pars(i) = [m, ic, r☼, lb_a[i], ub_a[i]]
     res = pmap(i->worker(pars(i)...), eachindex(x₀_a))
+    return res
 end
 # %%
 
@@ -105,21 +107,12 @@ const n_grid = 2
 """Running."""
 lb_l = [40., 29., 0.001]
 ub_l = [41., 30., 0.002]
-# xᵢ=[40.654391903440164, 29.52500686293749, 0.0013010438131347817]
-# lb_l = xᵢ-[0.01, 0.01, 0.0001]
-# ub_l = xᵢ+[0.01, 0.01, 0.0001]
-# sol = worker(m, ic, r☼, maxiters, lb_l, ub_l)
-len = length(lb_l)
-x₀ = 0.5*ones(len)
-p = (m, ic, r☼, lb_l, ub_l)
-optfun = OptimizationFunction(χ²Full, AutoFiniteDiff())
-prob = OptimizationProblem(χ²Full, x₀, p)
-println("prob=$prob")
-sol = Optimization.solve(prob, Optimisers.Descent())
-@show sol
-writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
+# sol = worker(m, ic, r☼, lb_l, ub_l)
+# sol = cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
+
+# @show sol
+# writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
 # %%
-# cooperative(m, ic, r☼, maxiters, lb_g, ub_g, n_grid)
 
 
 
