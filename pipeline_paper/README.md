@@ -73,15 +73,17 @@ julia rotation_curves.jl
 
 Output: "rotation_curves.pdf"
 
-## Compute Fermionic-MW solutions sequencially for $\epsilon\in [56,370]$ keV and polish for $\epsilon=56, 100, 200, 300, 360$ keV$
+## Compute Fermionic-MW solutions for any \epsilon using Distributed.jl parallel scheme.
 
 ```
-julia optim_sequentially_fermionmass.jl
+julia -p N
+> @everywhere include("optim_pot.jl")
+> data analysis ...
 ```
 
-Output: "param_optim_sequentially_fermionmass.txt", "param_optim_sequentially_fermionmass_polished.txt"
+Output: "...txt"
 
-The second txt file contains the solutions used to make the corresponding figure of density profiles.
+
 
 ## Plot the density profiles for $\epsilon=56, 100, 200, 300, 360$ keV$
 
