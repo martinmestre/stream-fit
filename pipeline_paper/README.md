@@ -73,12 +73,12 @@ julia rotation_curves.jl
 
 Output: "rotation_curves.pdf"
 
-## Compute Fermionic-MW solutions for any \epsilon using Distributed.jl parallel scheme.
+## Compute Fermionic-MW solutions for any $\epsilon$ using Distributed.jl parallel scheme.
 
 ```
 julia -p N
-> @everywhere include("optim_pot.jl")
-> data analysis ...
+julia> @everywhere include("optim_pot.jl")
+julia> data analysis ...
 ```
 
 Output: "...txt"
