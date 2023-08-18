@@ -52,7 +52,10 @@ function worker(i, m, ic, r☼, lb, ub)
     p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
     sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false)
-    @show "i= $i", "id= $(myid())", "u= $(sol.u)", "χ²= $(sol.objective)"
+    worker_file = "solutions_m$(Int(m))/param_optim_pot_m$(Int(m))_i$i.txt"
+    @show i, myid(), sol.u, χ²
+    @show worker_file
+
     return sol
 end
 
@@ -95,18 +98,20 @@ const ic = readdlm(ic_file)
 
 """Metaparameters."""
 const m = 300.0
-const sol_file = "param_optim_pot_m$(Int(m)).txt"
+const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
 const r☼ = 8.122
 const lb_g = [35., 25., 1.e-5]
 const ub_g = [45., 31., 0.005]
 const n_grid = 20
 @show m sol_file r☼ lb_g ub_g
 
+run(`mkdir $sol_dir`)
+
 """Running."""
 # lb_l = [40., 29., 0.001]
 # ub_l = [41., 30., 0.002]
-# sol = worker(m, ic, r☼, lb_l, ub_l)
-# sol = cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
+# sol = worker(i, m, ic, r☼, lb_l, ub_l)
+# sol = cooperative(i, sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
 # @show sol
 
 
