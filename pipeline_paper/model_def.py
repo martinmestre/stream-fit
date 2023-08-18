@@ -81,7 +81,7 @@ def model(param):
         if(eps_r < 1.0):           # This is important to avoid NaNs and to define the halo border.
             eps_r = 1.0
 
-        rho = density(n_eos, alpha_r, beta_r, eps_r)
+        # rho = density(n_eos, alpha_r, beta_r, eps_r)
         P = pressure(n_eos, alpha_r, beta_r, eps_r)
 
         d_nu = (np.exp(u[0]) + np.exp(2.0*t)*P/(rho_rel*c*c))/(1.0-np.exp(u[0]))

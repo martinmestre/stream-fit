@@ -55,8 +55,8 @@ class RAR:
         nu_s = nu[0:k]
         dnu_s = dnu[0:k]
         rho_s = rho[0:k]
-        print('radio=', r_s[-1], ' kpc')
-        print('masa=', mass_s[-1]/1.e11, ' x10^11 solar masses')
+        # print('radio=', r_s[-1], ' kpc')
+        # print('masa=', mass_s[-1]/1.e11, ' x10^11 solar masses')
         self.r_max = np.amax(r_s)
         self.r_s = r_s
         self.mass_spline = InterpolatedUnivariateSpline(r_s, mass_s, k=4)

@@ -82,7 +82,7 @@ def get_core_GR(halo):
     r_core = optimize.fminbound(lambda r: -v_circ_GR(r, halo),
                                 bounds[0], bounds[1], xtol=0.5e-12, maxfun=1000)
     m_core = halo.mass_wrap(r_core)
-    print('r_cand = ', r_cand, ' ---- r_core = ', r_core)
+    # print('r_cand = ', r_cand, ' ---- r_core = ', r_core)
     return r_core, m_core
 
 
@@ -352,7 +352,7 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     # print('Newton: ', r_core, mass_core)
     sum[5] = (mass_core - m_core_const)**2/(0.01*m_core_const)**2
 
-    print(theta_0, d_theta, beta_0, ener_f,  " chi2_full=", np.sum(sum), "chi2_stream=", np.sum(sum[0:5]), "chi2_core=", sum[5], "r_core=", r_core, "m_core=", mass_core/1.e6, "x10⁶ M_sun")
+    # print(theta_0, d_theta, beta_0, ener_f,  " chi2_full=", np.sum(sum), "chi2_stream=", np.sum(sum[0:5]), "chi2_core=", sum[5], "r_core=", r_core, "m_core=", mass_core/1.e6, "x10⁶ M_sun")
     return np.sum(sum)
 
 
