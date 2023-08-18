@@ -6,7 +6,7 @@ Using Jagger.jl
 using Pkg
 Pkg.activate(".")
 using PyCall
-using Optimization, OptimizationOptimisers
+using Optimization, OptimizationNOMAD
 using FiniteDiff
 using DelimitedFiles
 using CSV
@@ -46,19 +46,6 @@ function χ²Full(x, p)
 end
 
 
-function χ²Full_parallel(x, p)
-    println("sizes=",size(x,1), size(x,2))
-    len = size(x,1)
-    fitness = zeros(len)
-    Threads.@threads for i in 1:size(x,1)
-        MyGIL.pylock() do
-            @show χ²Full(x[i,:], p)
-            fitness[i] = χ²Full(x[i,:], p)
-        end
-    end
-    return fitness
-end
-
 """Worker function."""
 function worker(m, ic, r☼, maxiters, lb, ub)
     len = length(lb)
@@ -66,7 +53,7 @@ function worker(m, ic, r☼, maxiters, lb, ub)
     p = (m, ic, r☼, lb, ub)
     prob = OptimizationProblem(χ²Full_parallel, x₀, p, lb=zeros(len), ub=ones(len))
     println("prob=$prob")
-    sol = Optimization.solve(prob, ECA(); maxiters=maxiters, reltol=5.e-7, parallel_evaluation=true, use_initial=true)
+    sol = Optimization.solve(prob, NOMADOpt())
     return sol
 end
 
