@@ -3,6 +3,8 @@ for a grid in a global region of paramter space.
 Using Distributed.jl
 """
 
+@everywhere begin
+
 using Pkg
 Pkg.activate(".")
 
@@ -24,7 +26,7 @@ importLib.reload(stream)
 importLib.reload(potentials)
 # %%
 
-println("Threads=", Threads.nthreads())
+# println("Threads=", Threads.nthreads())
 
 """Loop in ϵ."""
 
@@ -38,23 +40,21 @@ function χ²Full(x, p)
     m = p[1]
     ic = p[2]
     r☼ = p[3]
-    lb = p[4]
-    ub = p[5]
-    θ, ω, β = back_orig(x, lb, ub)
+    θ, ω, β = x
     return stream.chi2_full(θ, ω, β, m, ic, r☼)
 end
 
 
 """Worker function."""
-function worker(i, m, ic, r☼, lb, ub)
-    len = length(lb)
-    x₀ = 0.5*ones(len)
-    p = (m, ic, r☼, lb, ub)
-    prob = OptimizationProblem(χ²Full, x₀, p, lb=zeros(len), ub=ones(len))
-    sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false)
-    worker_file = "solutions_m$(Int(m))/param_optim_pot_m$(Int(m))_i$i.txt"
-    @show i, myid(), sol.u, χ²
-    @show worker_file
+function worker(i, sol_dir, m, ic, r☼, lb, ub)
+    x₀ = 0.5*(lb+ub)
+    p = (m, ic, r☼)
+    prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
+    sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=3)
+    worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
+    @show i, myid(), sol.u, χ², worker_file
+    worker_sol = ("Minimizer = $(sol.u)", "Minimum = $(sol.objective)")
+    writedlm(worker_file, worker_sol)
 
     return sol
 end
@@ -83,13 +83,16 @@ end
 
 
 """Parallel function."""
-function cooperative(m, ic, r☼, lb_g, ub_g, n_grid)
+function cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
     lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
-    pars(i) = [i, m, ic, r☼, lb_a[i], ub_a[i]]
+    pars(i) = [i, sol_dir, m, ic, r☼, lb_a[i], ub_a[i]]
     res = pmap(i->worker(pars(i)...), eachindex(x₀_a))
     return res
 end
 # %%
+
+end  # @everywhere
+
 
 """Initial orbit conditions file."""
 
@@ -97,26 +100,27 @@ const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = readdlm(ic_file)
 
 """Metaparameters."""
-const m = 300.0
+const m = 360.0
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
+const sol_file = "sol_optim_pot_m$(Int(m))"
 const r☼ = 8.122
-const lb_g = [35., 25., 1.e-5]
-const ub_g = [45., 31., 0.005]
-const n_grid = 20
+const lb = [40., 27., 1.e-5]
+const ub = [45., 31., 0.005]
+const n_grid = 10
 @show m sol_file r☼ lb_g ub_g
 
 run(`mkdir $sol_dir`)
 
 """Running."""
-# lb_l = [40., 29., 0.001]
-# ub_l = [41., 30., 0.002]
-# sol = worker(i, m, ic, r☼, lb_l, ub_l)
-# sol = cooperative(i, sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
-# @show sol
-
-
-# writedlm(sol_file, back_orig(sol.u, lb_l, ub_l))
+sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
+@show sol
+obj = [sol[i].objective for i ∈ eachindex sol]
+min, index = findmin(obj)
+best_u = sol[index].u
+best = ("Minimizer = $(best_u)", "Minimum = $(min)")
+writedlm(sol_file, best)
 # %%
+
 
 
 
