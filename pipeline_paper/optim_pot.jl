@@ -9,7 +9,7 @@ Using Distributed.jl
     Pkg.activate(".")
 end
 @everywhere begin
-    using PyCall
+    using PythonCall
     using Optimization, OptimizationNOMAD
     using FiniteDiff
     using DelimitedFiles
@@ -20,7 +20,8 @@ end
 
 @everywhere begin
     # %%
-    pushfirst!(PyVector(pyimport("sys")."path"), "")
+    pyimport("sys")."path".append("")
+    # pushfirst!(pyconvert(Vector{String}, pyimport("sys")."path"), "")
     importLib = pyimport("importlib")
     stream = pyimport("stream")
     potentials = pyimport("potential_classes")
@@ -45,6 +46,8 @@ end
         ic = p[2]
         r☼ = p[3]
         θ, ω, β = x
+        @show stream.chi2_full(θ, ω, β, m, ic, r☼)
+        # ret =  pyconvert(Float64, stream.chi2_full(θ, ω, β, m, ic, r☼))
         return stream.chi2_full(θ, ω, β, m, ic, r☼)
     end
 
