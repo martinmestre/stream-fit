@@ -54,7 +54,7 @@ end
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-        sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=3)
+        sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=1)
         χ² = sol.objective
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
         @show i, myid(), sol.u, χ², worker_file
@@ -110,7 +110,7 @@ const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
 const lb_g = [40., 27., 1.e-5]
 const ub_g = [45., 31., 0.005]
-const n_grid = 3
+const n_grid = 2
 @show m sol_file r☼ lb_g ub_g
 
 if !isdir(sol_dir)
