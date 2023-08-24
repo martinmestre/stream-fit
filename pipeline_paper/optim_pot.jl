@@ -18,8 +18,8 @@ end
     using Distributed
 end
 
+
 @everywhere begin
-    # %%
     pyimport("sys")."path".append("")
     # pushfirst!(pyconvert(Vector{String}, pyimport("sys")."path"), "")
     importLib = pyimport("importlib")
@@ -28,9 +28,10 @@ end
     u = pyimport("astropy.units")
     # importLib.reload(stream)
     # importLib.reload(potentials)
-end
-    # %%
-@everywhere begin
+# end
+# # %%
+
+# @everywhere begin
     println("Threads=", Threads.nthreads())
 
     """Loop in ϵ."""
@@ -57,6 +58,7 @@ end
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
+        @show x₀, p
         sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=3)
         χ² = sol.objective
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
@@ -94,6 +96,7 @@ end
     function cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
         lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
         pars(i) = [i, sol_dir, m, ic, r☼, lb_a[i], ub_a[i]]
+        @show pars
         res = pmap(i->worker(pars(i)...), eachindex(x₀_a))
         return res
     end
@@ -121,13 +124,13 @@ if !isdir(sol_dir)
 end
 
 # """Running."""
-sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
-@show sol
-obj = [sol[i].objective for i ∈ eachindex(sol)]
-min, index = findmin(obj)
-best_u = sol[index].u
-best = ("Minimizer = $(best_u)", "Minimum = $(min)")
-writedlm(sol_file, best)
+# sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
+# @show sol
+# obj = [sol[i].objective for i ∈ eachindex(sol)]
+# min, index = findmin(obj)
+# best_u = sol[index].u
+# best = ("Minimizer = $(best_u)", "Minimum = $(min)")
+# writedlm(sol_file, best)
 # %%
 
 
