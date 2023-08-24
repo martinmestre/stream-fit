@@ -1,24 +1,33 @@
+#!/usr/bin/env julia
+
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
 Using Distributed.jl
 """
 
+using Pkg
+Pkg.activate(".")
+using Distributed, SlurmClusterManager
+@show SlurmManager()
+addprocs(SlurmManager())
+
+@everywhere println("hello from $(myid()):$(gethostname())")
 
 @everywhere begin
     using Pkg
     Pkg.activate(".")
-end
-@everywhere begin
+# end
+
+# @everywhere begin
     using PyCall
     using Optimization, OptimizationNOMAD
     using FiniteDiff
     using DelimitedFiles
     using CSV
     using DataFrames, DataFramesMeta
-    using Distributed
-end
+# end
 
-@everywhere begin
+# @everywhere begin
     # %%
     pushfirst!(PyVector(pyimport("sys")."path"), "")
     importLib = pyimport("importlib")
@@ -30,8 +39,8 @@ end
 end
     # %%
 @everywhere begin
+    println("hello from $(myid()):$(gethostname())")
     println("Threads=", Threads.nthreads())
-
     """Loop in ϵ."""
 
     """Anti-normalization function."""
