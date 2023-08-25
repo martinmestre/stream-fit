@@ -125,13 +125,13 @@ if !isdir(sol_dir)
 end
 
 # """Running."""
-sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
-@show sol
-obj = [sol[i].objective for i ∈ eachindex(sol)]
-min, index = findmin(obj)
-best_u = sol[index].u
-best = ("Minimizer = $(best_u)", "Minimum = $(min)")
-writedlm(sol_file, best)
+# sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
+# @show sol
+# obj = [sol[i].objective for i ∈ eachindex(sol)]
+# min, index = findmin(obj)
+# best_u = sol[index].u
+# best = ("Minimizer = $(best_u)", "Minimum = $(min)")
+# writedlm(sol_file, best)
 # %%
 
 

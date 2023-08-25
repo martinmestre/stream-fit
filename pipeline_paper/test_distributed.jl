@@ -1,16 +1,16 @@
 using Pkg
 Pkg.activate(".")
 using Distributed
-using PyCall
+using PythonCall
 using DelimitedFiles
 
-const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
-const ic = readdlm(ic_file)
-const r☼ = 8.122
-const m = 360.0
+ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
+icjl = readdlm(ic_file)
+r☼ = 8.122
+m = 360.0
 
 # launch worker processes
-addprocs(4)
+addprocs(3)
 
 println("Number of processes: ", nprocs())
 println("Number of workers: ", nworkers())
@@ -21,9 +21,8 @@ println("Number of workers: ", nworkers())
 end
 
 @everywhere begin
-    using PyCall
-
-    pushfirst!(PyVector(pyimport("sys")."path"), "")
+    using PythonCall
+    pyimport("sys")."path".append("")
     bar = pyimport("test_foo")
     stream = pyimport("stream")
 end
@@ -32,8 +31,10 @@ end
 for i in workers()
     id, pid, host = fetch(@spawnat i (myid(), getpid(), gethostname()))
     θ, ω, β = 40.0, 27.0, 0.002
-    param = [θ, ω, β, m, ic, r☼]
-    println(id, " " , pid, " ", host, " ", bar.foo(id), stream.chi2_full(θ, ω, β, m, ic, r☼))
+    param = [θ, ω, β, m, icjl, r☼]
+    χ²s = pyconvert(Float64,bar.foo(θ))
+    χ² = pyconvert(Float64,stream.chi2_full(Py(θ), Py(ω), Py(β), Py(m), pyconvert(Vector,icjl), Py(r☼)))
+    println(id, " " , pid, " ", host, " ", bar.foo(id), " ", χ²s, " ", χ²)
 end
 
 # remove the workers

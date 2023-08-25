@@ -105,7 +105,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     The orbit_model here defined works with sky coordinates
     at input and sky-cartesian at output.
     """
-
+    print("entre en orbit_model")
     # Autoconsistent velocity of LSR
     v_circ_sun = rot_vel_mw(pot_list, r_sun)
 
@@ -124,7 +124,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     w_0 = np.zeros(6)
     w_0[:3] = [galac_coord.x/u.kpc, galac_coord.y/u.kpc, galac_coord.z/u.kpc]
     w_0[3:] = [galac_coord.v_x/(u.km/u.s), galac_coord.v_y/(u.km/u.s), galac_coord.v_z/(u.km/u.s)]
-
+    print("mitad de orbit_model")
     # ODE integration
     unit_t = 0.977792221680356   # Gyr
     time_span_s2 = 0.2/unit_t
@@ -159,7 +159,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     icrs_coord = galac_coord.transform_to(coord.ICRS())
     mu_ra = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
+    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel,
 
 
 class IbaPoly:
@@ -307,8 +307,7 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     W_0 = theta_0 + d_theta
 
     pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
-    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(
-        ic[0], ic[1], ic[2], ic[3], ic[4], ic[5], pot_list, r_sun)
+    phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, x, y, z, v_circ = orbit_model(ic[0], ic[1], ic[2], ic[3], ic[4], ic[5],pot_list, r_sun)
     cfg.phi_2_spl = interp1d(phi_1, phi_2, kind='cubic')
     cfg.d_hel_spl = interp1d(phi_1, d_hel, kind='cubic')
     cfg.v_hel_spl = interp1d(phi_1, v_hel,  kind='cubic')
