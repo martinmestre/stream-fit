@@ -7,18 +7,14 @@ Using Distributed.jl
 
 using Pkg
 Pkg.activate(".")
-using Distributed, SlurmClusterManager
-@show SlurmManager()
-addprocs(SlurmManager())
 
-@everywhere println("hello from $(myid()):$(gethostname())")
 
 @everywhere begin
     using Pkg
     Pkg.activate(".")
-# end
+end
 
-# @everywhere begin
+@everywhere begin
     using PyCall
     using Optimization, OptimizationNOMAD
     using FiniteDiff
