@@ -11,4 +11,4 @@ ulimit -l unlimited
 
 #Ejecuta el programa paralelo con MPI
 . /etc/profile
-julia -p 4 optim_pot.jl
+julia  optim_pot.jl

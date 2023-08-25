@@ -7,7 +7,10 @@ Using Distributed.jl
 
 using Pkg
 Pkg.activate(".")
-
+using Distributed
+addprocs(4)
+println("Number of processes: ", nprocs())
+println("Number of workers: ", nworkers())
 
 @everywhere begin
     using Pkg
@@ -21,10 +24,9 @@ end
     using DelimitedFiles
     using CSV
     using DataFrames, DataFramesMeta
-# end
+end
 
-# @everywhere begin
-    # %%
+@everywhere begin
     pushfirst!(PyVector(pyimport("sys")."path"), "")
     importLib = pyimport("importlib")
     stream = pyimport("stream")
