@@ -5,7 +5,15 @@ using PythonCall
 using DelimitedFiles
 
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
-icjl = readdlm(ic_file)
+ic = vec(readdlm(ic_file))
+@show ic
+@show typeof(ic)
+@show pyconvert(Vector,ic)
+@show typeof((pyconvert(Vector,ic)))
+@show PyArray(ic)
+@show typeof(PyArray(ic))
+@show Py(ic)
+@show typeof(Py(ic))
 r☼ = 8.122
 m = 360.0
 
@@ -31,10 +39,11 @@ end
 for i in workers()
     id, pid, host = fetch(@spawnat i (myid(), getpid(), gethostname()))
     θ, ω, β = 40.0, 27.0, 0.002
-    param = [θ, ω, β, m, icjl, r☼]
+    param = [θ, ω, β, m, ic, r☼]
     χ²s = pyconvert(Float64,bar.foo(θ))
-    χ² = pyconvert(Float64,stream.chi2_full(Py(θ), Py(ω), Py(β), Py(m), pyconvert(Vector,icjl), Py(r☼)))
-    println(id, " " , pid, " ", host, " ", bar.foo(id), " ", χ²s, " ", χ²)
+    χc² = pyconvert(Float64,stream.chi2_full(θ, ω, β, m, ic, r☼))
+    χ² = pyconvert(Float64,stream.chi2_full(Py(θ), Py(ω), Py(β), Py(m), Py(ic), Py(r☼)))
+    println(id, " " , pid, " ", host, " ", bar.foo(id), " ", χ²s, " ", χc², " ", χ²)
 end
 
 # remove the workers
