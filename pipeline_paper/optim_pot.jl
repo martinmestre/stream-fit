@@ -47,9 +47,8 @@ end
         ic = p[2]
         r☼ = p[3]
         θ, ω, β = x
-        @show stream.chi2_full(θ, ω, β, m, ic, r☼)
-        # ret =  pyconvert(Float64, stream.chi2_full(θ, ω, β, m, ic, r☼))
-        return stream.chi2_full(θ, ω, β, m, ic, r☼)
+        χ² = pyconvert(Float64,stream.chi2_full(Py(θ), Py(ω), Py(β), Py(m), PyArray(ic), Py(r☼)))
+        return χ²
     end
 
 
