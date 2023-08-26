@@ -6,4 +6,4 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=52G
 
-julia test_distributed.jl
+julia -p 4 test_distributed.jl
