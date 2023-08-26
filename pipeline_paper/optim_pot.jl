@@ -18,7 +18,7 @@ println("Number of workers: ", nworkers())
 end
 
 @everywhere begin
-    using PyCall
+    using PythonCall
     using Optimization, OptimizationNOMAD
     using FiniteDiff
     using DelimitedFiles
@@ -27,13 +27,10 @@ end
 end
 
 @everywhere begin
-    pushfirst!(PyVector(pyimport("sys")."path"), "")
-    importLib = pyimport("importlib")
+    pyimport("sys")."path".append("")
     stream = pyimport("stream")
     potentials = pyimport("potential_classes")
     u = pyimport("astropy.units")
-    # importLib.reload(stream)
-    # importLib.reload(potentials)
 end
     # %%
 @everywhere begin
@@ -41,18 +38,13 @@ end
     println("Threads=", Threads.nthreads())
     """Loop in ϵ."""
 
-    """Anti-normalization function."""
-    function back_orig(x, a, b)
-        return (b-a).*x + a
-    end
-
     """χ² wrap."""
     function χ²Full(x, p)
         m = p[1]
         ic = p[2]
         r☼ = p[3]
         θ, ω, β = x
-        return stream.chi2_full(θ, ω, β, m, ic, r☼)
+        return pyconvert(Float64,stream.chi2_full(θ, ω, β, m, ic, r☼))
     end
 
 
@@ -108,7 +100,7 @@ end
 """Initial orbit conditions file."""
 
 const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
-const ic = readdlm(ic_file)
+const ic = vec(readdlm(ic_file))
 
 """Metaparameters."""
 const m = 360.0
@@ -125,13 +117,13 @@ if !isdir(sol_dir)
 end
 
 # """Running."""
-# sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
-# @show sol
-# obj = [sol[i].objective for i ∈ eachindex(sol)]
-# min, index = findmin(obj)
-# best_u = sol[index].u
-# best = ("Minimizer = $(best_u)", "Minimum = $(min)")
-# writedlm(sol_file, best)
+sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
+@show sol
+obj = [sol[i].objective for i ∈ eachindex(sol)]
+min, index = findmin(obj)
+best_u = sol[index].u
+best = ("Minimizer = $(best_u)", "Minimum = $(min)")
+writedlm(sol_file, best)
 # %%
 
 
