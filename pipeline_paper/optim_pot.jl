@@ -7,8 +7,7 @@ Using Distributed.jl
 
 using Pkg
 Pkg.activate(".")
-using Distributed
-addprocs(4)
+
 println("Number of processes: ", nprocs())
 println("Number of workers: ", nworkers())
 
@@ -103,7 +102,7 @@ const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = vec(readdlm(ic_file))
 
 """Metaparameters."""
-const m = 360.0
+const m = 300.0
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
 const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
