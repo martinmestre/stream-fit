@@ -7,9 +7,12 @@ Using Distributed.jl
 
 using Pkg
 Pkg.activate(".")
+using Distributed, SlurmClusterManager
+addprocs(SlurmManager())
 
-println("Number of processes: ", nprocs())
-println("Number of workers: ", nworkers())
+@show SlurmManager()
+@show nprocs()
+@show nworkers()
 
 @everywhere begin
     using Pkg
@@ -52,7 +55,7 @@ end
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-        sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=500)
+        sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=5)
         χ² = sol.objective
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
         @show i, myid(), sol.u, χ², worker_file
@@ -108,7 +111,7 @@ const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
 const lb_g = [36., 26., 1.e-5]
 const ub_g = [45., 34., 0.005]
-const n_grid = 10
+const n_grid = 3
 @show m sol_file r☼ lb_g ub_g
 
 if !isdir(sol_dir)
