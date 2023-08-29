@@ -8,10 +8,9 @@ Using Distributed.jl
 using Pkg
 Pkg.activate(".")
 using Distributed, SlurmClusterManager
-addprocs(SlurmManager())
+addprocs(SlurmManager(;launch_timeout=300.0))
 
 
-@show SlurmManager()
 @show nprocs()
 @show nworkers()
 
@@ -37,11 +36,6 @@ end
 end
     # %%
 @everywhere begin
-    export JULIA_WORKER_TIMEOUT=300
-    println("hello from $(myid()):$(gethostname())")
-    println("Threads=", Threads.nthreads())
-    """Loop in ϵ."""
-
     """χ² wrap."""
     function χ²Full(x, p)
         m = p[1]
@@ -54,7 +48,7 @@ end
 
     """Worker function."""
     function worker(i, sol_dir, m, ic, r☼, lb, ub)
-        println("hello from $(myid()):$(gethostname())")
+        println("Now at id:$(myid()), host:$(gethostname())")
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
