@@ -9,7 +9,7 @@ using Pkg
 Pkg.activate(".")
 using Distributed, SlurmClusterManager
 addprocs(SlurmManager())
-export JULIA_WORKER_TIMEOUT=300
+
 
 @show SlurmManager()
 @show nprocs()
@@ -37,6 +37,7 @@ end
 end
     # %%
 @everywhere begin
+    export JULIA_WORKER_TIMEOUT=300
     println("hello from $(myid()):$(gethostname())")
     println("Threads=", Threads.nthreads())
     """Loop in ϵ."""
@@ -107,7 +108,7 @@ const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = vec(readdlm(ic_file))
 
 """Metaparameters."""
-const i_m = 2
+const i_m = parse(Int,ARGS[1])
 const m_a = [56., 100., 200., 300., 360.]
 const m = m_a[i_m]
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
