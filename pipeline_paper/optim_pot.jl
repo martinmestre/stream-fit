@@ -106,12 +106,17 @@ const ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 const ic = vec(readdlm(ic_file))
 
 """Metaparameters."""
-const m = 300.0
+const i_m = 2
+const m_a = [56., 100., 200., 300., 360.]
+const m = m_a[i_m]
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
 const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
-const lb_g = [38., 27., 0.0005]
-const ub_g = [42., 31., 0.003]
+
+const lb_g = [[35., 26., 1.0e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+              [38., 29., 3.5e-4], [40., 29., 1.3e-3]]
+const ub_g = [[39., 30., 1.5e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+              [42., 32., 3.0e-3], [44., 32., 4.0e-3]]
 const n_grid = 20
 @show m sol_file r☼ lb_g ub_g
 
@@ -120,7 +125,7 @@ if !isdir(sol_dir)
 end
 
 # """Running."""
-sol = cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
+sol = cooperative(sol_dir, m, ic, r☼, lb_g[i_m], ub_g[i_m], n_grid)
 @show sol
 obj = [sol[i].objective for i ∈ eachindex(sol)]
 min, index = findmin(obj)
