@@ -9,6 +9,7 @@ using Pkg
 Pkg.activate(".")
 using Distributed, SlurmClusterManager
 addprocs(SlurmManager())
+export JULIA_WORKER_TIMEOUT=300
 
 @show SlurmManager()
 @show nprocs()
