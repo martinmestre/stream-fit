@@ -52,10 +52,9 @@ end
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-        sol = Optimization.solve(prob, NOMADOpt(); display_all_eval=false, maxiters=500)
+        sol = Optimization.solve(prob, NOMADOpt(); display_degree=0, maxiters=700)
         χ² = sol.objective
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
-        @show i, myid(), sol.u, χ², worker_file
         worker_sol = ("Minimizer = $(sol.u)", "Minimum = $(sol.objective)")
         writedlm(worker_file, worker_sol)
 
