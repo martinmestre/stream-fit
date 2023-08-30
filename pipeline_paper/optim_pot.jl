@@ -53,11 +53,9 @@ end
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
         sol = Optimization.solve(prob, NOMADOpt(); display_degree=0, maxiters=700)
-        χ² = sol.objective
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
         worker_sol = ("Minimizer = $(sol.u)", "Minimum = $(sol.objective)")
         writedlm(worker_file, worker_sol)
-
         return sol
     end
 
