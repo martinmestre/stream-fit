@@ -7,7 +7,8 @@ Using Distributed.jl
 
 using Pkg
 Pkg.activate(".")
-using Distributed, SlurmClusterManager
+using Distributed
+using SlurmClusterManager
 addprocs(SlurmManager(;launch_timeout=300.0))
 
 
