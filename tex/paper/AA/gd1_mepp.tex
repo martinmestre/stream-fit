@@ -267,11 +267,17 @@ was used with metaparemeters given by
 \texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0, unless otherwise stated. This method can be run in parallel with shared memory,
 so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. halving and doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
 
-The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the
-{\it NLopt.jl}~\citep{NLopt} package
-for the {\sc Julia}~\citep{bezanson2017julia} language.
-We used default values for the all its metaparameters except for
-\texttt{reltol}=$5\times10^{-5}$.
+The other algorithm is an implementation of the Mesh Adaptive Direct Search algorithm called
+\texttt{NOMAD}~\citep{audet2021nomad}. The {\sc Julia}~\citep{bezanson2017julia}
+wrapper of this algorithm, \href{https://bbopt.github.io/NOMAD.jl/stable/}{\it NOMAD.jl},
+is used through the package \href{https://docs.sciml.ai/Optimization/stable/}{\it Optimization.jl}.
+We used default values of all the metaparameters except for \texttt{maxiters}=700.
+
+% The other algorithm is \texttt{LN\_NELDERMEAD}~\citep{NELDERMEAD,10.1093/comjnl/8.1.42,shere} from the
+% {\it NLopt.jl}~\citep{NLopt} package
+% for the {\sc Julia}~\citep{bezanson2017julia} language.
+% We used default values for the all its metaparameters except for
+% \texttt{reltol}=$5\times10^{-5}$.
 
 
 
