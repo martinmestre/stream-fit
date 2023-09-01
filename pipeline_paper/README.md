@@ -73,15 +73,15 @@ julia rotation_curves.jl
 
 Output: "rotation_curves.pdf"
 
-## Compute Fermionic-MW solutions for any $\epsilon$ using Distributed.jl parallel scheme.
+## Compute Fermionic-MW solutions for any $\epsilon$ using Distributed.jl parallel scheme in a SLURM cluster environment.
 
+In the example below replace the $M \in [1:5]$ according to
+the index of the fermion mass $m=[56, 100, 200, 300, 360]$.
 ```
-julia -p N
-julia> @everywhere include("optim_pot.jl")
-julia> data analysis ...
+sbatch -N 3 --ntasks-per-node=64 --partition=multi -o optimo_pot_imM.out optim_pot.jl M
 ```
 
-Output: "...txt"
+Output: "sol_optim_pot_mF.txt" where $F\in m$.
 
 
 
