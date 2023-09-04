@@ -265,7 +265,7 @@ One of them is {\it SciPy}'s
 was used with metaparemeters given by
 \texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=200, \texttt{popsize}=200,
 \texttt{tol}=$5\times10^{-8}$ and \texttt{atol}=0, unless otherwise stated. This method can be run in parallel with shared memory,
-so a convergence test was made in a cluster's node with 24 processors, varying the values of the metaparameters (e.g. halving and doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
+so a convergence test was made in a cluster's node with 64 logical processors, varying the values of the metaparameters (e.g. halving and doubling the values of \texttt{maxiter} and \texttt{popsize}, setting \texttt{strategy}=\texttt{"best1bin"} and combinations).
 
 The other algorithm is an implementation of the Mesh Adaptive Direct Search algorithm called
 \texttt{NOMAD}~\citep{audet2021nomad}. The {\sc Julia}~\citep{bezanson2017julia}
@@ -412,7 +412,7 @@ while keeping simultaneously the S-stars and GD-1 contraints in the light of the
 of the Event Horizon Telescope which suggest a compactness of the order of magnitude of 5 Schwarzschild radii.
 A precise ray tracing study about simulated images of the central
 cores of fermionic distributions is on progress, trying to put strict constraints on the minimum
-compactness needed in ordert to be in agreemnt with the EHT observations.
+compactness needed so as to be in agreement with the EHT observations.
 In order to extend our solutions to other values of the fermion mass ($m$), we used the second optimization algorithm described in Sec.~\ref{sec:optimization} for $\epsilon=100, 200, 300, 360$ keV. For each fermion mass we divided a given macroscopic orthohedron in parameter space in $20^3=8000$ smaller orthoedrons. Each subregion was optimized in a parallel distributed scheme, searching for those parameters that minimize $\chi^2_{\rm{full}}$ with the \texttt{NOMAD} algorithm. Afterwards, we selected the global minimum by comparing the results of each distributed process.
 % In order to extend our solutions to other values of the fermion mass ($m$), we try the hypothesis that
 % the optimal solution for $m$ is close to the corresponding solution for $m+\Delta m$ as long as $\Delta m$
