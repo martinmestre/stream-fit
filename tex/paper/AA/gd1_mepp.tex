@@ -68,7 +68,7 @@
    mass going from $56$~keV/$c^2$ to $~360$~keV/$c^2$, respectively corresponding to core radii going from
    $10^3$ to 10 Schwarzschild radii. For smaller and larger values of the fermion mass, there is no solution that simultaneously fits the GD-1 stream and the S-stars. The solutions have a virial radius of 28 kpc and a virial mass of $1.4\times10^{11} M_\odot$, the latter being at $2\sigma$ from previous Milky Way DM halo mass estimates using the Sagittarius stream. We do not assume the velocity of the local standard of rest ($v_\mathrm{lsr}$) and the result gives $v_\mathrm{lsr}\approx244$ km/s, in agreement with recent independent estimates.}
   % conclusions heading (optional), leave it empty if necessary
-   {Here...}
+   {}
 
    \keywords{Galaxy: kinematics and dynamics --
              Galaxy: stellar streams --
@@ -330,10 +330,10 @@ $(\theta_0,\omega_0, \beta_0)\in [35, 40]\times[25, 30]\times[10^{-5}, 1.5\times
 $(\theta_0, \omega_0, \beta_0)\approx (36.0665,27.3471 , 1.25713\times10^{-5})$
  with a value of $\chi^2_{\rm{stream}}\approx 21.9585$ and  $\chi^2_{\rm{core}}\approx 1.117$.
  Although the stream fit is good (as will later be shown), the associated value of the core mass was
- $m\approx 3.537\times 10^6 M\odot$ which implies that there is room for improvement.
+ $m_c\approx 3.537\times 10^6 M\odot$ which implies that there is room for improvement.
 We took this result to shrink the window to $(\theta_0,\omega_0, \beta_0)\in [35, 37]\times[26, 28]\times[1.2\times 10^{-5}, 1.3\times10^{-5}]$ and re-run the genetic algorith, converging
 to $(\theta_0, \omega_0, \beta_0)\approx (36.0661, 27.3468,1.25769\times10^{-5})$ with a value of $\chi^2_{\rm{stream}}\approx 21.9585$ and  $\chi^2_{\rm{core}}\approx 1.344\times10^{-5}$ which corresponds to
- a much precise value of the core mass, $m\approx 3.5001 M\odot$. It can be noticed the great sensitivity of the core mass depence on the model parameters because a change in the fifth significant digit of the parameters propagates to a change of in  the third significant digit of $m$. Nevertheless, both solutions above are astrophysically equivalent because~\citet{2021MNRAS.505L..64B} has prooved that core masses in the range $[3.5, 3.55]\times 10^6 M\odot$ give good fits of the S-stars.
+ a much precise value of the core mass, $m_c\approx 3.5001\times 10^6  M\odot$. It can be noticed the great sensitivity of the core mass depence on the model parameters because a change in the fifth significant digit of the parameters propagates to a change of in  the third significant digit of $m_c$. Nevertheless, both solutions above are astrophysically equivalent because~\citet{2021MNRAS.505L..64B} has prooved that core masses in the range $[3.5, 3.55]\times 10^6 M\odot$ give good fits of the S-stars.
 
 The last step consisted in fixing the Fermionic-MW parameters while floating the ICs of the orbit with the genetic scheme, with metaparameter values \texttt{maxiter}=\texttt{popsize}=400, which gave us very similar to the FMW-MW case:
 $\alpha=149.21^{\circ}$, $\delta=36.69^{\circ}$, $D=7.95$ kpc,
@@ -371,6 +371,11 @@ Fig.~\ref{fig:chi2stream_tilted}. It is noticeable that the variance along $\ome
    the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.011,0.011]$. }
    \label{fig:chi2stream_tilted}
 \end{figure}
+
+\subsection{Virial quantities}
+Our dark matter solution has a finite (virial) radius of $r_{\rm{DM,vir}}=27.4$ kpc and a virial mass
+of $m_{\rm{DM,vir}}=1.4\times10^{11} M\odot$.
+
 
 \subsection{Rotation curves}
 As a way to compare our stream results with a more classical MW observable, we have compute the rotation curves for both models and plot them together with three independent rotation curve observations in
