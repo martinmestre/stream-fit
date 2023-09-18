@@ -84,21 +84,27 @@ When a galaxy hosts a satellite, i.e. dwarf galaxy or globular cluster, the grav
 between them modifies both subsystems. The host galaxy strips stars from the satellite at a rate
 that depends on their density profiles and on the orbit,
 while the host density profile suffers a reorganization of its matter in the vecinity of the satellite's orbit, developing a wake due to the dynamical friction.
-This ensemble of stars tidally stripped from the satellite constitute a stellar stream (also named tidal stream) and examples of them have been detected in the Milky Way (MW) and in Andromeda.
+This ensemble of stars tidally stripped from the satellite constitute a stellar stream (also named tidal stream) and examples of them have been detected in the Milky Way (MW) and in Andromeda, with different observational techniques.
 
-At present stellar streams constitute one of the main Milky Way (MW) observables related to the dynamics and the underlying density distribution, together with other baryonic observables like the rotation curve, the radial surface density profile of the disk and the vertical density profile of the disk at the solar radius.
-Tidal streams probe the acceleration field produced by the Galaxy~\citep{1999ApJ...512L.109J,2016ASSL..420..169J,Ibata_2016,2017ApJ...842..120I,2017A&A...603A..65T} as well as its formation history according
-to the pioneering work of~\citet{1999Natur.402...53H}.
-{\it A stellar stream can be the closest realization of a galactic halo orbit that can be observed in nature}.
+At present stellar streams constitute one of the main MW observables related to the dynamics, together with other baryonic observables like the rotation curve, the radial surface density profile of the disk and the vertical density profile of the disk at the solar radius.
+Tidal streams probe the acceleration field produced by the Galaxy~\citep{1999ApJ...512L.109J,1999A&A...348L..49Z,2009ApJ...703L..67L,2013MNRAS.436.2386L,2016ASSL..420..169J,Ibata_2016,2017ApJ...842..120I,2017A&A...603A..65T,2021MNRAS.502.4170R} as well as its formation history according to ~\citet{1999Natur.402...53H,2020ARA&A..58..205H,2022A&A...666A..64R,2023arXiv230708730C} among others.
+{\it A stellar stream could be the most faithful realization of a galactic orbit that can be observed in nature}.
 Nevertheless, the larger the progenitor, the more discrepancy between its orbit and the stream phase-space configuration. In fact, the taxonomy of streams is very rich~\citep{2015MNRAS.450..575A} because of the different gravitational configurations that can take place, going from almost unidimensional streams whose progenitor is a small globular cluster to a wide shell produced by the partially radial sinking into the MW centre of a large progenitor.
-Moreover, tidal streams may present gaps and on/off-track overdensities as studied by~\citet{Price-Whelan_2018,Ibata_2020,2020MNRAS.494.5315D,2022MNRAS.514.1757P,2022ApJ...925..118T,2023MNRAS.521.2087V} and references therein, making the full 6D modelling of a stream at high order of fidelity, a really difficult labour.
 
-In this way, stream data together with other baryonic measurements help in making claims about unknown aspects of the gravitational field: model either a dark matter (DM) halo component or a modified Newtonian dynamics (MOND) theory.
+Stream data together with other baryonic measurements can help in making claims about unknown aspects of the gravitational field: model either a dark matter (DM) halo component or a modified Newtonian dynamics (MOND) theory.
 For example, within the DM paradigm, a given candidate to the DM particle corresponds to certain family of halo and subhalo phase-space distributions, which in turn, are responsible for the satellite orbit and the phase-space density distribution of the stream. Besides, DM space densities might have different shapes
 (e.g.~spherical, axisymmetric, triaxial) depending on the number of conserved components of the angular momentum, which also incluences the stream properties as discussed in~\citet{2013ApJ...773L...4V,2020MNRAS.492.4398M}.
+In particular, \citet{2019MNRAS.486.2995M} have constrained the MW dark matter halo shape using the GD-1 stream data from Gaia DR2, assumming a triaxial generalization of the NFW profile and obtaining a flattening halo parameter of $q=0.82^{+0.25}_{-0.13}$, thus compatible with a situation of spherical symmetry.
+Moreover, \citep{2023MNRAS.524.2124P} has measured the oblateness in an axisymmetric generalization of the NFW profile using three stellar streams: NGC~3201, M68 and Palomar~5.
 
+{\color{cyan}Por favor Charly agrega desde aca...}
+In the recent literature many types of DM candidates have been analyzed, like axions, bosons and fermions.
+In this work we will work with the relativistic Fermionic King model defined in~\citet{2020EPJP..135..290C}, as implemented in the RAR model~\citep{arguelles_novel_2018}. {\color{cyan}...hasta aca.}
+
+In this paper we will model the the formation of the GD-1 stellar stream inside a MW with a relativistic fermionic King dark matter core-halo distribution. In Sec.~\ref{sec:methodology} we explain the work methodology. In Sec.~\ref{sec:results} we present the results and discussions while in Sec.~\ref{sec:conclusions} we give the conclusions.
 
 \section{Methodology}
+\label{sec:methodology}
 In this section we explain the observables and methods used in this research.
 The exact pipeline applied in order to obtain the results and plots of this paper
 can be found at the following GitHub repository:
@@ -135,8 +141,8 @@ galactocentric distance of the sun $R_\odot=8.122$ kpc~\citep{2018A&A...615L..15
 velocity $\boldsymbol{v}_{\odot p} = (11.1, 12.24, 7.25)$ km/s~\citep{Shonrich}.
 
 
-\subsection{The fermionic DM model}
-Our DM model consists of a spherical and isotropic distribution of fermions at finite temperature in hydrostatic equilibrium subject to the law of General Relativity (GR), i.e. T.O.V equations, as defined in~\cite{arguelles_novel_2018} with the particularity that we have made a few change of variables in order to make the numerical computation more robust. The system of equations thus obtained is as follows:
+\subsection{The relativistic fermionic King DM model}
+Our DM model consists of the relativistic fermionic King model (here denoted just ``fermionic'') which is a spherical and isotropic distribution of fermions at finite temperature in hydrostatic equilibrium subject to the law of General Relativity (GR), i.e. T.O.V equations, as defined in~\cite{arguelles_novel_2018} with the particularity that we have made a few change of variables in order to make the numerical computation more robust. The system of equations thus obtained is as follows:
 
 \begin{eqnarray}
    \label{sode}
@@ -413,7 +419,7 @@ According to GD-1 observables, the present Galactocentric distance projected ont
 belongs to the interval $11.5 \lesssim D_g \lesssim 16.4$ (kpc), displayed as a vertical shaded (grey) band in
 Fig.~\ref{fig:rotcurve}.
 Although the GD-1 stream orbit location corresponds to $z\in [2.6, 9.7]$ kpc and thus explores the non-sphericality of the full MW models (due to baryons/NFW axisymmetry), the fact that both models approximately agree in their circular velocity values in the GD-1 region gives support to the idea of using stellar streams as Galactic
-accelerometers~\citep{Ibata_2016}.
+accelerometers~\citep{Ibata_2016,2022ApJ...940...22N,2023ApJ...945L..32C}.
 It is interesting to note a coincidence between both models in their values of circular velocity
 at the position of the sun as they both give a value of $v_c(R_\odot)\approx 244$~km/s.
 Besides, this values are in perfect agreement with the independent estimate found
