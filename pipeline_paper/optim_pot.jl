@@ -30,6 +30,10 @@ end
 end
 
 @everywhere begin
+    ENV["JULIA_CONDAPKG_BACKEND"] = "Null"
+end
+
+@everywhere begin
     pyimport("sys")."path".append("")
     stream = pyimport("stream")
     potentials = pyimport("potential_classes")
