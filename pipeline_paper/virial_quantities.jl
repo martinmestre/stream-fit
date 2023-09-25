@@ -1,3 +1,21 @@
+# -*- coding: utf-8 -*-
+# ---
+# jupyter:
+#   jupytext:
+#     cell_metadata_filter: -all
+#     custom_cell_magics: kql
+#     text_representation:
+#       extension: .jl
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.11.2
+#   kernelspec:
+#     display_name: Julia 1.9.3
+#     language: julia
+#     name: julia-1.9
+# ---
+
+# %%
 """Compute virial quantities of our solution."""
 
 using Pkg
@@ -47,3 +65,10 @@ println("Disks mass = ", mass_disks/1.e11, " x 10^11 M_⊙")
 println("Barions mass = ", mass_barions/1.e11, " x 10^11 M_⊙")
 println("Halo mas = ", mass_halo/1.e11, " x 10^11 M_⊙")
 @show m_vir+mass_barions
+
+# %%
+# Local density 
+ρ☼ = rfk.rho_spl(r☼)[1]
+@show ρ☼;
+
+# %%

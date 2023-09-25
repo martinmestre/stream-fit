@@ -1,5 +1,3 @@
-#!/usr/bin/env julia
-
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
 Using Distributed.jl
@@ -29,9 +27,9 @@ end
     using DataFrames, DataFramesMeta
 end
 
-@everywhere begin
-    ENV["JULIA_CONDAPKG_BACKEND"] = "Null"
-end
+# @everywhere begin
+#     ENV["JULIA_CONDAPKG_BACKEND"] = "Null"
+# end
 
 @everywhere begin
     pyimport("sys")."path".append("")
