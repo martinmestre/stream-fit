@@ -10,7 +10,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Julia 1.9.0
+#     display_name: Julia 1.9.3
 #     language: julia
 #     name: julia-1.9
 # ---
@@ -25,6 +25,7 @@ using PyCall
 using DelimitedFiles
 using CSV
 using DataFrames
+using GLM
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -101,7 +102,7 @@ end
 
 # %%
 
-# Plot
+# Paper plot
 labels = ["Fermionic-MW","NFW-MW"]
 lw = 4
 
@@ -160,6 +161,7 @@ save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("first plot done.")
 # %%
 
+# Zoomed in plot (not in paper)
 fig = Figure(resolution = size_pt, fontsize = 37)
 gridpos = fig[1, 1]
 f=draw!(gridpos, plt, axis=(;limits=((5,20),(220,270)),
@@ -179,6 +181,13 @@ display(fig)
 save("paper_plots/rotation_curves_zoom.pdf", fig, pt_per_unit = 1)
 println("Second plot done.")
 
+
+
+# %%
+# Fit data of the fermionic rotation curve.
+bool = 15 .< df_ferm.r .< 40
+data = DataFrame(x=df_ferm.r[bool],y=df_ferm.v[bool])
+ols = lm(@formula(y ~ 1+x), data)
 
 
 # %%

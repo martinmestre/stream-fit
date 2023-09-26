@@ -10,7 +10,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Julia 1.9.0
+#     display_name: Julia 1.9.3
 #     language: julia
 #     name: julia-1.9
 # ---
@@ -28,7 +28,6 @@ using Showoff
 using DataFrames, DataFramesMeta
 include("bugfixMakie.jl")
 
-# %%
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 importLib = pyimport("importlib")
@@ -48,11 +47,13 @@ mat = readdlm(param_file)
 ω=mat[:,3]
 β=mat[:,4]
 W = θ+ω
+@show ϵ
 
 # %%
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
-ic = readdlm(ic_file)
+ic = vec(readdlm(ic_file))
 r☼ = 8.122
+@show ic
 
 # %%
 #pot_list = stream.pot_model(ϵ, θ, W, β)
@@ -65,13 +66,14 @@ param = [Vector{Float64}(undef,4) for _ = 1:length(ϵ)]
 println("i ::: β ::: r_core ::: m_core ::: χ²stream")
 for i = eachindex(ϵ)
       param[i] = [ϵ[i], θ[i], W[i], β[i]]
-    #   halo = potentials.RAR(param[i])
-    #   temp = stream.get_core_GR(halo)
-    #   r_core[i] = temp[1]
-    #   m_core[i] = temp[2][1]
-    #   χ²stream[i] = stream.chi2_stream(θ[i], ω[i], β[i], ϵ[i], ic, r☼)
-    #   println(i,"  ",  ϵ[i],  "  ", r_core[i],"  ", m_core[i], "  ", χ²stream[i])
+      halo = potentials.RAR(param[i])
+      temp = stream.get_core_GR(halo)
+      r_core[i] = temp[1]
+      m_core[i] = temp[2][1]
+      χ²stream[i] = stream.chi2_stream(θ[i], ω[i], β[i], ϵ[i], ic, r☼)
+      println(i,"  ",  ϵ[i],  "  ", r_core[i],"  ", m_core[i], "  ", χ²stream[i])
 end
+@show r_core/rₛ m_core;
 # %%
 
 # Compute MEPP selected solutions.

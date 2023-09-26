@@ -47,7 +47,7 @@ param = [ϵ, θ, W, β]
 
 
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
-ic = readdlm(ic_file)
+ic = vec(readdlm(ic_file))
 r☼ = 8.122
 
 orbit_nfw_file = "observable_orbit_NFW-MW.txt"
