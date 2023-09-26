@@ -69,6 +69,10 @@ println("Halo mas = ", mass_halo/1.e11, " x 10^11 M_⊙")
 # %%
 # Local density 
 ρ☼ = rfk.rho_spl(r☼)[1]
-@show ρ☼;
+@show ρ☼
+# fact value is the results uconvert(u"GeV/cm^3",1.0unit(ρ☼)*u"c"^2)
+fact = 3.7965164572915704e-8 
+@show fact*ρ☼
+
 
 # %%
