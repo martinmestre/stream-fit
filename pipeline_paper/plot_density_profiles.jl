@@ -27,6 +27,7 @@ using PyCall
 using Showoff
 using DataFrames, DataFramesMeta
 include("bugfixMakie.jl")
+using Unitful,UnitfulAstro, UnitfulAngles
 
 # %%
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -86,6 +87,22 @@ G = 4.300923924e-6  # kpc (km/s)^2 M_sun^(-1)
 c = 2.997925e5  # km s^(-1)
 M_bh = 4.075e6  # M_sun
 rₛ = 2.0*G*M_bh / c^2
+# %%
+# Black hole constants with units.
+begin 
+    M_bh = 4.075e6u"Msun"  # M_sun
+    rₛᵤ = 2.0u"G"*M_bh / u"c"^2
+    rₛᵤ = uconvert(u"kpc",rₛᵤ)
+    d_sh = 48.7u"μas"
+    r_sh = d_sh/2
+    r_sh = (r☼*u"kpc"/rₛᵤ)*uconvert(u"rad",r_sh).val
+    println("The radius of the BH shadow is $r_sh Schwarzschild radius")
+    @show rₛᵤ r_sh 
+end
+
+# %%
+r☼
+
 # %%
 
 # Suggestion from Ian Weaver (Julia slack)
