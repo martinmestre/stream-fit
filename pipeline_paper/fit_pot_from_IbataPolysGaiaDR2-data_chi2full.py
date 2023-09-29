@@ -80,7 +80,7 @@ def pot_model(ener_f, theta_0, W_0, beta_0):
     return bulge, thin, thick, halo
 
 
-def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_sun):
+def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_list, r_sun):
     """
     Orbit definition.
 
@@ -95,7 +95,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     # Transformation to galactocentric coordinates
     sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
                            distance=distance*u.kpc,
-                           pm_ra_cosdec=mu_alpha*np.cos(delta*u.degree)*u.mas/u.yr,
+                           pm_ra_cosdec=mu_alpha_cosdelta*u.mas/u.yr,
                            pm_dec=mu_delta*u.mas/u.yr,
                            radial_velocity=v_los*u.km/u.s)
     galcen_distance = r_sun*u.kpc
@@ -138,9 +138,9 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
     # Transformation to ICRS coordinates
     icrs_coord = galac_coord.transform_to(coord.ICRS)
-    mu_ra = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
+    mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
 
 
 class IbaPoly:
@@ -167,7 +167,7 @@ class IbaPoly:
         return 90.68*x**3+204.5*x**2-254.2*x-261.5
 
     def MU_RA(self, x):
-        """Proper motion in RA (without cos(Dec)."""
+        """Proper motion in RA times cos(Dec)."""
         return 3.794*x**3+9.467*x**2+1.615*x-7.844
 
     def MU_DEC(self, x):
@@ -189,28 +189,28 @@ Iba_sky['mu_dec'] = pol.MU_DEC(cfg.deg2rad*Iba_sky['phi_1'])
 
 # Transform Ibata data to Galactocentric coordinates in order to know
 # the galactocentricdistances.
-Iba_coord_GD1 = GD1_class.GD1Koposov10(phi1=Iba_sky['phi_1']*u.degree, phi2=Iba_sky['phi_2']*u.degree)
-Iba_coord_ICRS = Iba_coord_GD1.transform_to(coord.ICRS)
-Iba_sky['ra'] = Iba_coord_ICRS.ra.value
-Iba_sky['dec'] = Iba_coord_ICRS.dec.value
-Iba_coord_ICRS = coord.ICRS(ra=Iba_sky['ra']*u.degree,
-                            dec=Iba_sky['dec']*u.degree,
-                            distance=Iba_sky['d_hel']*u.kpc,
-                            pm_ra_cosdec=Iba_sky['mu_ra']*u.mas/u.yr,
-                            pm_dec=Iba_sky['mu_dec']*u.mas/u.yr,
-                            radial_velocity=Iba_sky['v_hel']*u.km/u.s)
-z_sun = 0.0*u.kpc
-frame = coord.Galactocentric(galcen_distance=8.0*u.kpc, z_sun=0.0*u.kpc)
-Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
-Iba_d_gal = np.zeros(len(Iba_coord_Gal.x.value))
-for i in range(0, len(Iba_coord_Gal.x.value)):
-    Iba_d_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2
-                           + Iba_coord_Gal.z[i].value**2)
-print('Galactocentric distances of GD-1:')
-print(Iba_d_gal)
+# Iba_coord_GD1 = GD1_class.GD1Koposov10(phi1=Iba_sky['phi_1']*u.degree, phi2=Iba_sky['phi_2']*u.degree)
+# Iba_coord_ICRS = Iba_coord_GD1.transform_to(coord.ICRS)
+# Iba_sky['ra'] = Iba_coord_ICRS.ra.value
+# Iba_sky['dec'] = Iba_coord_ICRS.dec.value
+# Iba_coord_ICRS = coord.ICRS(ra=Iba_sky['ra']*u.degree,
+#                             dec=Iba_sky['dec']*u.degree,
+#                             distance=Iba_sky['d_hel']*u.kpc,
+#                             pm_ra_cosdec=Iba_sky['mu_ra']*u.mas/u.yr,
+#                             pm_dec=Iba_sky['mu_dec']*u.mas/u.yr,
+#                             radial_velocity=Iba_sky['v_hel']*u.km/u.s)
+# z_sun = 0.0*u.kpc
+# frame = coord.Galactocentric(galcen_distance=8.0*u.kpc, z_sun=0.0*u.kpc)
+# Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
+# Iba_d_gal = np.zeros(len(Iba_coord_Gal.x.value))
+# for i in range(0, len(Iba_coord_Gal.x.value)):
+#     Iba_d_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2
+#                            + Iba_coord_Gal.z[i].value**2)
+# print('Galactocentric distances of GD-1:')
+# print(Iba_d_gal)
 
-np.savetxt('galcoords.txt', np.column_stack([Iba_coord_Gal.x.value, Iba_coord_Gal.y.value,
-                                             Iba_coord_Gal.z.value]))
+# np.savetxt('galcoords.txt', np.column_stack([Iba_coord_Gal.x.value, Iba_coord_Gal.y.value,
+#                                              Iba_coord_Gal.z.value]))
 
 # Alternative computation of helicentric distance as a function of phi_1, by
 # integrating the heliocentric velocity. The development comes from the two
@@ -224,39 +224,39 @@ np.savetxt('galcoords.txt', np.column_stack([Iba_coord_Gal.x.value, Iba_coord_Ga
 #                               = v_hel(phi_1)*alpha*cos(phi_2)/mu_1 =
 #                               = alpha*v_hel(phi_1)*cos(phi_2(phi_1))/mu_1(phi_1).
 
-Iba_coord_GD1 = Iba_coord_ICRS.transform_to(GD1_class.GD1Koposov10)
-print('Iba_coord_GD1 =', Iba_coord_GD1)
-Iba_sky['mu_1'] = Iba_coord_GD1.pm_phi1_cosphi2
-cm2kpc = 1.0/3.08567758e21
-km2cm = 10.0**5
-km2kpc = km2cm*cm2kpc
-kpc2km = 3.08567758e16
-rad2deg = 180.0/np.pi
-deg2mas = 60.0*60.0*1000.0
-year2sec = 365.25*24.0*60.0*60.0
-sec2year = 1.0/year2sec
-alpha = deg2mas/sec2year
-gamma = kpc2km
-integrand = (alpha/gamma)*np.cos(Iba_sky['phi_2']*u.deg)*Iba_sky['v_hel']/Iba_sky['mu_1']
-ang = Iba_sky['phi_1']
-r_hel = np.zeros(len(ang))
-r_hel[0] = 10.4
-for i in range(1, len(ang)):
-    r_hel[i] = r_hel[0] + integrate.simps(integrand[0:i+1], ang[0:i+1], even='avg')
-print('r_hel =', r_hel)
-Iba_coord_ICRS = coord.ICRS(ra=Iba_sky['ra']*u.degree,
-                            dec=Iba_sky['dec']*u.degree,
-                            distance=r_hel*u.kpc,
-                            pm_ra_cosdec=Iba_sky['mu_ra']*u.mas/u.yr,
-                            pm_dec=Iba_sky['mu_dec']*u.mas/u.yr,
-                            radial_velocity=Iba_sky['v_hel']*u.km/u.s)
-z_sun = 0.0*u.kpc
-frame = coord.Galactocentric(galcen_distance=8.0*u.kpc, z_sun=0.0*u.kpc)
-Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
-Iba_r_gal = np.zeros(len(Iba_coord_Gal.x.value))
-for i in range(0, len(Iba_coord_Gal.x.value)):
-    Iba_r_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2
-                           + Iba_coord_Gal.z[i].value**2)
+# Iba_coord_GD1 = Iba_coord_ICRS.transform_to(GD1_class.GD1Koposov10)
+# print('Iba_coord_GD1 =', Iba_coord_GD1)
+# Iba_sky['mu_1'] = Iba_coord_GD1.pm_phi1_cosphi2
+# cm2kpc = 1.0/3.08567758e21
+# km2cm = 10.0**5
+# km2kpc = km2cm*cm2kpc
+# kpc2km = 3.08567758e16
+# rad2deg = 180.0/np.pi
+# deg2mas = 60.0*60.0*1000.0
+# year2sec = 365.25*24.0*60.0*60.0
+# sec2year = 1.0/year2sec
+# alpha = deg2mas/sec2year
+# gamma = kpc2km
+# integrand = (alpha/gamma)*np.cos(Iba_sky['phi_2']*u.deg)*Iba_sky['v_hel']/Iba_sky['mu_1']
+# ang = Iba_sky['phi_1']
+# r_hel = np.zeros(len(ang))
+# r_hel[0] = 10.4
+# for i in range(1, len(ang)):
+#     r_hel[i] = r_hel[0] + integrate.simps(integrand[0:i+1], ang[0:i+1], even='avg')
+# print('r_hel =', r_hel)
+# Iba_coord_ICRS = coord.ICRS(ra=Iba_sky['ra']*u.degree,
+#                             dec=Iba_sky['dec']*u.degree,
+#                             distance=r_hel*u.kpc,
+#                             pm_ra_cosdec=Iba_sky['mu_ra']*u.mas/u.yr,
+#                             pm_dec=Iba_sky['mu_dec']*u.mas/u.yr,
+#                             radial_velocity=Iba_sky['v_hel']*u.km/u.s)
+# z_sun = 0.0*u.kpc
+# frame = coord.Galactocentric(galcen_distance=8.0*u.kpc, z_sun=0.0*u.kpc)
+# Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
+# Iba_r_gal = np.zeros(len(Iba_coord_Gal.x.value))
+# for i in range(0, len(Iba_coord_Gal.x.value)):
+#     Iba_r_gal[i] = np.sqrt(Iba_coord_Gal.x[i].value**2+Iba_coord_Gal.y[i].value**2
+#                            + Iba_coord_Gal.z[i].value**2)
 
 # Core constraint
 m_core_const = 3.5e6  # M_sun
@@ -471,12 +471,11 @@ ic = np.loadtxt(ic_file)
 param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
 r_sun = 8.122  # Gravity Collaboration (2018)
 ener_f = 56.0  # keV
-beta_0 = 1.20e-5
 
 
 #Optimization
-bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5))
-# bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5))
+# bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5)) # second run
+bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5)) # first run
 opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
                                       strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
                                       atol=0.0, disp=True, polish=True, workers=-1)
@@ -551,12 +550,12 @@ ax5.set_ylim(-300, 300)
 ax5.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 
 # Galactocentric distance
-d_gal = np.sqrt(x*x+y*y+z*z)
-ax6.scatter(phi_1.wrap_at(180*u.deg), d_gal, s=0.1, marker='o', color='red')
-ax6.plot(Iba_sky['phi_1'], Iba_d_gal, color='blue', label='Stream\n(Ibata+2020)')
-ax6.plot(Iba_sky['phi_1'], Iba_r_gal, color='green', label='Integrated from v_hel')
-ax6.set_ylim(13, 17)
-ax6.set_ylabel(r'$d_{\rm{Gal}}$ [kpc]')
+# d_gal = np.sqrt(x*x+y*y+z*z)
+# ax6.scatter(phi_1.wrap_at(180*u.deg), d_gal, s=0.1, marker='o', color='red')
+# ax6.plot(Iba_sky['phi_1'], Iba_d_gal, color='blue', label='Stream\n(Ibata+2020)')
+# ax6.plot(Iba_sky['phi_1'], Iba_r_gal, color='green', label='Integrated from v_hel')
+# ax6.set_ylim(13, 17)
+# ax6.set_ylabel(r'$d_{\rm{Gal}}$ [kpc]')
 
 
 plt.xlabel(r'$\phi_1$ [degrees]')

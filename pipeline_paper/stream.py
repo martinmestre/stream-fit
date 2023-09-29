@@ -99,7 +99,7 @@ def pot_model(ener_f, theta_0, W_0, beta_0):
     return [bulge, thin, thick, halo]
 
 
-def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_sun):
+def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_list, r_sun):
     """Orbit definition."""
     """
     The orbit_model here defined works with sky coordinates
@@ -111,7 +111,7 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     # Transformation to galactocentric coordinates
     sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
                            distance=distance*u.kpc,
-                           pm_ra_cosdec=mu_alpha*np.cos(delta*u.degree)*u.mas/u.yr,
+                           pm_ra_cosdec=mu_alpha_cosdelta*np.cos(delta*u.degree)*u.mas/u.yr,
                            pm_dec=mu_delta*u.mas/u.yr,
                            radial_velocity=v_los*u.km/u.s)
     galcen_distance = r_sun*u.kpc
@@ -156,9 +156,9 @@ def orbit_model(alpha, delta, distance, mu_alpha, mu_delta, v_los, pot_list, r_s
     # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
     # Transformation to ICRS coordinates
     icrs_coord = galac_coord.transform_to(coord.ICRS())
-    mu_ra = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
+    mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
 
 
 class IbaPoly:
@@ -185,7 +185,7 @@ class IbaPoly:
         return 90.68*x**3+204.5*x**2-254.2*x-261.5
 
     def MU_RA(self, x):
-        """Proper motion in RA (with cos(Dec)."""
+        """Proper motion in RA times cos(Dec)."""
         return 3.794*x**3+9.467*x**2+1.615*x-7.844
 
     def MU_DEC(self, x):

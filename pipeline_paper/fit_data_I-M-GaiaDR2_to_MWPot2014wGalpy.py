@@ -26,15 +26,15 @@ from galpy.orbit import Orbit
 
 # Orbit definition
 # The orbit_model here defined works with sky coordinates at input and sky-cartesian at output
-def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
-#    print('param= ',alpha,delta,distance,mu_alpha,mu_delta,v_los)
+def orbit_model(alpha,delta,distance,mu_alpha_cosdelta,mu_delta,v_los):
+#    print('param= ',alpha,delta,distance,mu_alpha_cosdelta,mu_delta,v_los)
 
     # Transformation to galactocentric coordinates
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import CartesianDifferential
     c= SkyCoord(ra=alpha*u.degree, dec=delta*u.degree,
                 distance=distance*u.kpc,
-                pm_ra_cosdec=mu_alpha*np.cos(delta*u.degree)*u.mas/u.yr,
+                pm_ra_cosdec=mu_alpha_cosdelta*u.mas/u.yr,
                 pm_dec=mu_delta*u.mas/u.yr,
                 radial_velocity=v_los*u.km/u.s,
 				galcen_distance = 8.0*u.kpc,
@@ -61,10 +61,10 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     #Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     icrs_coord=coord.ICRS(ra=y[0]*u.degree, dec=y[1]*u.degree,
                 distance=y[2]*u.kpc,
-                pm_ra_cosdec=y[3]*u.mas/u.yr, # *np.cos(y[1]*u.degree),
+                pm_ra_cosdec=y[3]*u.mas/u.yr,
                 pm_dec=y[4]*u.mas/u.yr,
                 radial_velocity=y[5]*u.km/u.s)
-    mu_ra = icrs_coord.pm_ra_cosdec  # / np.cos(icrs_coord.dec)
+    mu_ra_cosdec = icrs_coord.pm_ra_cosdec
     mu_dec= icrs_coord.pm_dec
     gd1_coord = icrs_coord.transform_to(GD1_class.GD1Koposov10)
     phi_1 = gd1_coord.phi1
@@ -76,7 +76,7 @@ def orbit_model(alpha,delta,distance,mu_alpha,mu_delta,v_los):
     #return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
 
     np.savetxt('observable_orbit_NFW-MW.txt', (phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel))
-    return phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel
 
 
 # Ibata's polynomials.
@@ -119,7 +119,7 @@ def invert_ic(u_0):
     return w_0
 
 #print('To compare with the Figures in Malhan+19')
-[Iba_sky['RA'],Iba_sky['Dec']] = invert_ic([Iba_sky['phi_1'],Iba_sky['phi_2']])
+# [Iba_sky['RA'],Iba_sky['Dec']] = invert_ic([Iba_sky['phi_1'],Iba_sky['phi_2']])
 
 
 # Load Malhan+19 tables
@@ -131,17 +131,17 @@ data = cross_match('asu.tsv')
 """
 
 # Open cross matched file
-from astropy.table import Table
-data = Table.read('cross_matched.dat', format='ascii')
-print(type(data))
-print(len(data))
+# from astropy.table import Table
+# data = Table.read('cross_matched.dat', format='ascii')
+# print(type(data))
+# print(len(data))
 
-arr = data['Pmember']
-boolarr=  (arr=='Y')
+# arr = data['Pmember']
+# boolarr=  (arr=='Y')
 
-data = data[boolarr]
-print(type(data))
-print(len(data))
+# data = data[boolarr]
+# print(type(data))
+# print(len(data))
 
 
 
@@ -270,12 +270,12 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 # bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
 #           (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-# opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=100,popsize=200,
-#                                     tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
+opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=100,popsize=200,
+                                     tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
 
-# param_fitted = opt.x
+param_fitted = opt.x
 
-# np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
+np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
 
 
 # Test call:

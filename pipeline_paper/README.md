@@ -32,6 +32,14 @@ opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun
 
 Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 
+## Improve the ICs for the Fermionic-MW model
+```
+fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.py
+```
+
+Output: "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
+
+
 ## Make the plot for both MW model orbits in observable space
 
 ```
