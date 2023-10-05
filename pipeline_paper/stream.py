@@ -111,7 +111,7 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     # Transformation to galactocentric coordinates
     sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
                            distance=distance*u.kpc,
-                           pm_ra_cosdec=mu_alpha_cosdelta*np.cos(delta*u.degree)*u.mas/u.yr,
+                           pm_ra_cosdec=mu_alpha_cosdelta*u.mas/u.yr,
                            pm_dec=mu_delta*u.mas/u.yr,
                            radial_velocity=v_los*u.km/u.s)
     galcen_distance = r_sun*u.kpc
@@ -151,7 +151,7 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     d_hel = gd1_coord.distance
     v_hel = gd1_coord.radial_velocity
     # Unused block of code
-    # mu_phi_1 = gd1_coord.pm_phi1_cosphi2/np.cos(phi_2)  #not used by Ibata
+    # mu_phi_1 = gd1_coord.pm_phi1_cosphi2  #not used by Ibata
     # mu_phi_2 = gd1_coord.pm_phi2
     # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
     # Transformation to ICRS coordinates

@@ -4,19 +4,21 @@ Using Distributed.jl
 """
 
 using Pkg
+Pkg.offline(true)
 Pkg.activate(".")
 using Distributed
-# using SlurmClusterManager
-# addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
+using SlurmClusterManager
+addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
 
 
 @show nprocs()
 @show nworkers()
 
-@everywhere begin
-    using Pkg
-    Pkg.activate(".")
-end
+# @everywhere begin
+#     using Pkg
+#     Pkg.offline(true)
+#     Pkg.activate(".")
+# end
 
 @everywhere begin
     using PythonCall
@@ -27,9 +29,6 @@ end
     using DataFrames, DataFramesMeta
 end
 
-# @everywhere begin
-#     ENV["JULIA_CONDAPKG_BACKEND"] = "Null"
-# end
 
 @everywhere begin
     pyimport("sys")."path".append("")
@@ -55,7 +54,7 @@ end
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
-        sol = Optimization.solve(prob, NOMADOpt(); display_degree=0, maxiters=700)
+        sol = Optimization.solve(prob, NOMADOpt(); display_degree=3, maxiters=700)
         worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
         worker_sol = ("Minimizer = $(sol.u)", "Minimum = $(sol.objective)")
         writedlm(worker_file, worker_sol)
@@ -114,7 +113,7 @@ const lb_g = [[35.5, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
               [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
 const ub_g = [[36.5, 28.0, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
               [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
-const n_grid = 1
+const n_grid = 4
 @show m sol_file r☼ lb_g ub_g
 
 if !isdir(sol_dir)
