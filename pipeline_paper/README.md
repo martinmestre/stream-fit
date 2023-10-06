@@ -40,13 +40,24 @@ fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.py
 Output: "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 
 
-## Re-fit the parameters for the Fermionic-MW model using NOMAD solver in small box.
+## Re-fit the parameters for the Fermionic-MW model using NOMAD solver in small box,using Distributed.jl parallel scheme in a SLURM cluster environment.
 
 ```
+sbatch -N 2 --ntasks-per-node=48 --partition=batch -o optim_pot_m56.out optim_pot.jl 1
+```
+having set before:
 
 ```
+const lb_g = [[35.8, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+              [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
+const ub_g = [[36.3, 27.6, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+              [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
 
-Output:
+const n_grid = 4
+```
+
+
+Output: "sol_optim_pot_m56.txt"
 
 
 ## Make the plot for both MW model orbits in observable space

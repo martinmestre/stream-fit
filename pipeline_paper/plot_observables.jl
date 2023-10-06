@@ -10,7 +10,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Julia 1.9.0
+#     display_name: Julia 1.9.3
 #     language: julia
 #     name: julia-1.9
 # ---
@@ -39,9 +39,12 @@ importLib.reload(potentials)
 
 # %%
 # Parameters and initial conditions.
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
-θ, Δθ, β = readdlm(param_file)
-ϵ = 56.0
+# param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
+# θ, Δθ, β = readdlm(param_file)
+ϵ = 56
+param_file = "sol_optim_pot_m$(Int(m)).txt"
+θ, Δθ, β = vec(readdlm(param_file))
+
 W = θ+Δθ
 param = [ϵ, θ, W, β]
 
@@ -88,13 +91,13 @@ v☼ₛ = v☼ₒ + Δv☼
 v☼ᵢ = v☼ₒ - Δv☼
 
 # Print Galactocentric distance array of Ibata polinomials.
-Iba_gal_dist, Iba_R_dist, Iba_z = stream.gal_distance(r☼,0.0)
-println("The Galactocentric distance satisfies:")
-println("$(minimum(Iba_gal_dist)) kpc < Iba_gal_dist < $(maximum(Iba_gal_dist)) kpc")
-println("The Galactocentric projected distance satisfies:")
-println("$(minimum(Iba_R_dist)) kpc < Iba_R_dist < $(maximum(Iba_R_dist)) kpc")
-println("The z variable satisfies:")
-println("$(minimum(Iba_z)) kpc < Iba_z < $(maximum(Iba_z)) kpc")
+# Iba_gal_dist, Iba_R_dist, Iba_z = stream.gal_distance(r☼,0.0)
+# println("The Galactocentric distance satisfies:")
+# println("$(minimum(Iba_gal_dist)) kpc < Iba_gal_dist < $(maximum(Iba_gal_dist)) kpc")
+# println("The Galactocentric projected distance satisfies:")
+# println("$(minimum(Iba_R_dist)) kpc < Iba_R_dist < $(maximum(Iba_R_dist)) kpc")
+# println("The z variable satisfies:")
+# println("$(minimum(Iba_z)) kpc < Iba_z < $(maximum(Iba_z)) kpc")
 
 # MEPP solution.
 pot_list = stream.pot_model(ϵ, θ, W, β)
