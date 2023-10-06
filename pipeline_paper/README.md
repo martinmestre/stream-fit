@@ -40,6 +40,15 @@ fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.py
 Output: "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 
 
+## Re-fit the parameters for the Fermionic-MW model using NOMAD solver in small box.
+
+```
+
+```
+
+Output:
+
+
 ## Make the plot for both MW model orbits in observable space
 
 ```
