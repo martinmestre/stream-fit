@@ -270,7 +270,7 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 # bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
 #           (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=100,popsize=200,
+opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=200,popsize=200,
                                      tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
 
 param_fitted = opt.x
