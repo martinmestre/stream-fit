@@ -1,24 +1,30 @@
+#!/home/mmestre/.juliaup/bin/julia
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
 Using Distributed.jl
 """
 
 using Pkg
-Pkg.offline(true)
 Pkg.activate(".")
 using Distributed
 using SlurmClusterManager
 addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
 
-
 @show nprocs()
 @show nworkers()
 
-# @everywhere begin
-#     using Pkg
-#     Pkg.offline(true)
-#     Pkg.activate(".")
-# end
+ENV["JULIA_CONDAPKG_BACKEND"]="Null"
+ENV["JULIA_PYTHONCALL_EXE"]= "$(ENV["CONDA_PREFIX"])/bin/python"
+
+@everywhere begin
+    using Pkg
+    Pkg.activate(".")
+    ENV["JULIA_CONDAPKG_BACKEND"]="Null"
+    ENV["JULIA_PYTHONCALL_EXE"]= "$(ENV["CONDA_PREFIX"])/bin/python"
+    @show ENV["JULIA_CONDAPKG_BACKEND"]
+    @show ENV["JULIA_PYTHONCALL_EXE"]
+end
+
 
 @everywhere begin
     using PythonCall
@@ -109,11 +115,11 @@ const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
 const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
 
-const lb_g = [[35.5, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+const lb_g = [[35., 26.0, 1.0e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
               [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
-const ub_g = [[36.5, 28.0, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+const ub_g = [[40., 30.0, 1.5e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
               [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
-const n_grid = 4
+const n_grid = 16
 @show m sol_file r☼ lb_g ub_g
 
 if !isdir(sol_dir)
