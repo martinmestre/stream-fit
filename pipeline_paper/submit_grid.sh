@@ -13,7 +13,7 @@
 ### mono/gpu: <= 8
 ### multi:    16-20
 ### Cantidad de procesos a lanzar por nodo
-###SBATCH --ntasks-per-node=30
+#SBATCH --ntasks-per-node=64
 ### Cores por proceso (para MPI+OpenMP)
 ###SBATCH --cpus-per-task=1
 
@@ -30,4 +30,4 @@
 
 . /etc/profile
 
-python grid_chi2stream_tilted.py
+python grid_chi2stream.py
