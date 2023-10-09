@@ -30,7 +30,9 @@ ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = np.loadtxt(ic_file)
 n_job = mp.cpu_count()
 print('n_cpu = ', n_job)
-beta_lim = np.linspace(1.258e-5, 1.268e-5, n_beta)
+param_file = "sol_optim_pot_m$(Int(m)).txt"
+_a, _b, beta_b = np.loadtxt(param_file)
+beta_lim = np.linspace(beta_b, beta_b+1, n_beta)
 
 
 if __name__ == "__main__":
