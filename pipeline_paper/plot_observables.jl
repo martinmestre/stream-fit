@@ -42,7 +42,7 @@ importLib.reload(potentials)
 # param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
 # θ, Δθ, β = readdlm(param_file)
 ϵ = 56
-param_file = "sol_optim_pot_m$(Int(m)).txt"
+param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
 θ, Δθ, β = vec(readdlm(param_file))
 
 W = θ+Δθ
@@ -121,6 +121,7 @@ d☼ₘ = fd☼(ϕ₁ₒ)
 μ_decₘ = fμ_dec(ϕ₁ₒ)
 v☼ₘ = fv☼(ϕ₁ₒ);
 # %%
+
 df_obsmod = DataFrame([ϕ₁ₒ, ϕ₂ₒ, ϕ₂ₛ, ϕ₂ᵢ, d☼ₒ, d☼ₛ, d☼ᵢ,
                     μ_raₒ, μ_raₛ, μ_raᵢ, μ_decₒ, μ_decₛ, μ_decᵢ,
                     v☼ₒ, v☼ₛ, v☼ᵢ,
