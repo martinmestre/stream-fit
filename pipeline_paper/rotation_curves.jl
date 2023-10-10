@@ -39,10 +39,9 @@ importLib.reload(potentials)
 
 # %%
 # Parameters and initial conditions.
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
-θ, ω, β = readdlm(param_file)
-
-ϵ = 56.0
+ϵ = 56
+param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+θ, ω, β = vec(readdlm(param_file))
 W = θ+ω
 param = [ϵ, θ, W, β]
 
@@ -186,8 +185,8 @@ println("Second plot done.")
 # %%
 # Fit data of the fermionic rotation curve.
 bool = 15 .< df_ferm.r .< 40
-data = DataFrame(x=df_ferm.r[bool],y=df_ferm.v[bool])
-ols = lm(@formula(y ~ 1+x), data)
+mydata = DataFrame(x=df_ferm.r[bool],y=df_ferm.v[bool])
+ols = lm(@formula(y ~ 1+x), mydata)
 
 
 # %%
@@ -219,9 +218,4 @@ display(fig)
 leg = fig.content[2]
 leg_items = leg.blockscene.children[1].plots
 display(leg_items)
-
-# %%
-# MWE
-
-
 # %%
