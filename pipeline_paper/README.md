@@ -43,7 +43,7 @@ Output: "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ## Re-fit the parameters for the Fermionic-MW model using NOMAD solver in small box,using Distributed.jl parallel scheme in a SLURM cluster environment.
 
 ```
-sbatch -N 2 --ntasks-per-node=48 --partition=batch -o optim_pot_m56.out optim_pot.jl 1
+sbatch -N 3 --ntasks-per-node=32 --partition=batch -o optim_pot_m56.out optim_pot.jl 1
 ```
 having set before:
 
@@ -57,7 +57,7 @@ const n_grid = 4
 ```
 
 
-Output: "sol_optim_pot_m56.txt"
+Output: "sol_optim_pot_m56.txt"  "chi2_optim_pot_m56.txt"
 
 
 ## Make the plot for both MW model orbits in observable space
@@ -67,7 +67,7 @@ julia plot_observables.jl
 ```
 Output: "observables_xxx.pdf"
 
-## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0)$ plane
+## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon=56, \beta_0\approx1.254\times10^{-5})$ and for a grid in $(\theta_0,\omega_0)$ plane
 ```
 python grid_chi2stream.py
 ```
