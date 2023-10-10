@@ -13,7 +13,7 @@
 ### mono/gpu: <= 8
 ### multi:    16-20
 ### Cantidad de procesos a lanzar por nodo
-#SBATCH --ntasks-per-node=64
+#SBATCH --ntasks-per-node=256
 ### Cores por proceso (para MPI+OpenMP)
 ###SBATCH --cpus-per-task=1
 
