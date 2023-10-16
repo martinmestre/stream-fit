@@ -10,7 +10,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Julia 1.9.0
+#     display_name: Julia 1.9.3
 #     language: julia
 #     name: julia-1.9
 # ---
@@ -32,8 +32,9 @@ stream = pyimport("stream")
 
 # Open input file
 
-chi2_file = "laruidosa/likelihood_beta0_1.258e-05.txt"
-chi2_t_file = "chi2stream_tilted_beta0_1.258e-05.txt"
+#chi2_file = "laruidosa/likelihood_beta0_1.258e-05.txt"
+chi2_file = "chi2stream_beta0_1.254e-05.txt"
+chi2_t_file = "chi2stream_tilted_beta0_1.254e-05.txt"
 matriz = readdlm(chi2_file);
 matriz_t = readdlm(chi2_t_file);
 
@@ -44,8 +45,8 @@ matriz_t = readdlm(chi2_t_file);
 θ = matriz[:, 1]
 ω = matriz[:, 2]
 β = matriz[:, 3]
-# χ²= matriz[:,4] # for chi2stream file
-χ² = -matriz[:, 4]; #for likelihood file
+χ²= matriz[:, 4] # for chi2stream file
+#χ² = -matriz[:, 4]; #for likelihood file
 
 
 # %%
@@ -78,7 +79,7 @@ co = contourf!(θ, ω, χ², levels=levels,
                extendhigh=(:black,0.2),colormap=:viridis)
 Colorbar(f[1, 2], co;ticks=levels,
         ticklabelsize=25, label=L"χ²_{\textrm{stream}}")
-sol = (36.0661, 27.3468)
+sol = (36.033, 27.323)
 scatter!(sol, color=:black, markersize=15)
 save("paper_plots/chi2stream_contourf.pdf", f, pt_per_unit=1)
 f

@@ -74,7 +74,7 @@ python grid_chi2stream.py
 
 To run in a large/fast cluster.
 
-Output: "chi2stream_beta0_1.258e-05.txt"
+Output: "chi2stream_beta0_1.254e-05.txt"
 
 ## Compute the $\chi^2_{\rm{Stream}}$ function for fixed values of $(\epsilon, \beta_0)$ and for a grid in $(\theta_0,\omega_0-h(\theta_0))$ plane (zoomed in version).
 ```
@@ -83,7 +83,7 @@ python grid_chi2stream_tilted.py
 
 To run in a large/fast cluster.
 
-Output: "chi2stream_tilted_beta0_1.258e-05.txt"
+Output: "chi2stream_tilted_beta0_1.254e-05.txt"
 
 ## Make $\chi^2_{\rm{Stream}}$ function plot
 
