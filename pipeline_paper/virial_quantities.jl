@@ -23,6 +23,7 @@ Pkg.activate(".")
 using PyCall
 using CSV
 using DelimitedFiles
+using Unitful, UnitfulAstro
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 importLib = pyimport("importlib")
@@ -32,12 +33,11 @@ importLib.reload(stream)
 importLib.reload(potentials)
 
 # Parameters and initial conditions.
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
-θ, Δθ, β = readdlm(param_file)
 ϵ = 56.0
+param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+θ, Δθ, β = vec(readdlm(param_file))
 W = θ+Δθ
 param = [ϵ, θ, W, β]
-
 
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = readdlm(ic_file)
@@ -67,12 +67,25 @@ println("Halo mas = ", mass_halo/1.e11, " x 10^11 M_⊙")
 @show m_vir+mass_barions
 
 # %%
-# Local density 
+# Local density
 ρ☼ = rfk.rho_spl(r☼)[1]
 @show ρ☼
 # fact value is the results uconvert(u"GeV/cm^3",1.0unit(ρ☼)*u"c"^2)
-fact = 3.7965164572915704e-8 
+fact = 3.7965164572915704e-8
 @show fact*ρ☼
 
+
+# %%
+# Enclosed mass
+r☼ = 8.122u"kpc"
+r_p_as = 0.01427*u"arcsecond"  # New Edward values
+r_a_as = 0.23623*u"arcsecond"
+r_p = uconvert(u"kpc", r_p_as*r☼)
+r_a = uconvert(u"kpc", r_a_as*r☼)
+@show r_p r_a
+m_p = rfk.mass_wrap(r_p/u"kpc")[1]
+Δm = rfk.mass_wrap(r_a/u"kpc")[1]-rfk.mass_wrap(r_p/u"kpc")[1]
+m_core = 3.5e6
+@show m_p Δm/m_core
 
 # %%
