@@ -1,4 +1,4 @@
-#!/home/mmestre/.juliaup/bin/julia
+#!/home/mmestrefcaglp/.juliaup/bin/julia
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
 Using Distributed.jl
