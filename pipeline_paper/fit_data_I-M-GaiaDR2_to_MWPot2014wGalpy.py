@@ -75,7 +75,7 @@ def orbit_model(alpha,delta,distance,mu_alpha_cosdelta,mu_delta,v_los):
     #mu_phi_2 = gd1_coord.pm_phi2
     #return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
 
-    np.savetxt('observable_orbit_NFW-MW.txt', (phi_1, phi_2, d_hel, mu_ra, mu_dec, v_hel))
+    np.savetxt('observable_orbit_NFW-MW.txt', (phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel))
     return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel
 
 
@@ -246,6 +246,7 @@ v0=mw[0].vcirc(r_sun)
 v1=mw[1].vcirc(r_sun)
 v2=mw[2].vcirc(r_sun)
 vo=220.0
+print("v=",v0,v1,v2)
 v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)*vo
 print('v_circ_sun=',v_circ_sun)
 
@@ -270,16 +271,16 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 # bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
 #           (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=200,popsize=200,
-                                     tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
+# opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=200,popsize=200,
+#                                      tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
 
-param_fitted = opt.x
+# param_fitted = opt.x
 
-np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
+# np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
 
 
-# Test call:
-w_0 = np.loadtxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt')
+# # Test call:
+# w_0 = np.loadtxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt')
 
 
 
