@@ -142,9 +142,10 @@ legend!(gridpos, f; tellwidth=false, halign=:right, valign=:bottom,
 # Lines re-styling
 lineas = fig.content[1].scene.plots
 println("lineas=$lineas")
-for l in lineas
-    l.linestyle = :dash
-end
+# for l in lineas
+#     l.linestyle = :dash
+# end
+
 
 # Legend re-styling
 leg = fig.content[2]
