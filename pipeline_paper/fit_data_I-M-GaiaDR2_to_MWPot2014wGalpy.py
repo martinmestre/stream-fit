@@ -22,7 +22,7 @@ import galpy as gp
 from galpy.potential.mwpotentials import MWPotential2014
 from galpy.potential import TriaxialNFWPotential,PowerSphericalPotentialwCutoff,MiyamotoNagaiPotential
 from galpy.orbit import Orbit
-
+from galpy.util import conversion
 
 # Orbit definition
 # The orbit_model here defined works with sky coordinates at input and sky-cartesian at output
@@ -236,21 +236,30 @@ def chi2_stream(w_0):
 
 bp= PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.,normalize=0.05)
 mp= MiyamotoNagaiPotential(a=3./8.,b=0.28/8.,normalize=.6)
-hp=TriaxialNFWPotential(a=16.0/8.,b=1.0,c=0.82,normalize=0.59)
+hp=TriaxialNFWPotential(a=16.0*u.kpc,b=1.0,c=0.82,normalize=0.59)
 mw = bp+mp+hp
 print('mw=',mw)
-#for i in range(0,3):
+# for i in range(0,3):
 #    mw[i].turn_physical_on()
-r_sun=8.0*u.kpc
+#r_sun=8.0*u.kpc
+r_sun=8.122*u.kpc
 v0=mw[0].vcirc(r_sun)
 v1=mw[1].vcirc(r_sun)
 v2=mw[2].vcirc(r_sun)
 vo=220.0
-print("v=",v0,v1,v2)
+print("v_i=",v0,v1,v2)
 v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)*vo
 print('v_circ_sun=',v_circ_sun)
+a_R = np.zeros(3)
+a_z = np.zeros(3)
+for i in range(0,3):
+    a_R[i] = mw[i].Rforce(15.0, 3.0)
+    a_z[i] = mw[i].zforce(15.0, 3.0)
+    print("a_R_z = ", a_R[i]*conversion.force_in_kmsMyr(220.,8.), a_z[i]*conversion.force_in_kmsMyr(220.,8.))
 
-
+a = np.sqrt([np.dot(a_R,a_R), np.dot(a_z,a_z)])*conversion.force_in_kmsMyr(220.,8.)
+acel = np.sqrt(np.dot(a,a))
+print("a=",a, "  acel=",acel)
 # Initial conditions:
 k0=50
 u_0=np.array([Iba_sky['phi_1'][k0],Iba_sky['phi_2'][k0],Iba_sky['d_hel'][k0],

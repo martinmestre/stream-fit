@@ -28,13 +28,18 @@ using Showoff
 using CubicSplines
 using DelimitedFiles
 include("bugfixMakie.jl")# %%
+using Unitful, UnitfulAstro
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
 importLib = pyimport("importlib")
 stream = pyimport("stream")
 potentials = pyimport("potential_classes")
-importLib.reload(stream)
-importLib.reload(potentials)
+galconv = pyimport("galpy.util.conversion")
+galpot = pyimport("galpy.potential")
+# importLib.reload(stream)
+# importLib.reload(potentials)
+# importLib.reload(galpot)
+# importLib.reload(galutil)
 # %%
 
 # Parameters and initial conditions.
@@ -75,6 +80,34 @@ fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1,:][boolϕ₁], temp[
 d☼ₘ = fd☼(ϕ₁ₒ)
 μ_raₘ = fμ_ra(ϕ₁ₒ)
 μ_decₘ = fμ_dec(ϕ₁ₒ)
-v☼ₘ = fv☼(ϕ₁ₒ);
-# %%
+v☼ₘ = fv☼(ϕ₁ₒ)
+#%%
 
+bp = galpot.PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.0,normalize=0.05)
+mp = galpot.MiyamotoNagaiPotential(a=3.0/8.0,b=0.28/8.0,normalize=0.6)
+hp = galpot.TriaxialNFWPotential(a=16.0/8.0,b=1.0,c=0.82,normalize=0.59)
+
+mw = bp+mp+hp
+v = Vector{Float64}(undef,3)
+a_R = Vector{Float64}(undef,3)
+a_z = Vector{Float64}(undef,3)
+vo = 220.0u"km/s"
+ro = 8.0u"kpc"
+for i in 1:3
+    # mw[i].turn_physical_on()
+    v[i] = mw[i].vcirc(r☼/8.0)*ustrip(vo)
+    a_R[i] = mw[i].Rforce(15.0, 3.0)
+    a_z[i] = mw[i].zforce(15.0, 3.0)
+    @show v[i] a_R[i]*galconv.force_in_kmsMyr(220.,8.) a_z[i]*galconv.force_in_kmsMyr(220.,8.)
+end
+
+v_c = sqrt(v'v)
+a = [sqrt(a_R'a_R), sqrt(a_z'a_z)].*galconv.force_in_kmsMyr(220.,8.)
+@show a sqrt(a'a) v_c
+a = [sqrt(a_R'a_R), sqrt(a_z'a_z)]*vo^2/ro
+a = uconvert.(u"km/s/Myr", a)
+@show a sqrt(a'a) v_c
+
+
+@show a_rar = stream.accel_mw(pot_list, 15.0, 0.0, 3.0)u"(km/s)^2/kpc"
+uconvert.(u"km/s/Myr",a_rar)
