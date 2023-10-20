@@ -36,8 +36,9 @@ stream = pyimport("stream")
 potentials = pyimport("potential_classes")
 galconv = pyimport("galpy.util.conversion")
 galpot = pyimport("galpy.potential")
-# importLib.reload(stream)
-# importLib.reload(potentials)
+astrocoords = pyimport("astropy.coordinates")
+importLib.reload(stream)
+importLib.reload(potentials)
 # importLib.reload(galpot)
 # importLib.reload(galutil)
 # %%
@@ -66,12 +67,26 @@ temp = stream.orbit_model(ic..., pot_list, r☼)
 # Cubic spline for solution:
 boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
 fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
+fx = CubicSpline(temp[1][boolϕ₁], temp[7][boolϕ₁])
+fy = CubicSpline(temp[1][boolϕ₁], temp[8][boolϕ₁])
+fz = CubicSpline(temp[1][boolϕ₁], temp[9][boolϕ₁])
+fvx = CubicSpline(temp[1][boolϕ₁], temp[11][boolϕ₁])
+fvy = CubicSpline(temp[1][boolϕ₁], temp[12][boolϕ₁])
+fvz = CubicSpline(temp[1][boolϕ₁], temp[13][boolϕ₁])
 ϕ₂ = fϕ₂(ϕ₁ₒ)
 d☼ = fd☼(ϕ₁ₒ)
 μ_ra = fμ_ra(ϕ₁ₒ)
 μ_dec = fμ_dec(ϕ₁ₒ)
 v☼ = fv☼(ϕ₁ₒ)
-
+x, y, z = fx(ϕ₁ₒ), fy(ϕ₁ₒ), fz(ϕ₁ₒ)
+v_x, v_y, v_z = fvx(ϕ₁ₒ), fvy(ϕ₁ₒ), fvz(ϕ₁ₒ)
+v_circ_sun = stream.rot_vel_mw(pot_list, r☼)
+galcen_distance = r☼*u.kpc
+v_sun = astrocoords.CartesianDifferential([11.1, v_circ_sun+12.24, 7.25]*u.km/u.s)
+z_sun = 0.0*u.kpc
+stream_cart = astrocoords.Galactocentric(x=x*u.kpc, y=y*u.kpc, z=z*u.kpc,
+                                       v_x=v_x*u.km/u.s, v_y=v_y*u.km/u.s, v_z=v_z*u.km/u.s,
+                                       galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
 # Malhan (MWPotential2014) solution.
 temp = readdlm(orbit_nfw_file)
 boolϕ₁ = (temp[1,:].>-95 .&& temp[1,:].<15)
@@ -83,6 +98,7 @@ d☼ₘ = fd☼(ϕ₁ₒ)
 v☼ₘ = fv☼(ϕ₁ₒ)
 #%%
 
+# Accelerations
 bp = galpot.PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.0,normalize=0.05)
 mp = galpot.MiyamotoNagaiPotential(a=3.0/8.0,b=0.28/8.0,normalize=0.6)
 hp = galpot.TriaxialNFWPotential(a=16.0/8.0,b=1.0,c=0.82,normalize=0.59)
@@ -96,8 +112,8 @@ ro = 8.0u"kpc"
 for i in 1:3
     # mw[i].turn_physical_on()
     v[i] = mw[i].vcirc(r☼/8.0)*ustrip(vo)
-    a_R[i] = mw[i].Rforce(15.0, 3.0)
-    a_z[i] = mw[i].zforce(15.0, 3.0)
+    a_R[i] = mw[i].Rforce(14.0/8.0, 0.0)
+    a_z[i] = mw[i].zforce(14.0/8.0, 0.0)
     @show v[i] a_R[i]*galconv.force_in_kmsMyr(220.,8.) a_z[i]*galconv.force_in_kmsMyr(220.,8.)
 end
 
@@ -109,5 +125,5 @@ a = uconvert.(u"km/s/Myr", a)
 @show a sqrt(a'a) v_c
 
 
-@show a_rar = stream.accel_mw(pot_list, 15.0, 0.0, 3.0)u"(km/s)^2/kpc"
+@show a_rar = stream.accel_mw(pot_list, stream_cart.x[50], stream_cart.y[50], stream_cart.z[50])u"(km/s)^2/kpc"
 uconvert.(u"km/s/Myr",a_rar)

@@ -158,7 +158,7 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     icrs_coord = galac_coord.transform_to(coord.ICRS())
     mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun, y[3], y[4], y[5]
 
 
 class IbaPoly:
