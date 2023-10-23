@@ -241,7 +241,8 @@ mw = bp+mp+hp
 print('mw=',mw)
 # for i in range(0,3):
 #    mw[i].turn_physical_on()
-#r_sun=8.0*u.kpc
+
+# r_sun=8.0*u.kpc
 r_sun=8.122*u.kpc
 v0=mw[0].vcirc(r_sun)
 v1=mw[1].vcirc(r_sun)
@@ -252,14 +253,16 @@ v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)*vo
 print('v_circ_sun=',v_circ_sun)
 a_R = np.zeros(3)
 a_z = np.zeros(3)
+r = np.array([14.0, 3.0])/8.0
 for i in range(0,3):
-    a_R[i] = mw[i].Rforce(15.0, 3.0)
-    a_z[i] = mw[i].zforce(15.0, 3.0)
-    print("a_R_z = ", a_R[i]*conversion.force_in_kmsMyr(220.,8.), a_z[i]*conversion.force_in_kmsMyr(220.,8.))
+    a_R[i] = mw[i].Rforce(r[0],r[1])*conversion.force_in_kmsMyr(220.,8.)
+    a_z[i] = mw[i].zforce(r[0],r[1])*conversion.force_in_kmsMyr(220.,8.)
+    print("i a_R a_z = ", i,  a_R[i], a_z[i])
 
-a = np.sqrt([np.dot(a_R,a_R), np.dot(a_z,a_z)])*conversion.force_in_kmsMyr(220.,8.)
-acel = np.sqrt(np.dot(a,a))
-print("a=",a, "  acel=",acel)
+a = np.sqrt([np.dot(a_R,a_R), np.dot(a_z,a_z)])
+a_mod = np.sqrt(np.dot(a,a))
+print("a=",a, "  a_mod=",a_mod)
+
 # Initial conditions:
 k0=50
 u_0=np.array([Iba_sky['phi_1'][k0],Iba_sky['phi_2'][k0],Iba_sky['d_hel'][k0],
@@ -289,7 +292,7 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 
 
 # # Test call:
-# w_0 = np.loadtxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt')
+w_0 = np.loadtxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt')
 
 
 

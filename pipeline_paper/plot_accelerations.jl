@@ -107,23 +107,25 @@ mw = bp+mp+hp
 v = Vector{Float64}(undef,3)
 a_R = Vector{Float64}(undef,3)
 a_z = Vector{Float64}(undef,3)
-vo = 220.0u"km/s"
-ro = 8.0u"kpc"
+vo = 244.0u"km/s"
+ro = r☼*u"kpc"
+jᵣ = 1
+r = [sqrt(stream_cart.x[jᵣ]^2+stream_cart.y[jᵣ]^2), stream_cart.z[jᵣ]]*u.kpc
 for i in 1:3
-    # mw[i].turn_physical_on()
-    v[i] = mw[i].vcirc(r☼/8.0)*ustrip(vo)
-    a_R[i] = mw[i].Rforce(14.0/8.0, 0.0)
-    a_z[i] = mw[i].zforce(14.0/8.0, 0.0)
-    @show v[i] a_R[i]*galconv.force_in_kmsMyr(220.,8.) a_z[i]*galconv.force_in_kmsMyr(220.,8.)
+    a_R[i] = mw[i].Rforce(r...)
+    a_z[i] = mw[i].zforce(r...)
+    @show i, a_R[i], a_z[i]
+    @show i, uconvert(u"km/s/Myr",mw[i].Rforce(r...)*vo^2/ro), uconvert(u"km/s/Myr",mw[i].zforce(r...)*vo^2/ro)
 end
 
 v_c = sqrt(v'v)
-a = [sqrt(a_R'a_R), sqrt(a_z'a_z)].*galconv.force_in_kmsMyr(220.,8.)
-@show a sqrt(a'a) v_c
-a = [sqrt(a_R'a_R), sqrt(a_z'a_z)]*vo^2/ro
-a = uconvert.(u"km/s/Myr", a)
-@show a sqrt(a'a) v_c
+a = [sqrt(a_R'a_R), sqrt(a_z'a_z)]
+a_mod = sqrt(a'a)
+@show a a_mod a[2]/a[1]
 
 
-@show a_rar = stream.accel_mw(pot_list, stream_cart.x[50], stream_cart.y[50], stream_cart.z[50])u"(km/s)^2/kpc"
-uconvert.(u"km/s/Myr",a_rar)
+
+@show a_rar = stream.accel_mw(pot_list, stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ])u"(km/s)^2/kpc"
+a_rar = uconvert.(u"km/s/Myr", a_rar)
+@show a_rar_mod = sqrt(a_rar'a_rar)
+@show a_rar_mod/a_mod
