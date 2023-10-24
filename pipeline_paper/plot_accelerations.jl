@@ -37,6 +37,7 @@ potentials = pyimport("potential_classes")
 galconv = pyimport("galpy.util.conversion")
 galpot = pyimport("galpy.potential")
 astrocoords = pyimport("astropy.coordinates")
+au = pyimport("astropy.units")
 importLib.reload(stream)
 importLib.reload(potentials)
 # importLib.reload(galpot)
@@ -81,11 +82,11 @@ v☼ = fv☼(ϕ₁ₒ)
 x, y, z = fx(ϕ₁ₒ), fy(ϕ₁ₒ), fz(ϕ₁ₒ)
 v_x, v_y, v_z = fvx(ϕ₁ₒ), fvy(ϕ₁ₒ), fvz(ϕ₁ₒ)
 v_circ_sun = stream.rot_vel_mw(pot_list, r☼)
-galcen_distance = r☼*u.kpc
-v_sun = astrocoords.CartesianDifferential([11.1, v_circ_sun+12.24, 7.25]*u.km/u.s)
-z_sun = 0.0*u.kpc
-stream_cart = astrocoords.Galactocentric(x=x*u.kpc, y=y*u.kpc, z=z*u.kpc,
-                                       v_x=v_x*u.km/u.s, v_y=v_y*u.km/u.s, v_z=v_z*u.km/u.s,
+galcen_distance = r☼*au.kpc
+v_sun = astrocoords.CartesianDifferential([11.1, v_circ_sun+12.24, 7.25]*au.km/au.s)
+z_sun = 0.0*au.kpc
+stream_cart = astrocoords.Galactocentric(x=x*au.kpc, y=y*au.kpc, z=z*au.kpc,
+                                       v_x=v_x*au.km/au.s, v_y=v_y*au.km/au.s, v_z=v_z*au.km/au.s,
                                        galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
 # Malhan (MWPotential2014) solution.
 temp = readdlm(orbit_nfw_file)
@@ -98,34 +99,83 @@ d☼ₘ = fd☼(ϕ₁ₒ)
 v☼ₘ = fv☼(ϕ₁ₒ)
 #%%
 
-# Accelerations
+# Acceleration
+function acceleration_nfw_mw(pot::PyObject, x::Vector{T})  where {T<:Number}
+    a_R = Vector{Float64}(undef,3)
+    a_z = Vector{Float64}(undef,3)
+    R = sqrt(x[1:2]'x[1:2])
+    z = x[3]
+    r = [R, z]
+    for i in 1:3
+        a_R[i] = pot[i].Rforce(r...)[1]
+        a_z[i] = pot[i].zforce(r...)[1]
+    end
+    return [sum(a_R), sum(a_z)]
+end
+function acceleration_rfk_mw(pot_list::Vector{PyObject}, x::Vector{T})  where {T<:Number}
+    a = stream.accel_mw(pot_list, x...)u"(km/s)^2/kpc"
+    a = uconvert.(u"km/s/Myr", a)
+    eᵣ = x[1:2]/sqrt(x[1:2]'x[1:2])
+    a_R = a[1:2]'eᵣ
+    return [a_R, a[3]]
+end
+
+bp = galpot.PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.0,normalize=0.05)
+mp = galpot.MiyamotoNagaiPotential(a=3.0/8.0,b=0.28/8.0,normalize=0.6)
+hp = galpot.TriaxialNFWPotential(a=16.0/8.0,b=1.0,c=0.82,normalize=0.59)
+mw = bp+mp+hp
+for i in 1:3
+    mw[i].turn_physical_on()
+end
+jᵣ = 80
+x = [stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ]]
+a_nfw = acceleration_nfw_mw(mw, x/8.0)
+a_rfk = acceleration_rfk_mw(pot_list, x)
+@show a_nfw./a_rfk sqrt(a_nfw'a_nfw/a_rfk'a_rfk)
+@show a_nfw a_rfk;
+
+#%%
+
+# Acceleration tests
 bp = galpot.PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.0,normalize=0.05)
 mp = galpot.MiyamotoNagaiPotential(a=3.0/8.0,b=0.28/8.0,normalize=0.6)
 hp = galpot.TriaxialNFWPotential(a=16.0/8.0,b=1.0,c=0.82,normalize=0.59)
 
 mw = bp+mp+hp
+r = [14.0, 3.0]/8.0
+for i in 1:3
+    mw[i].turn_physical_on()
+    @show mw[i].vcirc(r_sun/8.0)[1]
+    @show mw[i].Rforce(r...)[1], mw[i].zforce(r...)[1]
+end
+@show sqrt(sum([mw[i].vcirc(r_sun)[1]^2 for i in 1:3]))
+#%%
+
 v = Vector{Float64}(undef,3)
 a_R = Vector{Float64}(undef,3)
 a_z = Vector{Float64}(undef,3)
-vo = 244.0u"km/s"
-ro = r☼*u"kpc"
-jᵣ = 1
-r = [sqrt(stream_cart.x[jᵣ]^2+stream_cart.y[jᵣ]^2), stream_cart.z[jᵣ]]*u.kpc
+jᵣ = 50
+r = [sqrt(stream_cart.x[jᵣ]^2+stream_cart.y[jᵣ]^2), stream_cart.z[jᵣ]]/8.0
+# r = [14.0, 3.0]/8.0
+vo = sqrt(sum([mw[i].vcirc(r_sun)[1]^2 for i in 1:3]))
+ro = r☼
+fac = (vo/220.0)^2/(ro/8.0)
 for i in 1:3
-    a_R[i] = mw[i].Rforce(r...)
-    a_z[i] = mw[i].zforce(r...)
+    mw[i].turn_physical_on()
+    @show (mw[i].Rforce(r...))
+    a_R[i] = mw[i].Rforce(r...)[1]*fac
+    a_z[i] = mw[i].zforce(r...)[1]*fac
     @show i, a_R[i], a_z[i]
-    @show i, uconvert(u"km/s/Myr",mw[i].Rforce(r...)*vo^2/ro), uconvert(u"km/s/Myr",mw[i].zforce(r...)*vo^2/ro)
+    # @show i, uconvert(u"km/s/Myr",mw[i].Rforce(r...)*vo^2/ro), uconvert(u"km/s/Myr",mw[i].zforce(r...)*vo^2/ro)
 end
+#%%
 
-v_c = sqrt(v'v)
 a = [sqrt(a_R'a_R), sqrt(a_z'a_z)]
 a_mod = sqrt(a'a)
-@show a a_mod a[2]/a[1]
-
-
-
+@show a a_mod
+r = [stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ]]
 @show a_rar = stream.accel_mw(pot_list, stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ])u"(km/s)^2/kpc"
 a_rar = uconvert.(u"km/s/Myr", a_rar)
 @show a_rar_mod = sqrt(a_rar'a_rar)
 @show a_rar_mod/a_mod
+@show a_rar[2]/a_rar[1] r[2]/r[1]

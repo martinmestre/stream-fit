@@ -239,29 +239,32 @@ mp= MiyamotoNagaiPotential(a=3./8.,b=0.28/8.,normalize=.6)
 hp=TriaxialNFWPotential(a=16.0*u.kpc,b=1.0,c=0.82,normalize=0.59)
 mw = bp+mp+hp
 print('mw=',mw)
-# for i in range(0,3):
-#    mw[i].turn_physical_on()
+for i in range(0,3):
+   mw[i].turn_physical_on()
 
 # r_sun=8.0*u.kpc
 r_sun=8.122*u.kpc
 v0=mw[0].vcirc(r_sun)
 v1=mw[1].vcirc(r_sun)
 v2=mw[2].vcirc(r_sun)
-vo=220.0
-print("v_i=",v0,v1,v2)
-v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)*vo
-print('v_circ_sun=',v_circ_sun)
-a_R = np.zeros(3)
-a_z = np.zeros(3)
-r = np.array([14.0, 3.0])/8.0
-for i in range(0,3):
-    a_R[i] = mw[i].Rforce(r[0],r[1])*conversion.force_in_kmsMyr(220.,8.)
-    a_z[i] = mw[i].zforce(r[0],r[1])*conversion.force_in_kmsMyr(220.,8.)
-    print("i a_R a_z = ", i,  a_R[i], a_z[i])
 
-a = np.sqrt([np.dot(a_R,a_R), np.dot(a_z,a_z)])
-a_mod = np.sqrt(np.dot(a,a))
+print("v_i=",v0,v1,v2)
+v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)
+print('v_circ_sun=',v_circ_sun)
+a_R = np.zeros(3)*u.km/u.s/u.Myr
+a_z = np.zeros(3)*u.km/u.s/u.Myr
+r = np.array([14.0, 3.0])*u.kpc
+for i in range(0,3):
+    a_R[i] = mw[i].Rforce(r[0],r[1])
+    a_z[i] = mw[i].zforce(r[0],r[1])
+    print("i a_R a_z = ", i,  a_R[i], a_z[i])
+print("a_R = ",a_R)
+print(([np.sqrt(np.dot(a_R,a_R)), np.sqrt(np.dot(a_z,a_z))]), a_z.unit)
+
+a = [np.sqrt(np.dot(a_R.value,a_R.value)), np.sqrt(np.dot(a_z.value,a_z.value))]*a_R.unit
+a_mod = np.sqrt(np.dot(a.value,a.value))*a_R.unit
 print("a=",a, "  a_mod=",a_mod)
+
 
 # Initial conditions:
 k0=50
