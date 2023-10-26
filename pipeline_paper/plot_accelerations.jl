@@ -134,8 +134,8 @@ a_rfk = acceleration_rfk_mw(pot_list, x)
 @show a_nfw./a_rfk sqrt(a_nfw'a_nfw/a_rfk'a_rfk)
 @show a_nfw a_rfk;
 x = [[stream_cart.x[i], stream_cart.y[i], stream_cart.z[i]] for i in eachindex(stream_cart.x)]
-y_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
-y_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
+a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
+a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
 # Acceleration tests
