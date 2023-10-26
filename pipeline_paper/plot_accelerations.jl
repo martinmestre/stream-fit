@@ -138,46 +138,37 @@ a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
 a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
-# Acceleration tests
-bp = galpot.PowerSphericalPotentialwCutoff(alpha=1.8,rc=1.9/8.0,normalize=0.05)
-mp = galpot.MiyamotoNagaiPotential(a=3.0/8.0,b=0.28/8.0,normalize=0.6)
-hp = galpot.TriaxialNFWPotential(a=16.0/8.0,b=1.0,c=0.82,normalize=0.59)
-
-mw = bp+mp+hp
-r = [14.0, 3.0]/8.0
-for i in 1:3
-    mw[i].turn_physical_on()
-    @show mw[i].vcirc(r_sun/8.0)[1]
-    @show mw[i].Rforce(r...)[1], mw[i].zforce(r...)[1]
-end
-@show sqrt(sum([mw[i].vcirc(r_sun)[1]^2 for i in 1:3]))
+df = DataFrame(ϕ₁=ϕ₁ₒ,
+                a_nfw_R=[a_nfw[i][1] for i ∈ eachindex(a_nfw)],
+                a_nfw_z=[a_nfw[i][2] for i ∈ eachindex(a_nfw)],
+                a_rfk_R=ustrip.([a_rfk[i][1] for i ∈ eachindex(a_rfk)]),
+                a_rfk_z=ustrip.([a_rfk[i][2] for i ∈ eachindex(a_rfk)])
+)
 #%%
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+fig = Figure(resolution = size_pt, fontsize = 37)
+gridpos = fig[1, 1]
+grp = dims(1) => renamer(labels) => ""
+plt = data(df_obsmod) *
+    mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [2, 17, 22] .=> L"ϕ_2~[°]";
+        color = grp,
+        linestyle = grp
+    ) *
+    visual(Lines, linewidth=lw)
+plt2 = data(df_obsmod) *
+mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [3,4] .=> L"ϕ_2~[°]";
+) *
+visual(Lines, linewidth=lw)
+plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:ϕ₂ₛ=>"",:ϕ₂ᵢ=>"")*visual(Band,color=(:black,0.15))
+f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
+    xgridvisible=false, ygridvisible=false))
 
-v = Vector{Float64}(undef,3)
-a_R = Vector{Float64}(undef,3)
-a_z = Vector{Float64}(undef,3)
-jᵣ = 50
-r = [sqrt(stream_cart.x[jᵣ]^2+stream_cart.y[jᵣ]^2), stream_cart.z[jᵣ]]/8.0
-# r = [14.0, 3.0]/8.0
-vo = sqrt(sum([mw[i].vcirc(r_sun)[1]^2 for i in 1:3]))
-ro = r☼
-fac = (vo/220.0)^2/(ro/8.0)
-for i in 1:3
-    mw[i].turn_physical_on()
-    @show (mw[i].Rforce(r...))
-    a_R[i] = mw[i].Rforce(r...)[1]*fac
-    a_z[i] = mw[i].zforce(r...)[1]*fac
-    @show i, a_R[i], a_z[i]
-    # @show i, uconvert(u"km/s/Myr",mw[i].Rforce(r...)*vo^2/ro), uconvert(u"km/s/Myr",mw[i].zforce(r...)*vo^2/ro)
-end
-#%%
+legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
+draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-4, 1)),
+xgridvisible=false, ygridvisible=false
 
-a = [sqrt(a_R'a_R), sqrt(a_z'a_z)]
-a_mod = sqrt(a'a)
-@show a a_mod
-r = [stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ]]
-@show a_rar = stream.accel_mw(pot_list, stream_cart.x[jᵣ], stream_cart.y[jᵣ], stream_cart.z[jᵣ])u"(km/s)^2/kpc"
-a_rar = uconvert.(u"km/s/Myr", a_rar)
-@show a_rar_mod = sqrt(a_rar'a_rar)
-@show a_rar_mod/a_mod
-@show a_rar[2]/a_rar[1] r[2]/r[1]
