@@ -66,7 +66,7 @@ orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 pot_list = stream.pot_model(ϵ, θ, W, β)
 temp = stream.orbit_model(ic..., pot_list, r☼)
 # Cubic spline for solution:
-boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
+boolϕ₁ = (temp[1].>-200 .&& temp[1].<100)
 fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
 fx = CubicSpline(temp[1][boolϕ₁], temp[7][boolϕ₁])
 fy = CubicSpline(temp[1][boolϕ₁], temp[8][boolϕ₁])
@@ -134,11 +134,15 @@ a_rfk = acceleration_rfk_mw(pot_list, x)
 @show a_nfw./a_rfk sqrt(a_nfw'a_nfw/a_rfk'a_rfk)
 @show a_nfw a_rfk;
 x = [[stream_cart.x[i], stream_cart.y[i], stream_cart.z[i]] for i in eachindex(stream_cart.x)]
+R = [sqrt(stream_cart.x[i]^2+stream_cart.y[i]^2) for i in eachindex(stream_cart.x)]
+z = [stream_cart.z[i] for i in eachindex(stream_cart.x)]
 a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
 a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
 df = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
                 a_nfw_R=[a_nfw[i][1] for i ∈ eachindex(a_nfw)],
                 a_nfw_z=[a_nfw[i][2] for i ∈ eachindex(a_nfw)],
                 a_rfk_R=ustrip.([a_rfk[i][1] for i ∈ eachindex(a_rfk)]),
@@ -151,24 +155,90 @@ topspinecolor=:darkgray, rightspinecolor=:darkgray,
 xticksmirrored = true, yticksmirrored = true))
 size_inches = (6.2*2, 3*2)
 size_pt = 72 .* size_inches
-fig = Figure(resolution = size_pt, fontsize = 37)
+lw = 5
+fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
+labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
-plt = data(df_obsmod) *
-    mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [2, 17, 22] .=> L"ϕ_2~[°]";
+plt = data(df) *
+    mapping(:ϕ₁ => L"ϕ_1~[°]", [4,5,6,7] .=> L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]";
         color = grp,
         linestyle = grp
     ) *
     visual(Lines, linewidth=lw)
-plt2 = data(df_obsmod) *
-mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [3,4] .=> L"ϕ_2~[°]";
-) *
-visual(Lines, linewidth=lw)
-plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:ϕ₂ₛ=>"",:ϕ₂ᵢ=>"")*visual(Band,color=(:black,0.15))
 f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
     xgridvisible=false, ygridvisible=false))
 
-legend!(gridpos, f; tellwidth=false, halign=:center, valign=:bottom, margin=(10, 10, 10, 10), patchsize=(50,35))
-draw!(gridpos, plt_band, axis=(;limits=((-90,10),(-4, 1)),
-xgridvisible=false, ygridvisible=false
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+display(fig)
+#%%
+
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+lw = 5
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
+grp = dims(1) => renamer(labels) => ""
+plt = data(df) *
+    mapping(:R => L"R~[kpc]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
+        color = grp,
+        linestyle = grp
+    ) *
+    visual(Lines, linewidth=lw)
+f = draw!(gridpos, plt, axis=(xgridvisible=false, ygridvisible=false))
+
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+display(fig)
+#%%
+
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+lw = 5
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
+grp = dims(1) => renamer(labels) => ""
+plt = data(df) *
+    mapping(:z => L"z~[kpc]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
+        color = grp,
+        linestyle = grp
+    ) *
+    visual(Lines, linewidth=lw)
+f = draw!(gridpos, plt, axis=(xgridvisible=false, ygridvisible=false))
+
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+display(fig)
+#%%
+
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true, aspect=1))
+size_inches = (7, 7)
+size_pt = 72 .* size_inches
+lw = 5
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+plt = data(df) *
+    mapping(:R => L"R~[kpc]", :z => L"z~[kpc]") *
+    visual(Lines, linewidth=lw)
+f = draw!(gridpos, plt, axis=(xgridvisible=false, ygridvisible=false, limits=((0,16),(0, 16))))
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+us = df.a_rfk_R
+vs = df.a_rfk_z
+strength = @. sqrt(us^2+vs^2)
+@. us = us/strength
+@. vs = vs/strength
+arrows!(df.R, df.z, df.a_rfk_R, df.a_rfk_z, arrowsize = strength, lengthscale = 1)
+display(fig)
+
 
