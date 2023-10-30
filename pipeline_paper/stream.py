@@ -126,7 +126,8 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
 
     # ODE integration
     unit_t = 0.977792221680356   # Gyr
-    time_span_s2 = 0.2/unit_t
+    time_span_s2 = 1.5/unit_t  # only to be used with plot_orbit.jl
+    # time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
     t_0 = 0.0/unit_t
     n_steps = 1000
     t_back = np.linspace(t_0, -time_span_s2, n_steps+1)
@@ -140,6 +141,10 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     y_back = np.flip(y_back, axis=1)
     y = np.concatenate([y_back, sol_forw.y],  axis=1)
     y = np.flip(y, axis=1)
+    t_back = np.delete(t_back, 0)  # Remove duplicated column
+    t_back = np.flip(t_back)
+    t = np.concatenate([t_back, t_forw])
+    t = np.flip(t)
 
     # Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
     galac_coord = coord.Galactocentric(x=y[0]*u.kpc, y=y[1]*u.kpc, z=y[2]*u.kpc,
@@ -158,7 +163,7 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     icrs_coord = galac_coord.transform_to(coord.ICRS())
     mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
-    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun, y[3], y[4], y[5]
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun, y[3], y[4], y[5], t
 
 
 class IbaPoly:
