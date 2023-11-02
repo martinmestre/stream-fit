@@ -64,7 +64,7 @@ orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 # MEPP solution
 ϕ₁ₒ = stream.Iba_phi1_np
 pot_list = stream.pot_model(ϵ, θ, W, β)
-temp = stream.orbit_model(ic..., pot_list, r☼)
+temp = stream.orbit_model_ext(ic..., pot_list, r☼)
 # Cubic spline for solution:
 ϕ₁, ϕ₂, d☼, μ_α_cosδ, μ_δ, v☼, x, y, z, _vcirc, v_x, v_y, v_z, t = [temp[i] for i ∈ eachindex(temp)]
 R = sqrt.([x[i]^2+y[i]^2 for i in eachindex(x)])

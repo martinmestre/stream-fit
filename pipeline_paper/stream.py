@@ -163,6 +163,73 @@ def orbit_model(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_
     icrs_coord = galac_coord.transform_to(coord.ICRS())
     mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
     mu_dec = icrs_coord.pm_dec
+    return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun
+
+
+def orbit_model_ext(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, pot_list, r_sun):
+    """Orbit definition."""
+    """
+    The orbit_model here defined works with sky coordinates
+    at input and sky-cartesian at output.
+    """
+    # Autoconsistent velocity of LSR
+    v_circ_sun = rot_vel_mw(pot_list, r_sun)
+
+    # Transformation to galactocentric coordinates
+    sky_coord = coord.ICRS(ra=alpha*u.degree, dec=delta*u.degree,
+                           distance=distance*u.kpc,
+                           pm_ra_cosdec=mu_alpha_cosdelta*u.mas/u.yr,
+                           pm_dec=mu_delta*u.mas/u.yr,
+                           radial_velocity=v_los*u.km/u.s)
+    galcen_distance = r_sun*u.kpc
+    v_sun = coord.CartesianDifferential([11.1, v_circ_sun+12.24, 7.25]*u.km/u.s)
+    z_sun = 0.0*u.kpc
+    frame = coord.Galactocentric(galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
+    galac_coord = sky_coord.transform_to(frame)
+
+    w_0 = np.zeros(6)
+    w_0[:3] = [galac_coord.x/u.kpc, galac_coord.y/u.kpc, galac_coord.z/u.kpc]
+    w_0[3:] = [galac_coord.v_x/(u.km/u.s), galac_coord.v_y/(u.km/u.s), galac_coord.v_z/(u.km/u.s)]
+
+    # ODE integration
+    unit_t = 0.977792221680356   # Gyr
+    time_span_s2 = 1.5/unit_t  # only to be used with plot_orbit.jl
+    # time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
+    t_0 = 0.0/unit_t
+    n_steps = 1000
+    t_back = np.linspace(t_0, -time_span_s2, n_steps+1)
+    t_forw = np.linspace(t_0, time_span_s2, n_steps+1)
+    sol_back = solve_ivp(symp_grad_mw, [t_0, -time_span_s2], w_0, t_eval=t_back, args=[pot_list],
+                         method='DOP853', rtol=5.0e-14, atol=0.5e-14)
+    sol_forw = solve_ivp(symp_grad_mw, [t_0, time_span_s2], w_0, t_eval=t_forw, args=[pot_list],
+                         method='DOP853', rtol=5.0e-14, atol=0.5e-14)
+    # t = np.concatenate([sol_back.t,sol_forw.t])  Not used
+    y_back = np.delete(sol_back.y, 0, axis=1)  # Remove duplicated column
+    y_back = np.flip(y_back, axis=1)
+    y = np.concatenate([y_back, sol_forw.y],  axis=1)
+    y = np.flip(y, axis=1)
+    t_back = np.delete(t_back, 0)  # Remove duplicated column
+    t_back = np.flip(t_back)
+    t = np.concatenate([t_back, t_forw])
+    t = np.flip(t)
+
+    # Transformation to GD-1 frame of coordinates (\phi_1, \phi_2)
+    galac_coord = coord.Galactocentric(x=y[0]*u.kpc, y=y[1]*u.kpc, z=y[2]*u.kpc,
+                                       v_x=y[3]*u.km/u.s, v_y=y[4]*u.km/u.s, v_z=y[5]*u.km/u.s,
+                                       galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
+    gd1_coord = galac_coord.transform_to(GD1_class.GD1Koposov10())
+    phi_1 = gd1_coord.phi1
+    phi_2 = gd1_coord.phi2
+    d_hel = gd1_coord.distance
+    v_hel = gd1_coord.radial_velocity
+    # Unused block of code
+    # mu_phi_1 = gd1_coord.pm_phi1_cosphi2  #not used by Ibata
+    # mu_phi_2 = gd1_coord.pm_phi2
+    # return phi_1, phi_2, d_hel, v_hel, mu_phi_1, mu_phi_2
+    # Transformation to ICRS coordinates
+    icrs_coord = galac_coord.transform_to(coord.ICRS())
+    mu_ra_cosdec = icrs_coord.pm_ra_cosdec  # Ibata's mu_ra = pm_ra_cosdec
+    mu_dec = icrs_coord.pm_dec
     return phi_1, phi_2, d_hel, mu_ra_cosdec, mu_dec, v_hel, y[0], y[1], y[2], v_circ_sun, y[3], y[4], y[5], t
 
 
