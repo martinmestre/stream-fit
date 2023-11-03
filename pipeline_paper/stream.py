@@ -193,8 +193,8 @@ def orbit_model_ext(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, 
 
     # ODE integration
     unit_t = 0.977792221680356   # Gyr
-    time_span_s2 = 1.5/unit_t  # only to be used with plot_orbit.jl
-    # time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
+    # time_span_s2 = 1.5/unit_t  # only to be used with plot_orbit.jl
+    time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
     t_0 = 0.0/unit_t
     n_steps = 1000
     t_back = np.linspace(t_0, -time_span_s2, n_steps+1)

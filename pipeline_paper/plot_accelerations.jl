@@ -21,6 +21,7 @@
 using Pkg
 Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
+using LaTeXStrings
 using PyCall
 using CSV
 using DataFrames
@@ -64,9 +65,9 @@ orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 # MEPP solution
 ϕ₁ₒ = stream.Iba_phi1_np
 pot_list = stream.pot_model(ϵ, θ, W, β)
-temp = stream.orbit_model(ic..., pot_list, r☼)
+temp = stream.orbit_model_ext(ic..., pot_list, r☼)
 # Cubic spline for solution:
-boolϕ₁ = (temp[1].>-200 .&& temp[1].<100)
+boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
 fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
 fx = CubicSpline(temp[1][boolϕ₁], temp[7][boolϕ₁])
 fy = CubicSpline(temp[1][boolϕ₁], temp[8][boolϕ₁])
@@ -158,7 +159,7 @@ size_pt = 72 .* size_inches
 lw = 5
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
-labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
+labels = [L"radial (NFW-MW)", L"z (NFW-MW)", L"radial (Fermionic-MW)", L"z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
 plt = data(df) *
     mapping(:ϕ₁ => L"ϕ_1~[°]", [4,5,6,7] .=> L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]";
