@@ -150,6 +150,59 @@ df = DataFrame(ϕ₁=ϕ₁ₒ,
                 a_rfk_z=ustrip.([a_rfk[i][2] for i ∈ eachindex(a_rfk)])
 )
 #%%
+
+# Test how to put LaTeX in legend.
+labels = latexstring.(["a_R (NFW-MW)", "a_z (NFW-MW)", "a_R (Fermionic-MW)", "a_z (Fermionic-MW)"])
+df_nfw_R = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
+                a=[a_nfw[i][1] for i ∈ eachindex(a_nfw)],
+                grp=fill(labels[1],length(ϕ₁ₒ))
+)
+df_nfw_z = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
+                a=[a_nfw[i][2] for i ∈ eachindex(a_nfw)],
+                grp=fill(labels[2],length(ϕ₁ₒ))
+)
+df_rfk_R = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
+                a=[a_rfk[i][1] for i ∈ eachindex(a_rfk)],
+                grp=fill(labels[3],length(ϕ₁ₒ))
+)
+df_rfk_z = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
+                a=[a_rfk[i][2] for i ∈ eachindex(a_rfk)],
+                grp=fill(labels[4],length(ϕ₁ₒ))
+)
+
+df = vcat(df_nfw_R, df_nfw_z, df_rfk_R, df_rfk_z)
+#%%
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3*2)
+size_pt = 72 .* size_inches
+lw = 5
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+
+plt = data(df) *
+    mapping(:ϕ₁ => L"ϕ_1~[°]", :a => L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]",
+        color = :grp,
+        linestyle = :grp
+    ) *
+    visual(Lines, linewidth=lw)
+f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
+    xgridvisible=false, ygridvisible=false))
+
+legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+display(fig)
+#%%
+
 set_aog_theme!()
 update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
