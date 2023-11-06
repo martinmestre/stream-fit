@@ -141,6 +141,7 @@ a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
 a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
+# This is used for plots of acceleration along R and z.
 df = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
                 z=z,
@@ -151,7 +152,7 @@ df = DataFrame(ϕ₁=ϕ₁ₒ,
 )
 #%%
 
-# Test how to put LaTeX in legend.
+# This is the plot used in the paper for plot of acceleratio along ϕ₁.
 labels = [L"a_R~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_R~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
 df_nfw_R = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
@@ -184,7 +185,7 @@ set_aog_theme!()
 update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
 xticksmirrored = true, yticksmirrored = true))
-size_inches = (6.2*2, 3*2)
+size_inches = (6.2*2, 3.6*2)
 size_pt = 72 .* size_inches
 lw = 6
 fig = Figure(resolution = size_pt, fontsize = 33)
@@ -206,8 +207,10 @@ for l in _lines
     l.linewidth = 5
 end
 display(fig)
+save("paper_plots/acceleration_along_phi1.pdf", fig, pt_per_unit = 1)
 #%%
 
+# Not used for now.
 set_aog_theme!()
 update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
@@ -241,7 +244,7 @@ size_pt = 72 .* size_inches
 lw = 5
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
-labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
+labels = [L"a_R (NFW-MW)", L"a_z (NFW-MW)", L"a_R (Fermionic-MW)", L"a_z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
 plt = data(df) *
     mapping(:R => L"R~[kpc]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
@@ -250,9 +253,9 @@ plt = data(df) *
     ) *
     visual(Lines, linewidth=lw)
 f = draw!(gridpos, plt, axis=(xgridvisible=false, ygridvisible=false))
-
-legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+# legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
 display(fig)
+save("paper_plots/acceleration_along_R.pdf", fig, pt_per_unit = 1)
 #%%
 
 set_aog_theme!()
@@ -273,9 +276,9 @@ plt = data(df) *
     ) *
     visual(Lines, linewidth=lw)
 f = draw!(gridpos, plt, axis=(xgridvisible=false, ygridvisible=false))
-
-legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+# legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
 display(fig)
+save("paper_plots/acceleration_along_z.pdf", fig, pt_per_unit = 1)
 #%%
 
 set_aog_theme!()
