@@ -152,7 +152,7 @@ df = DataFrame(ϕ₁=ϕ₁ₒ,
 #%%
 
 # Test how to put LaTeX in legend.
-labels = latexstring.(["a_R (NFW-MW)", "a_z (NFW-MW)", "a_R (Fermionic-MW)", "a_z (Fermionic-MW)"])
+labels = [L"a_R~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_R~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
 df_nfw_R = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
                 z=z,
@@ -168,13 +168,13 @@ df_nfw_z = DataFrame(ϕ₁=ϕ₁ₒ,
 df_rfk_R = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
                 z=z,
-                a=[a_rfk[i][1] for i ∈ eachindex(a_rfk)],
+                a=ustrip.([a_rfk[i][1] for i ∈ eachindex(a_rfk)]),
                 grp=fill(labels[3],length(ϕ₁ₒ))
 )
 df_rfk_z = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
                 z=z,
-                a=[a_rfk[i][2] for i ∈ eachindex(a_rfk)],
+                a=ustrip.([a_rfk[i][2] for i ∈ eachindex(a_rfk)]),
                 grp=fill(labels[4],length(ϕ₁ₒ))
 )
 
@@ -186,20 +186,25 @@ topspinecolor=:darkgray, rightspinecolor=:darkgray,
 xticksmirrored = true, yticksmirrored = true))
 size_inches = (6.2*2, 3*2)
 size_pt = 72 .* size_inches
-lw = 5
+lw = 6
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
 
 plt = data(df) *
     mapping(:ϕ₁ => L"ϕ_1~[°]", :a => L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]",
-        color = :grp,
-        linestyle = :grp
+        color = :grp => "",
+        linestyle = :grp => ""
     ) *
     visual(Lines, linewidth=lw)
 f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
     xgridvisible=false, ygridvisible=false))
 
-legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(55,40))
+legend!(gridpos, f; tellwidth=false, nbanks=2, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(60,40))
+leg = fig.content[2]
+_lines = leg.blockscene.children[1].plots[2:5]
+for l in _lines
+    l.linewidth = 5
+end
 display(fig)
 #%%
 
@@ -212,7 +217,7 @@ size_pt = 72 .* size_inches
 lw = 5
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
-labels = [L"radial (NFW-MW)", L"z (NFW-MW)", L"radial (Fermionic-MW)", L"z (Fermionic-MW)"]
+labels = [L"a_R (NFW-MW)", L"a_z (NFW-MW)", L"a_R (Fermionic-MW)", L"a_z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
 plt = data(df) *
     mapping(:ϕ₁ => L"ϕ_1~[°]", [4,5,6,7] .=> L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]";
