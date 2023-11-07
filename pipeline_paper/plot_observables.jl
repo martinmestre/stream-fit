@@ -340,7 +340,7 @@ let
       gridpos = fig[1, 1]
       grp = dims(1) => renamer(labels) => ""
       plt = data(df_obsmod) *
-          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [14, 26, 21] .=> L"v_h~[\mathrm{km~s^{-1}}]";
+          mapping(:ϕ₁ₒ => L"ϕ_1~[°]", [14, 26, 21] .=> L"v_h~[\mathrm{km~s}^{-1}]";
               color = grp,
               linestyle = grp
           ) *

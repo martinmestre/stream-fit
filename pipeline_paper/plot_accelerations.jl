@@ -153,7 +153,7 @@ df = DataFrame(ϕ₁=ϕ₁ₒ,
 #%%
 
 # This is the plot used in the paper for plot of acceleratio along ϕ₁.
-labels = [L"a_R~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_R~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
+labels = [L"a_r~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_r~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
 df_nfw_R = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
                 z=z,
@@ -244,10 +244,9 @@ size_pt = 72 .* size_inches
 lw = 5
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
-labels = [L"a_R (NFW-MW)", L"a_z (NFW-MW)", L"a_R (Fermionic-MW)", L"a_z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
 plt = data(df) *
-    mapping(:R => L"R~[kpc]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
+    mapping(:R => L"r~[\mathrm{kpc}]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
         color = grp,
         linestyle = grp
     ) *
@@ -267,10 +266,9 @@ size_pt = 72 .* size_inches
 lw = 5
 fig = Figure(resolution = size_pt, fontsize = 33)
 gridpos = fig[1, 1]
-labels = ["R (NFW-MW)", "z (NFW-MW)", "R (Fermionic-MW)", "z (Fermionic-MW)"]
 grp = dims(1) => renamer(labels) => ""
 plt = data(df) *
-    mapping(:z => L"z~[kpc]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
+    mapping(:z => L"z~[\mathrm{kpc}]", [4,5,6,7] .=> L"a~[\mathrm{km s}^{-1} \mathrm{Myr}^{-1}]";
         color = grp,
         linestyle = grp
     ) *
