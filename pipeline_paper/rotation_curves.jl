@@ -74,7 +74,7 @@ df_nfw = DataFrame(grp="NFW-MW", r=r, v=v_nfw)
 df_ferm = DataFrame(grp="Fermionic-MW", r=r, v=v_ferm)
 df_model = append!(df_nfw, df_ferm)
 
- # %%
+
  # Reading rotation curve observables
  # Set rotation data
 
@@ -131,7 +131,7 @@ plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
 
 
 plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
-f=draw!(gridpos, plt, axis=(;limits=((0,40),(0,300)),
+f=draw!(gridpos, plt, axis=(;limits=((0,42),(0,300)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
 vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.15))
