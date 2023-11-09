@@ -21,11 +21,13 @@
 using Pkg
 Pkg.activate(".")
 using AlgebraOfGraphics, CairoMakie
+using Colors
 using PyCall
 using DelimitedFiles
 using CSV
 using DataFrames
 using GLM
+include("wongcolors.jl")
 # %%
 
 pushfirst!(PyVector(pyimport("sys")."path"), "")
@@ -78,9 +80,11 @@ df_model = append!(df_nfw, df_ferm)
  # Reading rotation curve observables
  # Set rotation data
 
- df_Sof13 = DataFrame(CSV.File("data_rotcurves/vel_Sofue13.txt"; delim=" ", ignorerepeated=true))
- df_Sof20 = DataFrame(CSV.File("data_rotcurves/vel_Sofue20.txt"; delim=" ", ignorerepeated=true))
- df_Eilers = DataFrame(CSV.File("data_rotcurves/vel_Eilers.txt"; delim=" ", ignorerepeated=true))
+df_Sof13 = DataFrame(CSV.File("data_rotcurves/vel_Sofue13.txt"; delim=" ", ignorerepeated=true))
+df_Sof20 = DataFrame(CSV.File("data_rotcurves/vel_Sofue20.txt"; delim=" ", ignorerepeated=true))
+df_Eilers = DataFrame(CSV.File("data_rotcurves/vel_Eilers.txt"; delim=" ", ignorerepeated=true))
+df_Ou = DataFrame(CSV.File("data_rotcurves/vel_Ou23.txt"; delim=" ", ignorerepeated=true))
+df_Jiao = DataFrame(CSV.File("data_rotcurves/vel_Jiao23.txt"; delim=" ", ignorerepeated=true))
 
 df_Sof13.r = df_Sof13.r/1.0e3
 df_Sof13.err_r =  df_Sof13.err_r/1.0e3
@@ -88,25 +92,31 @@ rename!(df_Sof20, [:Radius, :Velocity, :Error] .=> [:r, :v, :err_v])
 insertcols!(df_Sof13, 1, :grp=>fill("Sofue 2013",nrow(df_Sof13)))
 insertcols!(df_Sof20, 1, :grp=>fill("Sofue 2020",nrow(df_Sof20)))
 insertcols!(df_Eilers, 1, :grp=>fill("Eilers 2019",nrow(df_Eilers)))
-println(names(df_Sof13))
-println(names(df_Sof20))
-println(names(df_Eilers))
-df_obs = vcat(df_Sof13, df_Sof20, df_Eilers, cols=:union)
+insertcols!(df_Ou, 1, :grp=>fill("Ou 2023",nrow(df_Ou)))
+insertcols!(df_Jiao, 1, :grp=>fill("Jiao 2023",nrow(df_Jiao)))
+@show names(df_Sof13) names(df_Sof20) names(df_Eilers)
+@show names(df_Ou) names(df_Jiao)
+
+df_obs = vcat(df_Sof20, df_Eilers, df_Jiao, cols=:union)
 for col in eachcol(df_obs)
     replace!(col,missing=>0)
 end
-
-
-
-
 # %%
 
 # Paper plot
 labels = ["Fermionic-MW","NFW-MW"]
 lw = 4
 
+col = wongcolors()
+pal = (color=[col[4], col[2], :black, col[3], col[5]],
+    patchcolor=wongcolors(),
+    marker=[:utriangle, :utriangle, :circle, :rect, :diamond, :dtriangle, :pentagon, :xcross],
+    linestyle=[:solid, :dash, :dashdot, :dot, :dashdotdot],
+    side=[:left, :right],
+)
+
 set_aog_theme!()
-update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+update_theme!(palette=pal,Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
 xticksmirrored = true, yticksmirrored = true))
 size_inches = (6.2*2, 4*2)
@@ -130,32 +140,30 @@ plt_ev_ud =  data(df_obs)   * rv_ev_ud_map * visual(Errorbars)
 plt_er = data(df_obs)   * rv_er_map * visual(Errorbars;direction=:x)
 
 
-plt = plt_obs+plt_ev+plt_ev_ud+plt_er+plt_model
-f=draw!(gridpos, plt, axis=(;limits=((0,42),(0,300)),
+plt = plt_model+plt_obs+plt_ev+plt_ev_ud
+f=draw!(gridpos, plt, axis=(;limits=((0,42),(80,270)),
     xgridvisible=false, ygridvisible=false))
 ax = f[1,1].axis
 vspan!(ax,11.539089193812874,16.35356513868187,color=(:black,0.15))
 
 legend!(gridpos, f; tellwidth=false, halign=:right, valign=:bottom,
-        margin=(10, 10, 10, 10), patchsize=(30,20), nbanks=2, framevisible=false, labelsize=25)
+        margin=(10, 10, 10, 10), patchsize=(50,20), nbanks=2, framevisible=false, labelsize=25)
 
 # Lines re-styling
+col = wongcolors()
 lineas = fig.content[1].scene.plots
 println("lineas=$lineas")
-# for l in lineas
-#     l.linestyle = :dash
-# end
 
 
 # Legend re-styling
 leg = fig.content[2]
 _lines = leg.blockscene.children[1].plots
 for l in _lines
-    l.linewidth = 4
+    l.linewidth = 5
 end
 
 println("_lines=$_lines")
-deleteat!(_lines,[3,4,5,6,8,9,12,13,15,16])
+deleteat!(_lines,[2,4,6,7,8,10,12,13,14,16])
 display(fig)
 save("paper_plots/rotation_curves.pdf", fig, pt_per_unit = 1)
 println("first plot done.")
