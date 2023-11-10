@@ -141,16 +141,6 @@ a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
 a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
-# This is used for plots of acceleration along R and z.
-df = DataFrame(ϕ₁=ϕ₁ₒ,
-                R=R,
-                z=z,
-                a_nfw_R=[a_nfw[i][1] for i ∈ eachindex(a_nfw)],
-                a_nfw_z=[a_nfw[i][2] for i ∈ eachindex(a_nfw)],
-                a_rfk_R=ustrip.([a_rfk[i][1] for i ∈ eachindex(a_rfk)]),
-                a_rfk_z=ustrip.([a_rfk[i][2] for i ∈ eachindex(a_rfk)])
-)
-#%%
 
 # This is the plot used in the paper for plot of acceleratio along ϕ₁.
 labels = [L"a_r~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_r~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
@@ -181,6 +171,8 @@ df_rfk_z = DataFrame(ϕ₁=ϕ₁ₒ,
 
 df = vcat(df_nfw_R, df_nfw_z, df_rfk_R, df_rfk_z)
 #%%
+
+# Along ϕ₁
 set_aog_theme!()
 update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
@@ -197,7 +189,7 @@ plt = data(df) *
         linestyle = :grp => ""
     ) *
     visual(Lines, linewidth=lw)
-f = draw!(gridpos, plt, axis=(;limits=((-90,10),(-4, 1)),
+f = draw!(gridpos, plt, axis=(;limits=((minimum(df.ϕ₁),maximum(df.ϕ₁)),(-4, 1)),
     xgridvisible=false, ygridvisible=false))
 
 legend!(gridpos, f; tellwidth=false, nbanks=2, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(60,40))
@@ -210,7 +202,63 @@ display(fig)
 save("paper_plots/acceleration_along_phi1.pdf", fig, pt_per_unit = 1)
 #%%
 
-# Not used for now.
+# Along r (ir R)
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3.6*2)
+size_pt = 72 .* size_inches
+lw = 6
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+
+plt = data(df) *
+    mapping(:R => L"r~[\mathrm{kpc}]", :a => L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]",
+        color = :grp => "",
+        linestyle = :grp => ""
+    ) *
+    visual(Lines, linewidth=lw)
+ f = draw!(gridpos, plt, axis=(;limits=((minimum(df.R),maximum(df.R)),(nothing,nothing)),
+     xgridvisible=false, ygridvisible=false))
+display(fig)
+save("paper_plots/acceleration_along_R.pdf", fig, pt_per_unit = 1)
+#%%
+
+# Along z
+set_aog_theme!()
+update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+topspinecolor=:darkgray, rightspinecolor=:darkgray,
+xticksmirrored = true, yticksmirrored = true))
+size_inches = (6.2*2, 3.6*2)
+size_pt = 72 .* size_inches
+lw = 6
+fig = Figure(resolution = size_pt, fontsize = 33)
+gridpos = fig[1, 1]
+
+plt = data(df) *
+    mapping(:z => L"z~[\mathrm{kpc}]", :a => L"a~[\mathrm{km~s}^{-1}~\mathrm{Myr}^{-1}]",
+        color = :grp => "",
+        linestyle = :grp => ""
+    ) *
+    visual(Lines, linewidth=lw)
+ f = draw!(gridpos, plt, axis=(;limits=((minimum(df.z),maximum(df.z)),(nothing,nothing)),
+     xgridvisible=false, ygridvisible=false))
+display(fig)
+save("paper_plots/acceleration_along_z.pdf", fig, pt_per_unit = 1)
+#%%
+
+# -----------------------------------------------------
+# Not used because of not being able to render latex symbols in legend.
+df = DataFrame(ϕ₁=ϕ₁ₒ,
+                R=R,
+                z=z,
+                a_nfw_R=[a_nfw[i][1] for i ∈ eachindex(a_nfw)],
+                a_rfk_R=ustrip.([a_rfk[i][1] for i ∈ eachindex(a_rfk)]),
+                a_nfw_z=[a_nfw[i][2] for i ∈ eachindex(a_nfw)],
+                a_rfk_z=ustrip.([a_rfk[i][2] for i ∈ eachindex(a_rfk)])
+)
+
 set_aog_theme!()
 update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
 topspinecolor=:darkgray, rightspinecolor=:darkgray,
