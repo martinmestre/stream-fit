@@ -67,7 +67,7 @@ orbit_nfw_file = "observable_orbit_NFW-MW.txt"
 pot_list = stream.pot_model(ϵ, θ, W, β)
 temp = stream.orbit_model_ext(ic..., pot_list, r☼)
 # Cubic spline for solution:
-boolϕ₁ = (temp[1].>-95 .&& temp[1].<15)
+boolϕ₁ = (temp[1].>-91 .&& temp[1].<11)
 fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1][boolϕ₁], temp[i][boolϕ₁]) for i=2:6]
 fx = CubicSpline(temp[1][boolϕ₁], temp[7][boolϕ₁])
 fy = CubicSpline(temp[1][boolϕ₁], temp[8][boolϕ₁])
@@ -91,7 +91,7 @@ stream_cart = astrocoords.Galactocentric(x=x*au.kpc, y=y*au.kpc, z=z*au.kpc,
                                        galcen_distance=galcen_distance, galcen_v_sun=v_sun, z_sun=z_sun)
 # Malhan (MWPotential2014) solution.
 temp = readdlm(orbit_nfw_file)
-boolϕ₁ = (temp[1,:].>-95 .&& temp[1,:].<15)
+boolϕ₁ = (temp[1,:].>-91 .&& temp[1,:].<11)
 fϕ₂, fd☼, fμ_ra, fμ_dec, fv☼ = [CubicSpline(temp[1,:][boolϕ₁], temp[i,:][boolϕ₁]) for i=2:6]
 ϕ₂ₘ = fϕ₂(ϕ₁ₒ)
 d☼ₘ = fd☼(ϕ₁ₒ)
@@ -141,6 +141,10 @@ a_nfw=[acceleration_nfw_mw(mw, x[i]/8.0) for i in eachindex(x)]
 a_rfk=[acceleration_rfk_mw(pot_list, x[i]) for i in eachindex(x)]
 #%%
 
+d_g = [sqrt(x[i]'x[i]) for i in eachindex(x)]
+minimum(d_g)
+maximum(d_g)
+#%%
 
 # This is the plot used in the paper for plot of acceleratio along ϕ₁.
 labels = [L"a_r~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_r~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]

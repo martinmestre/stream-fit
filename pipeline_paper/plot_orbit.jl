@@ -72,9 +72,11 @@ v_circ_sun = stream.rot_vel_mw(pot_list, r☼)
 galcen_distance = r☼*au.kpc
 v_sun = astrocoords.CartesianDifferential([11.1, v_circ_sun+12.24, 7.25]*au.km/au.s)
 z_sun = 0.0*au.kpc
+d = [sqrt(R[i]^2+z[i]^2) for i in eachindex(R)]
+@show  minimum(d) maximum(d)
 #%%
 
-bool_t = t.>-0.03 .&& t.<0.03
+bool_t = t.>-0.2 .&& t.<0.2
 
 df_b = DataFrame(ϕ₁_b=ϕ₁[bool_t],
                 R_b=R[bool_t],
