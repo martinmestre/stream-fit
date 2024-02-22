@@ -205,10 +205,10 @@ def chi2_stream(w_0):
     sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['d_hel']
-    sigma2 = sigma_array[1]**2
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    # y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    # y_dat = Iba_sky['d_hel']
+    # sigma2 = sigma_array[1]**2
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
