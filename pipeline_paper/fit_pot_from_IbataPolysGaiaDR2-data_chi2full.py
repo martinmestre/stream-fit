@@ -468,7 +468,7 @@ def invert_ic(u_0):
 ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
 ic = np.loadtxt(ic_file)
 # Parameters
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
+param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.txt"
 r_sun = 8.122  # Gravity Collaboration (2018)
 ener_f = 56.0  # keV
 
@@ -509,7 +509,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
-fig.savefig("plots/orbit_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
+fig.savefig("plots/orbit_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.png")
 plt.show()
 
 # Plots in the sky using the GD-1 frame
@@ -560,5 +560,5 @@ ax5.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
-fig.savefig("plots/sky_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
+fig.savefig("plots/sky_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.png")
 plt.show()
