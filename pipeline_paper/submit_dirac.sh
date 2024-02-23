@@ -30,4 +30,4 @@
 
 . /etc/profile
 
-python fit_pot_from_IbataPolysGaiaDR2-data_chi2full_2.py
+python fit_pot_from_IbataPolysGaiaDR2-data_chi2full.py
