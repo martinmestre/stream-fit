@@ -468,14 +468,14 @@ def invert_ic(u_0):
 ic_file = "param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt"
 ic = np.loadtxt(ic_file)
 # Parameters
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
+param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.txt"
 r_sun = 8.122  # Gravity Collaboration (2018)
 ener_f = 56.0  # keV
 
 
 #Optimization
-# bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5)) # second run
-bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5)) # first run
+bounds = ((35, 37), (26, 28), (1.2e-5, 1.3e-5)) # second run
+# bounds = ((35, 40), (25, 30), (1.0e-5, 1.5e-5)) # first run
 opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun),
                                       strategy='best2bin', maxiter=300, popsize=300, tol=5.0e-8,
                                       atol=0.0, disp=True, polish=True, workers=-1)
@@ -509,7 +509,7 @@ plt.ylim(-15, 20)
 plt.grid()
 plt.legend()
 plt.tight_layout()
-fig.savefig("plots/orbit_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
+fig.savefig("plots/orbit_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.png")
 plt.show()
 
 # Plots in the sky using the GD-1 frame
@@ -560,5 +560,5 @@ ax5.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
 
 plt.xlabel(r'$\phi_1$ [degrees]')
 plt.xlim(IbaPoly.limit[0], IbaPoly.limit[1])
-fig.savefig("plots/sky_fit_pot_from_IbataPolysGaiaDR2_chi2full.png")
+fig.savefig("plots/sky_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.png")
 plt.show()
