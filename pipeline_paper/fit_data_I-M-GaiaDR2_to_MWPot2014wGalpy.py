@@ -249,7 +249,7 @@ v1=mw[1].vcirc(r_sun)
 v2=mw[2].vcirc(r_sun)
 
 print("v_i=",v0,v1,v2)
-v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2)
+v_circ_sun=np.sqrt(v0*v0+v1*v1+v2*v2).value
 print('v_circ_sun=',v_circ_sun)
 a_R = np.zeros(3)*u.km/u.s/u.Myr
 a_z = np.zeros(3)*u.km/u.s/u.Myr
@@ -286,12 +286,12 @@ bounds=((w_0[0]-dw[0],w_0[0]+dw[0]), (w_0[1]-dw[1],w_0[1]+dw[1]), (w_0[2]-dw[2],
 # bounds = ((w_0[0]-dw[0], w_0[0]+dw[0]), (w_0[1]-dw[1], w_0[1]+dw[1]), (w_0[2]-dw[2], w_0[2]+dw[2]),
 #           (w_0[3]-dw[3], w_0[3]+dw[3]), (w_0[4]-dw[4], w_0[4]+dw[4]), (w_0[5]-dw[5], w_0[5]+dw[5]))
 
-# opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=200,popsize=200,
-#                                      tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
+opt=optimize.differential_evolution(chi2_stream, bounds,strategy='best2bin',maxiter=200,popsize=200,
+                                      tol=5.0e-8,atol=0.0,disp=True,polish=True,workers=-1)
 
-# param_fitted = opt.x
+param_fitted = opt.x
 
-# np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
+np.savetxt('param_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.txt', param_fitted, delimiter=',')
 
 
 # # Test call:
@@ -352,40 +352,40 @@ fig.savefig("plots/sky_fit_I-M-GaiaDR2_to_MWPot2014wGalpy_Polys.png")
 
 
 # Plots using RA
-fig, (ax1,ax2,ax3) = plt.subplots(3, 1, sharex=True, figsize=(13,15))
+# fig, (ax1,ax2,ax3) = plt.subplots(3, 1, sharex=True, figsize=(13,15))
 
-# proper motion along RA
-ax1.scatter(ra,mu_ra,s=0.5,color='red')
-ax1.scatter(ra,mu_dec,s=0.5,color='orange')
-ax1.plot(Iba_sky['RA'], Iba_sky['mu_ra'], color='blue', label=r'$\mu_\alpha$(Malhan+19)')
-ax1.plot(Iba_sky['RA'], Iba_sky['mu_dec'], color='orange', label=r'$\mu_\delta$(Malhan+19)')
-ax1.errorbar(data['RAJ2000'],data['pmra'],yerr=data['pmra_error'],fmt='o',color='black')
-ax1.errorbar(data['RAJ2000'],data['pmdec'],yerr=data['pmdec_error'],fmt='o',color='black')
-ax1.set_ylabel(r'$\mu$ [mas yr$^{-1}$]')
-ax1.set_ylim(-15,5)
-ax1.legend()
+# # proper motion along RA
+# ax1.scatter(ra,mu_ra,s=0.5,color='red')
+# ax1.scatter(ra,mu_dec,s=0.5,color='orange')
+# ax1.plot(Iba_sky['RA'], Iba_sky['mu_ra'], color='blue', label=r'$\mu_\alpha$(Malhan+19)')
+# ax1.plot(Iba_sky['RA'], Iba_sky['mu_dec'], color='orange', label=r'$\mu_\delta$(Malhan+19)')
+# ax1.errorbar(data['RAJ2000'],data['pmra'],yerr=data['pmra_error'],fmt='o',color='black')
+# ax1.errorbar(data['RAJ2000'],data['pmdec'],yerr=data['pmdec_error'],fmt='o',color='black')
+# ax1.set_ylabel(r'$\mu$ [mas yr$^{-1}$]')
+# ax1.set_ylim(-15,5)
+# ax1.legend()
 
-# heliocentric radial velocity
-ax2.scatter(ra,v_hel,s=0.5,color='red')
-ax2.plot(Iba_sky['RA'], Iba_sky['v_hel'], color='blue', label='Ibata+19')
-ax2.errorbar(data['RAJ2000'],data['Vlos'],yerr=data['e_Vlos'],fmt='o',color='black')
-ax2.set_ylim(-300,300)
-ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
-ax2.set_xlim(130,230)
+# # heliocentric radial velocity
+# ax2.scatter(ra,v_hel,s=0.5,color='red')
+# ax2.plot(Iba_sky['RA'], Iba_sky['v_hel'], color='blue', label='Ibata+19')
+# ax2.errorbar(data['RAJ2000'],data['Vlos'],yerr=data['e_Vlos'],fmt='o',color='black')
+# ax2.set_ylim(-300,300)
+# ax2.set_ylabel(r'$v_{\rm{LOS}}$ [km s$^{-1}$]')
+# ax2.set_xlim(130,230)
 
-# sky position
-ax3.scatter(ra,dec,s=0.5,color='red')
-ax3.plot(Iba_sky['RA'], Iba_sky['Dec'], color='blue', label='Ibata+19')
-ax3.scatter(data['RAJ2000'],data['DEJ2000'])
-ax3.set_ylim(10,70)
-ax3.set_ylabel(r'$\delta$ [degrees]')
-ax3.set_xlim(130,230)
+# # sky position
+# ax3.scatter(ra,dec,s=0.5,color='red')
+# ax3.plot(Iba_sky['RA'], Iba_sky['Dec'], color='blue', label='Ibata+19')
+# ax3.scatter(data['RAJ2000'],data['DEJ2000'])
+# ax3.set_ylim(10,70)
+# ax3.set_ylabel(r'$\delta$ [degrees]')
+# ax3.set_xlim(130,230)
 
-plt.xlabel('RA [degrees]')
-plt.xlim(130,230)
-plt.tight_layout()
-plt.show()
-fig.savefig("plots/sky_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.png")
+# plt.xlabel('RA [degrees]')
+# plt.xlim(130,230)
+# plt.tight_layout()
+# plt.show()
+# fig.savefig("plots/sky_fit_I-M-GaiaDR2_to_MWPot2014wGalpy.png")
 
 
 
