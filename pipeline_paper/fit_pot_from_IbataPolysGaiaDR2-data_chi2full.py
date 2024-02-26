@@ -527,7 +527,7 @@ ax1.legend()
 # Heliocentric distance
 ax2.scatter(phi_1, d_hel, s=0.1, marker='o', color='red')
 ax2.plot(Iba_sky['phi_1'], Iba_sky['d_hel'], color='blue', label='Stream\n(Ibata+2020)')
-ax2.plot(Iba_sky['phi_1'], d_hel, color='green', label='Integrated from v_hel')
+ax2.plot(Iba_sky['phi_1'], r_hel, color='green', label='Integrated from v_hel')
 ax2.set_ylim(7, 12)
 ax2.set_ylabel(r'$D$ [kpc]')
 

@@ -193,10 +193,10 @@ def chi2(w_0, pot_list):
     sigma2 = 0.5**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['d_hel']
-    sigma2 = 1.5**2
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    # y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    # y_dat = Iba_sky['d_hel']
+    # sigma2 = 1.5**2
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
@@ -231,7 +231,7 @@ def invert_ic(u_0):
 # Parameters
 r_sun = 8.122  # Gravity Collaboration (2018)
 ener_f = 56.0  # keV
-param_input_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"
+param_input_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.txt"
 theta_0, d_theta, beta_0 = np.loadtxt(param_input_file)
 W_0 = theta_0 + d_theta
 pot_list = pot_model(ener_f, theta_0, W_0, beta_0)
