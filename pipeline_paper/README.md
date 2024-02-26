@@ -34,7 +34,7 @@ Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
 
 ## Improve the ICs for the Fermionic-MW model
 ```
-fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.py
+python fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.py
 ```
 
 Output: "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"

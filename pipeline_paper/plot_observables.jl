@@ -41,13 +41,11 @@ importLib.reload(potentials)
 # Parameters and initial conditions.
 
 ϵ = 56
-#param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
-param_file = "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.txt"
+param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
 θ, Δθ, β = vec(readdlm(param_file))
 
 W = θ+Δθ
 param = [ϵ, θ, W, β]
-
 
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = vec(readdlm(ic_file))
