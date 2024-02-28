@@ -30,7 +30,7 @@ opt = optimize.differential_evolution(chi2_full, bounds, args=(ener_f, ic, r_sun
                                       atol=0.0, disp=True, polish=True, workers=-1)
 ```
 
-Output: "param_fit_pot_from_IbataPolysGaiaDR2-data_chi2full.txt"
+Output: "param_fit_pot_from_IbataPolysGaiaDR2_chi2full.txt"  "param_fit_pot_from_IbataPolysGaiaDR2_chi2full_2.txt"
 
 ## Improve the ICs for the Fermionic-MW model
 ```
