@@ -1,4 +1,5 @@
 #!/home/mmestrefcaglp/.juliaup/bin/julia
+
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
 Using Distributed.jl
@@ -115,17 +116,17 @@ const sol_file = "sol_optim_pot_m$(Int(m)).txt"
 const chi2_file = "chi2_optim_pot_m$(Int(m)).txt"
 const r☼ = 8.122
 
-const lb_g = [[35., 26.0, 1.0e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
-              [40., 29., 0.001], [40., 29., 1.3e-3], [43., 29.5, 3.0e-3]]
-const ub_g = [[40., 30.0, 1.5e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
-              [41., 30., 0.002], [44., 32., 4.0e-3], [46., 32.5, 6.0e-3]]
+# const lb_g = [[35., 26.0, 1.0e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+#               [40., 29., 0.001], [40., 29., 1.3e-3], [43., 29.5, 3.0e-3]]
+# const ub_g = [[40., 30.0, 1.5e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+#               [41., 30., 0.002], [44., 32., 4.0e-3], [46., 32.5, 6.0e-3]]
 
-# const lb_g = [[35.8, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
-#               [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
-# const ub_g = [[36.3, 27.6, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
-#               [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
+const lb_g = [[35.8, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+              [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
+const ub_g = [[36.3, 27.6, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+              [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
 
-const n_grid = 22
+const n_grid = [12, 14, 14, 14, 14, 14]
 
 @show m sol_file r☼ lb_g ub_g
 
@@ -134,7 +135,7 @@ if !isdir(sol_dir)
 end
 
 # """Running."""
-sol = cooperative(sol_dir, m, ic, r☼, lb_g[i_m], ub_g[i_m], n_grid)
+sol = cooperative(sol_dir, m, ic, r☼, lb_g[i_m], ub_g[i_m], n_grid[i_m])
 obj = [sol[i].objective for i ∈ eachindex(sol)]
 min, index = findmin(obj)
 best_u = sol[index].u
