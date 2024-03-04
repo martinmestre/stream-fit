@@ -333,10 +333,10 @@ def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['d_hel']
-    sigma2 = sigma_array[1]**2
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    # y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    # y_dat = Iba_sky['d_hel']
+    # sigma2 = sigma_array[1]**2
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
@@ -394,10 +394,10 @@ def chi2_full(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['d_hel']
-    sigma2 = sigma_array[1]**2
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    # y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    # y_dat = Iba_sky['d_hel']
+    # sigma2 = sigma_array[1]**2
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
@@ -446,10 +446,10 @@ def chi2_stream_potlist(pot_list, ic, r_sun):
     sigma2 = sigma_array[0]**2
     sum[0] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
-    y_dat = Iba_sky['d_hel']
-    sigma2 = sigma_array[1]**2
-    sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
+    # y_mod = wrap.d_hel_wrap(Iba_sky['phi_1'])
+    # y_dat = Iba_sky['d_hel']
+    # sigma2 = sigma_array[1]**2
+    # sum[1] = np.sum((y_dat-y_mod)**2 / sigma2)
 
     y_mod = wrap.mu_ra_wrap(Iba_sky['phi_1'])
     y_dat = Iba_sky['mu_ra']
