@@ -1,4 +1,4 @@
-#!/home/mmestrefcaglp/.juliaup/bin/julia
+#!/home/mmestre/.juliaup/bin/julia
 
 """Perform optimization for any fermion mass (ϵ) by running in parallel
 for a grid in a global region of paramter space.
@@ -8,8 +8,8 @@ Using Distributed.jl
 using Pkg
 Pkg.activate(".")
 using Distributed
-using SlurmClusterManager
-addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
+# using SlurmClusterManager
+# addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
 
 @show nprocs()
 @show nworkers()
@@ -56,13 +56,13 @@ end
 
 
     """Worker function."""
-    function worker(i, sol_dir, m, ic, r☼, lb, ub)
+    function worker(i, sol_dir, m, ic, r☼, lb, ub, ng)
         println("Now at id:$(myid()), host:$(gethostname())")
         x₀ = 0.5*(lb+ub)
         p = (m, ic, r☼)
         prob = OptimizationProblem(χ²Full, x₀, p, lb=lb, ub=ub)
         sol = Optimization.solve(prob, NOMADOpt(); display_degree=1, maxiters=700)
-        worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$i.txt"
+        worker_file = "$(sol_dir)/worker_optim_pot_m$(Int(m))_i$(i)_ng$(ng).txt"
         worker_sol = ("Minimizer = $(sol.u)", "Minimum = $(sol.objective)")
         writedlm(worker_file, worker_sol)
         return sol
@@ -94,7 +94,7 @@ end
     """Parallel function."""
     function cooperative(sol_dir, m, ic, r☼, lb_g, ub_g, n_grid)
         lb_a, ub_a, x₀_a = build_grid(lb_g, ub_g, n_grid)
-        pars(i) = [i, sol_dir, m, ic, r☼, lb_a[i], ub_a[i]]
+        pars(i) = [i, sol_dir, m, ic, r☼, lb_a[i], ub_a[i], n_grid]
         res = pmap(i->worker(pars(i)...), eachindex(x₀_a))
         return res
     end
@@ -110,23 +110,27 @@ const ic = vec(readdlm(ic_file))
 """Metaparameters."""
 const i_m = parse(Int,ARGS[1])
 const m_a = [56., 100., 200., 300., 360., 375.]
+const n_grid = fill(20, length(m_a))
 const m = m_a[i_m]
+const ng = n_grid[i_m]
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
-const sol_file = "sol_optim_pot_m$(Int(m)).txt"
-const chi2_file = "chi2_optim_pot_m$(Int(m)).txt"
+const sol_file = "sol_optim_pot_m$(Int(m))_ng$(ng).txt"
+const chi2_file = "chi2_optim_pot_m$(Int(m))_ng$(ng).txt"
 const r☼ = 8.122
 
-# const lb_g = [[35., 26.0, 1.0e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
-#               [40., 29., 0.001], [40., 29., 1.3e-3], [43., 29.5, 3.0e-3]]
-# const ub_g = [[40., 30.0, 1.5e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
-#               [41., 30., 0.002], [44., 32., 4.0e-3], [46., 32.5, 6.0e-3]]
+# Testing value sent to antikythera, only for 56 keV.
+const lb_g = [[36.0, 27.2, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+              [40., 29., 0.001], [40., 29., 1.3e-3], [43., 29.5, 3.0e-3]]
+const ub_g = [[36.2, 27.5, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+              [41., 30., 0.002], [44., 32., 4.0e-3], [46., 32.5, 6.0e-3]]
 
-const lb_g = [[35.8, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
-              [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
-const ub_g = [[36.3, 27.6, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
-              [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
+# Ultimate values used for the paper
+# const lb_g = [[35.8, 27.0, 1.2e-5], [36., 27., 1.2e-5], [37., 28., 5.0e-5],
+#               [38., 29., 3.5e-4], [40., 29., 1.3e-3], [43., 29.6, 3.0e-3]]
+# const ub_g = [[36.3, 27.6, 1.3e-5], [40., 31., 1.0e-4], [41., 32., 1.0e-3],
+#               [42., 32., 3.0e-3], [44., 32., 4.0e-3], [47., 36., 1.0e-2]]
 
-const n_grid = [15, 15, 15, 15, 15, 15]
+
 
 @show m sol_file r☼ lb_g ub_g
 
