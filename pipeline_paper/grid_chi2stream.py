@@ -30,7 +30,7 @@ ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = np.loadtxt(ic_file)
 n_job = mp.cpu_count()
 print('n_cpu = ', n_job)
-param_file = "sol_optim_pot_m{:2d}.txt".format(int(ener_f))
+param_file = "serafin/sol_optim_pot_m{:2d}.txt".format(int(ener_f))
 _a, _b, beta_b = np.loadtxt(param_file)
 beta_lim = np.linspace(beta_b, beta_b+1, n_beta)
 
@@ -38,7 +38,7 @@ beta_lim = np.linspace(beta_b, beta_b+1, n_beta)
 if __name__ == "__main__":
 
     for beta in beta_lim:
-        chi2stream_file = 'chi2stream_beta0_{:.3e}.txt'.format(beta)
+        chi2stream_file = 'serafin/chi2stream_beta0_{:.3e}.txt'.format(beta)
 
         args_iter = list(iter.product(np.linspace(bounds[0][0], bounds[0][1], n_grid),
                                       np.linspace(bounds[1][0], bounds[1][1], n_grid),
