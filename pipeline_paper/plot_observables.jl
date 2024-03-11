@@ -41,7 +41,7 @@ importLib.reload(potentials)
 # Parameters and initial conditions.
 
 ϵ = 56
-param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+param_file = "serafin/sol_optim_pot_m$(Int(ϵ)).txt"
 θ, Δθ, β = vec(readdlm(param_file))
 
 W = θ+Δθ
