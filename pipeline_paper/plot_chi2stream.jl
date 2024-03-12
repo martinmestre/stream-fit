@@ -33,8 +33,8 @@ stream = pyimport("stream")
 # Open input file
 
 #chi2_file = "laruidosa/likelihood_beta0_1.258e-05.txt"
-chi2_file = "chi2stream_beta0_1.254e-05.txt"
-chi2_t_file = "chi2stream_tilted_beta0_1.254e-05.txt"
+chi2_file = "chi2stream_beta0_1.253e-05.txt"
+chi2_t_file = "chi2stream_tilted_beta0_1.253e-05.txt"
 matriz = readdlm(chi2_file);
 matriz_t = readdlm(chi2_t_file);
 
