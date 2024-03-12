@@ -38,7 +38,7 @@ beta_lim = np.linspace(beta_b, beta_b+1, n_beta)
 if __name__ == "__main__":
 
     for beta in beta_lim:
-        chi2stream_file = 'serafin/chi2stream_beta0_{:.3e}.txt'.format(beta)
+        chi2stream_file = 'dirac/chi2stream_beta0_{:.3e}.txt'.format(beta)
 
         args_iter = list(iter.product(np.linspace(bounds[0][0], bounds[0][1], n_grid),
                                       np.linspace(bounds[1][0], bounds[1][1], n_grid),
