@@ -30,4 +30,4 @@
 
 . /etc/profile
 
-python grid_chi2stream_tilted.py
+python grid_chi2stream.py
