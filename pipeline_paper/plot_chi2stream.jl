@@ -33,10 +33,10 @@ stream = pyimport("stream")
 # Open input file
 
 #chi2_file = "laruidosa/likelihood_beta0_1.258e-05.txt"
-chi2_file = "chi2stream_beta0_1.253e-05.txt"
+chi2_file = "dirac/chi2stream_beta0_1.253e-05.txt"
 chi2_t_file = "chi2stream_tilted_beta0_1.253e-05.txt"
 matriz = readdlm(chi2_file);
-matriz_t = readdlm(chi2_t_file);
+# matriz_t = readdlm(chi2_t_file);
 
 
 
@@ -74,7 +74,7 @@ f = Figure()
 ax=Axis(f[1, 1], xlabel=L"θ_0", ylabel=L"ω_0", limits=((34,38),(25.5,28.2)))
 levels = collect(range(1000.,10000.,length=10))
 pushfirst!(levels,500)
-pushfirst!(levels, 20)
+pushfirst!(levels, 13)
 co = contourf!(θ, ω, χ², levels=levels,
                extendhigh=(:black,0.2),colormap=:viridis)
 Colorbar(f[1, 2], co;ticks=levels,

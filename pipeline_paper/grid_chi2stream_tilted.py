@@ -14,8 +14,8 @@ import stream
 
 
 def h(x):
-    a = 0.7966927408288083
-    b = 0.7361601392661351
+    a = 0.7938982774281393
+    b = 0.7362420289225402
     return a+b*x
 
 def worker(theta_0, xi_0, beta_0):
@@ -31,19 +31,19 @@ n_beta = 1
 n_grid = 500
 r_sun = 8.122  # kpc   (Gravity Collaboration 2018.)
 ener_f = 56.0  # keV
-bounds = ((35.0, 37.0), (-0.015, 0.015))  # For (theta_0, W_0-theta_0)
+bounds = ((35.0, 37.0), (-0.012, 0.012))  # For (theta_0, W_0-theta_0)
 ic_file = "param_fit_orbit_from_IbataPolysGaiaDR2-data_fixedpot.txt"
 ic = np.loadtxt(ic_file)
 n_job = mp.cpu_count()
 print('n_cpu = ', n_job)
-param_file = "sol_optim_pot_m{:2d}.txt".format(int(ener_f))
+param_file = "serafin/sol_optim_pot_m{:2d}.txt".format(int(ener_f))
 _a, _b, beta_b = np.loadtxt(param_file)
 beta_lim = np.linspace(beta_b, beta_b+1, n_beta)
 
 if __name__ == "__main__":
 
     for beta in beta_lim:
-        chi2stream_file = 'chi2stream_tilted_beta0_{:.3e}.txt'.format(beta)
+        chi2stream_file = 'dirac/chi2stream_tilted_beta0_{:.3e}.txt'.format(beta)
 
         args_iter = list(iter.product(np.linspace(bounds[0][0], bounds[0][1], n_grid),
                                       np.linspace(bounds[1][0], bounds[1][1], n_grid),

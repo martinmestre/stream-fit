@@ -34,7 +34,7 @@ importLib.reload(potentials)
 
 # Parameters and initial conditions.
 ϵ = 56.0
-param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+param_file = "serafin/sol_optim_pot_m$(Int(ϵ)).txt"
 θ, Δθ, β = vec(readdlm(param_file))
 W = θ+Δθ
 param = [ϵ, θ, W, β]
@@ -87,5 +87,11 @@ m_p = rfk.mass_wrap(r_p/u"kpc")[1]
 Δm = rfk.mass_wrap(r_a/u"kpc")[1]-rfk.mass_wrap(r_p/u"kpc")[1]
 m_core = 3.5e6
 @show m_p Δm/m_core
+
+m12 = rfk.mass_wrap(12.0)[1]
+m40 = rfk.mass_wrap(40.0)[1]
+m80 = rfk.mass_wrap(80.0)[1]
+
+@show m12 m40 m80;
 
 # %%
