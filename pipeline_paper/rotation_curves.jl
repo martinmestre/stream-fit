@@ -42,7 +42,7 @@ importLib.reload(potentials)
 # %%
 # Parameters and initial conditions.
 ϵ = 56
-param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+param_file = "serafin/sol_optim_pot_m$(Int(ϵ)).txt"
 θ, ω, β = vec(readdlm(param_file))
 W = θ+ω
 param = [ϵ, θ, W, β]
@@ -59,6 +59,8 @@ pot_list = stream.pot_model(ϵ, θ, W, β)
 halo = pot_list[4]
 r = 10 .^ range(log10(halo.r_s[begin]),log10(100.),length=2000)
 v_ferm = [stream.rot_vel_mw(pot_list, x) for x in r]
+
+
 
 # NFW-MW solution and rotation curve
 function malhan_vcirc(r)
@@ -193,7 +195,7 @@ println("Second plot done.")
 
 # %%
 # Fit data of the fermionic rotation curve.
-bool = 15 .< df_ferm.r .< 40
+bool = 14.5 .< df_ferm.r .< 26.5
 mydata = DataFrame(x=df_ferm.r[bool],y=df_ferm.v[bool])
 ols = lm(@formula(y ~ 1+x), mydata)
 
@@ -202,6 +204,8 @@ ols = lm(@formula(y ~ 1+x), mydata)
 fig.content[2].blockscene.children[1].plots
 
 
+
+# Tests...
 # %%
 n = 20
 df_a = DataFrame(grp=fill("a", n), x=collect(1:n), y=fill(2, n))
