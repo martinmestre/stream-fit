@@ -34,10 +34,11 @@ stream = pyimport("stream")
 
 #chi2_file = "laruidosa/likelihood_beta0_1.258e-05.txt"
 chi2_file = "dirac/chi2stream_beta0_1.253e-05.txt"
-chi2_t_file = "chi2stream_tilted_beta0_1.253e-05.txt"
+chi2_t_file = "dirac/chi2stream_tilted_beta0_1.253e-05.txt"
+sol_file = "serafin/sol_optim_pot_m56.txt"
 matriz = readdlm(chi2_file);
-# matriz_t = readdlm(chi2_t_file);
-
+matriz_t = readdlm(chi2_t_file);
+sol = readdlm(sol_file)
 
 
 # %%
@@ -59,7 +60,6 @@ plt = data(df) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * visual
 bool = χ² .< 50
 df_crest = (x=θ[bool], y=ω[bool], z=χ²[bool])
 plt_crest = data(df_crest) * mapping(:x, :y) * visual(Scatter, markersize=5, color=:red)
-sol = (36.0661, 27.3468)
 fig = draw(plt + plt_crest, axis=(xlabel=L"θ_0", ylabel=L"ω_0"))
 scatter!(sol, color=:black, markersize=15)
 save("paper_plots/chi2stream.pdf", fig, pt_per_unit=1)
@@ -79,7 +79,6 @@ co = contourf!(θ, ω, χ², levels=levels,
                extendhigh=(:black,0.2),colormap=:viridis)
 Colorbar(f[1, 2], co;ticks=levels,
         ticklabelsize=25, label=L"χ²_{\textrm{stream}}")
-sol = (36.033, 27.323)
 scatter!(sol, color=:black, markersize=15)
 save("paper_plots/chi2stream_contourf.pdf", f, pt_per_unit=1)
 f
@@ -105,9 +104,9 @@ plt = data(df_tilt) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * v
 bool = χ² .< 50
 df_crest = (x=θ[bool], y=η[bool], z=χ²[bool])
 plt_crest = data(df_crest) * mapping(:x, :y) * visual(Scatter, markersize=10, color=:red)
-sol = (36.0661, 27.3468- h(36.0661))
+sol_t = (sol[1], sol[2]- h(sol[1]))
 fig = draw(plt + plt_crest, axis=(xlabel=L"θ_0", ylabel=L"ω_0-h(θ_0)",limits=((35,37),(sol[2]-0.02, sol[2]+0.02))))
-scatter!(sol, color=:black, markersize=15)
+scatter!(sol_t, color=:black, markersize=15)
 save("paper_plots/chi2stream_tilted.pdf", fig, pt_per_unit=1)
 display(fig)
 
@@ -117,7 +116,7 @@ display(fig)
 ξ = matriz_t[:, 2]
 β = matriz_t[:, 3]
 χ²= matriz_t[:, 4]; # for chi2stream file
-
+minimum(χ²)
 
 # %%
 # Looking at the Likelihood in the parameter 2D slice (tilted)
@@ -128,7 +127,7 @@ update_theme!(fontsize=37)
 df_tilt = (x=θ, y=ξ, z=χ²)
 plt = data(df_tilt) * mapping(:x, :y; color=:z => L"χ²_{\textrm{stream}}") * (visual(Scatter, markersize=3, colormap=:viridis))
 plt_crest = data(df_crest) * mapping(:x, :y) * visual(Scatter, markersize=1, color=:red)
-sol = (36.0661, 27.3468- h(36.0661))
+sol_t = (sol[1], sol[2]- h(sol[1]))
 plt_contour =  data(df_tilt) * mapping(:x, :y, :z)*visual(Contourf,levels=[19.,19.2, 19.32, 30, 50,100,200,300,500], colormap=:viridis)
 
 fig = Figure(fontsize = 40)
@@ -147,10 +146,11 @@ update_theme!(fontsize=40)
 f = Figure()
 ax=Axis(f[1, 1], xlabel=L"θ_0", ylabel=L"ω_0-h(θ_0)", limits=((35,37),(-0.011,0.011)))
 
-co = contourf!(θ, ξ, χ², levels=[19., 20, 30, 50, 70, 100,200,300,500],
+co = contourf!(θ, ξ, χ², levels=[minimum(χ²), 25, 50, 75, 100,200,300,500],
                extendhigh=(:black,0.2),colormap=:viridis)
-
-Colorbar(f[1, 2], co;ticks=[20, 50,70, 100,200,300,500],
+sol_t = (sol[1], sol[2]-h(sol[1]))
+scatter!(sol_t, color=:black, markersize=15)
+Colorbar(f[1, 2], co; ticks=[25, 50, 75, 100,200,300,500],
         ticklabelsize=25, label=L"χ²_{\textrm{stream}}")
 save("paper_plots/chi2stream_tilted_contourf.pdf", f, pt_per_unit=1)
 f
