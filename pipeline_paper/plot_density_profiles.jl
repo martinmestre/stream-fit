@@ -41,7 +41,7 @@ importLib.reload(potentials)
 """Parameters and initial conditions"""
 
 # %%
-param_file = "param_optim_sequentially_fermionmass_polished.txt"
+param_file = "param_all_masses_antikythera.txt"
 mat = readdlm(param_file)
 ϵ=mat[:,1]
 θ=mat[:,2]
@@ -57,7 +57,6 @@ r☼ = 8.122
 @show ic
 
 # %%
-#pot_list = stream.pot_model(ϵ, θ, W, β)
 
 # Core radii and masses; compute only if needed.
 r_core = Vector{Float64}(undef, length(ϵ))
@@ -89,7 +88,7 @@ M_bh = 4.075e6  # M_sun
 rₛ = 2.0*G*M_bh / c^2
 # %%
 # Black hole constants with units.
-begin 
+begin
     M_bh = 4.075e6u"Msun"  # M_sun
     rₛᵤ = 2.0u"G"*M_bh / u"c"^2
     rₛᵤ = uconvert(u"kpc",rₛᵤ)
@@ -97,16 +96,14 @@ begin
     r_sh = d_sh/2
     r_sh = (r☼*u"kpc"/rₛᵤ)*uconvert(u"rad",r_sh).val
     println("The radius of the BH shadow is $r_sh Schwarzschild radius")
-    @show rₛᵤ r_sh 
+    @show rₛᵤ r_sh
 end
-
-# %%
-r☼
 
 # %%
 
 # Suggestion from Ian Weaver (Julia slack)
-r = rar[2].r_s
+k = 3  # the value of k should be of the model with smallest radius.
+r = rar[k].r_s[6000:end]
 
 ϵs = ϵ
 is = 1:5
@@ -119,6 +116,7 @@ end
 # Each column is a separate profile
 ρ_fs = ρ_f.(r, is')
 # %%
+ρ_f(15.0,5)
 
 # Build the DataFrame
 df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
@@ -174,5 +172,47 @@ let
       hideydecorations!(ax2)
       display(fig)
       save("paper_plots/density_profiles.pdf", fig, pt_per_unit = 1)
+      println("ρ(r) plot done.")
+end
+# %%
+
+let
+      set_aog_theme!()
+      update_theme!(Axis=(topspinevisible=true, rightspinevisible=true,
+      topspinecolor=:darkgray, rightspinecolor=:darkgray))
+      size_inches = (5.2*2, 3.5*2)
+      size_pt = 72 .* size_inches
+      fig = Figure(resolution = size_pt, fontsize = 24)
+      gridpos = fig[1, 1]
+      grp = dims(1) => renamer(labels) => L"$m$ [keV/c²]"
+      plt = data(df) *
+          mapping(:r => L"$r$ [kpc]", 2:ncol(df) .=> L"$ρ$ [$M_⊙$/kpc³]";
+              color = grp,
+              linestyle = grp
+          ) *
+          visual(Lines, linewidth=3)
+      f = draw!(gridpos, plt, axis=(
+            limits=((5.0, 27.0),(0, 3.0e7)),
+            xgridvisible=false, ygridvisible=false))
+      legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
+      leg = fig.content[2]
+      lineas = leg.blockscene.children[1].plots[2:6]
+      for l in lineas
+            l.linewidth = 4
+      end
+      ls = [:dashdotdot, :dash, :dot, :solid, :dashdot]
+      for i ∈ eachindex(lineas)
+        lineas[i].linestyle = ls[i]
+      end
+
+
+      lineas = fig.content[1].scene.plots
+      for i ∈ eachindex(lineas)
+        lineas[i].linestyle = ls[i]
+      end
+
+
+      display(fig)
+      save("paper_plots/density_profiles_linear.pdf", fig, pt_per_unit = 1)
       println("ρ(r) plot done.")
 end

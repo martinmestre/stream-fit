@@ -353,11 +353,7 @@ def chi2_stream(theta_0, d_theta, beta_0, ener_f, ic, r_sun):
     sigma2 = sigma_array[4]**2
     sum[4] = np.sum((y_dat-y_mod)**2 / sigma2)
 
-    halo = pot_list[3]
 
-    r_core, mass_core = get_core_GR(halo)
-
-    print(theta_0, d_theta, beta_0, ener_f,  " chi2_full=", np.sum(sum), "chi2_stream=", np.sum(sum[0:5]), "r_core=", r_core, "m_core=", mass_core/1.e6, "x10⁶ M_sun")
     return np.sum(sum)
 
 

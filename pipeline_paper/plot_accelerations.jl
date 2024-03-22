@@ -48,7 +48,7 @@ importLib.reload(potentials)
 # Parameters and initial conditions.
 
 ϵ = 56
-param_file = "sol_optim_pot_m$(Int(ϵ)).txt"
+param_file = "serafin/sol_optim_pot_m$(Int(ϵ)).txt"
 θ, Δθ, β = vec(readdlm(param_file))
 
 W = θ+Δθ
@@ -146,7 +146,7 @@ minimum(d_g)
 maximum(d_g)
 #%%
 
-# This is the plot used in the paper for plot of acceleratio along ϕ₁.
+# This is the plot used in the paper for plot of acceleration along ϕ₁.
 labels = [L"a_r~(\mathrm{NFW-MW})", L"a_z~(\mathrm{NFW-MW})", L"a_r~(\mathrm{Fermionic-MW})", L"a_z~(\mathrm{Fermionic-MW})"]
 df_nfw_R = DataFrame(ϕ₁=ϕ₁ₒ,
                 R=R,
