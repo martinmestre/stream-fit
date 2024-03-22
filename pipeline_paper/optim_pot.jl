@@ -8,8 +8,8 @@ Using Distributed.jl
 using Pkg
 Pkg.activate(".")
 using Distributed
-using SlurmClusterManager
-addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
+# using SlurmClusterManager
+# addprocs(SlurmManager(;launch_timeout=300.0, verbose=true))
 
 @show nprocs()
 @show nworkers()
@@ -110,7 +110,7 @@ const ic = vec(readdlm(ic_file))
 """Metaparameters."""
 const i_m = parse(Int,ARGS[1])
 const m_a = [56., 100., 200., 300., 360., 375.]
-const n_grid = fill(20, length(m_a))
+const n_grid = fill(10, length(m_a))
 const m = m_a[i_m]
 const ng = n_grid[i_m]
 const sol_dir = "sol_dir_optim_pot_m$(Int(m))"
