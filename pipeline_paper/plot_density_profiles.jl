@@ -41,7 +41,7 @@ importLib.reload(potentials)
 """Parameters and initial conditions"""
 
 # %%
-param_file = "param_all_masses_antikythera.txt"
+param_file = "param_all_masses_serafin.txt"
 mat = readdlm(param_file)
 ϵ=mat[:,1]
 θ=mat[:,2]
@@ -102,8 +102,10 @@ end
 # %%
 
 # Suggestion from Ian Weaver (Julia slack)
-k = 3  # the value of k should be of the model with smallest radius.
-r = rar[k].r_s[6000:end]
+k_min_sup = argmin([rar[j].r_s[end] for j ∈ 1:5]) # index of the model with smallest radius.
+k_max_inf = argmax([rar[j].r_s[begin] for j ∈ 1:5]) # index of the model that starts farther from origin.
+r = rar[k_min_sup].r_s
+r = r[ r .> rar[k_max_inf].r_s[begin] ]
 
 ϵs = ϵ
 is = 1:5
@@ -116,7 +118,6 @@ end
 # Each column is a separate profile
 ρ_fs = ρ_f.(r, is')
 # %%
-ρ_f(15.0,5)
 
 # Build the DataFrame
 df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
@@ -174,7 +175,16 @@ let
       save("paper_plots/density_profiles.pdf", fig, pt_per_unit = 1)
       println("ρ(r) plot done.")
 end
-# %%
+# %%#
+
+# Plotting the halo in linear scale.
+k_min_sup = argmin([rar[j].r_s[end] for j ∈ 1:5]) # index of the model with smallest radius.
+k_max_inf = argmax([rar[j].r_s[begin] for j ∈ 1:5]) # index of the model that starts farther from origin.
+r = rar[k_min_sup].r_s
+r = r[ r .> rar[k_max_inf].r_s[begin] ]
+r = r[6000:end]
+ρ_fs = ρ_f.(r, is')
+df = DataFrame([r;; ρ_fs], [:r; [Symbol("ϵ_$ϵ") for ϵ ∈ ϵs]])
 
 let
       set_aog_theme!()
@@ -192,7 +202,7 @@ let
           ) *
           visual(Lines, linewidth=3)
       f = draw!(gridpos, plt, axis=(
-            limits=((5.0, 27.0),(0, 3.0e7)),
+            limits=((1.0, 27.0),(0, 3.0e7)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:right, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
       leg = fig.content[2]
