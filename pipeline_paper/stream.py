@@ -193,8 +193,8 @@ def orbit_model_ext(alpha, delta, distance, mu_alpha_cosdelta, mu_delta, v_los, 
 
     # ODE integration
     unit_t = 0.977792221680356   # Gyr
-    time_span_s2 = 3.0/unit_t  # only to be used with plot_orbit.jl
-    # time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
+    # time_span_s2 = 3.0/unit_t  # only to be used with plot_orbit.jl
+    time_span_s2 = 0.2/unit_t  # for all the scripts except for plot_orbit.jl
     t_0 = 0.0/unit_t
     n_steps = 1000
     t_back = np.linspace(t_0, -time_span_s2, n_steps+1)
@@ -287,7 +287,6 @@ sigma_array = np.array([0.5, 1.5, 2.0, 2.0, 10.0])
 
 def gal_distance(R_sun, z_sun):
     Iba_coord_GD1 = coord.SkyCoord(Iba_phi1_np, Iba_phi2_np, frame="gd1koposov10", unit="deg")
-    # Iba_coord_GD1 = GD1_class.GD1Koposov10(phi1=Iba_phi1_np*u.degree, phi2=Iba_phi2_np*u.degree)
     Iba_coord_ICRS = Iba_coord_GD1.transform_to(coord.ICRS)
     Iba_ra_np = Iba_coord_ICRS.ra.value
     Iba_dec_np = Iba_coord_ICRS.dec.value
@@ -298,7 +297,6 @@ def gal_distance(R_sun, z_sun):
                                 radial_velocity=Iba_vhel_np*u.km/u.s)
     frame = coord.Galactocentric(galcen_distance=R_sun*u.kpc, z_sun=z_sun*u.kpc)
     Iba_coord_Gal = Iba_coord_ICRS.transform_to(frame)
-    # Iba_coord_Gal = Iba_coord_Gal[11:90] without cropping
     Iba_d_gal = np.zeros(len(Iba_coord_Gal.x.value))
     Iba_R_gal = np.zeros(len(Iba_coord_Gal.x.value))
     for i in range(0, len(Iba_coord_Gal.x.value)):
