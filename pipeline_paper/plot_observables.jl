@@ -85,13 +85,13 @@ v☼ₛ = v☼ₒ + Δv☼
 v☼ᵢ = v☼ₒ - Δv☼
 
 # Print Galactocentric distance array of Ibata polinomials.
-# Iba_gal_dist, Iba_R_dist, Iba_z = stream.gal_distance(r☼,0.0)
-# println("The Galactocentric distance satisfies:")
-# println("$(minimum(Iba_gal_dist)) kpc < Iba_gal_dist < $(maximum(Iba_gal_dist)) kpc")
-# println("The Galactocentric projected distance satisfies:")
-# println("$(minimum(Iba_R_dist)) kpc < Iba_R_dist < $(maximum(Iba_R_dist)) kpc")
-# println("The z variable satisfies:")
-# println("$(minimum(Iba_z)) kpc < Iba_z < $(maximum(Iba_z)) kpc")
+Iba_gal_dist, Iba_R_dist, Iba_z = stream.gal_distance(r☼,0.0)
+println("The Galactocentric distance satisfies:")
+println("$(minimum(Iba_gal_dist)) kpc < Iba_gal_dist < $(maximum(Iba_gal_dist)) kpc")
+println("The Galactocentric projected distance satisfies:")
+println("$(minimum(Iba_R_dist)) kpc < Iba_R_dist < $(maximum(Iba_R_dist)) kpc")
+println("The z variable satisfies:")
+println("$(minimum(Iba_z)) kpc < Iba_z < $(maximum(Iba_z)) kpc")
 
 # MEPP solution.
 pot_list = stream.pot_model(ϵ, θ, W, β)
@@ -301,11 +301,10 @@ let
       visual(Lines, linewidth=lw)
       plt_band = data(df_obsmod)*mapping(:ϕ₁ₒ=>"",:d☼ₛ=>"",:d☼ᵢ=>"")*visual(Band,color=(:black,0.15))
 
-      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(6, 13.5)),
+      f = draw!(gridpos, plt, axis=(;limits=((-90,10),(7, 12)),
             xgridvisible=false, ygridvisible=false))
       legend!(gridpos, f; tellwidth=false, halign=:center, valign=:top, margin=(10, 10, 10, 10), patchsize=(50,35))
-      draw!(gridpos, plt_band, axis=(;limits=((-90,10),(6, 13.5)),
-      xgridvisible=false, ygridvisible=false))
+      # draw!(gridpos, plt_band, axis=(;limits=((-90,10),(6, 13.5)), xgridvisible=false, ygridvisible=false))
 
       # Lines re-styling
       lineas = fig.content[1].scene.plots
