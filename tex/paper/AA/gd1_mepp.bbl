@@ -1,0 +1,397 @@
+\begin{thebibliography}{76}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{{Amorisco}(2015)}]{2015MNRAS.450..575A}
+{Amorisco}, N.~C. 2015, \mnras, 450, 575
+
+\bibitem[{{Arg{\"u}elles} {et~al.}(2021){Arg{\"u}elles}, {D{\'\i}az}, {Krut},
+  \& {Yunis}}]{2021MNRAS.502.4227A}
+{Arg{\"u}elles}, C.~R., {D{\'\i}az}, M.~I., {Krut}, A., \& {Yunis}, R. 2021,
+  \mnras, 502, 4227
+
+\bibitem[{{Arg{\"u}elles} {et~al.}(2019){Arg{\"u}elles}, {Krut}, {Rueda}, \&
+  {Ruffini}}]{2019PDU....24..278A}
+{Arg{\"u}elles}, C.~R., {Krut}, A., {Rueda}, J.~A., \& {Ruffini}, R. 2019,
+  Physics of the Dark Universe, 24, 100278
+
+\bibitem[{{Arg{\"u}elles} {et~al.}(2022){Arg{\"u}elles}, {Mestre},
+  {Becerra-Vergara}, {Crespi}, {Krut}, {Rueda}, \&
+  {Ruffini}}]{2022MNRAS.511L..35A}
+{Arg{\"u}elles}, C.~R., {Mestre}, M.~F., {Becerra-Vergara}, E.~A., {et~al.}
+  2022, \mnras, 511, L35
+
+\bibitem[{Argüelles {et~al.}(2018)Argüelles, Krut, Rueda, \&
+  Ruffini}]{arguelles_novel_2018}
+Argüelles, C.~R., Krut, A., Rueda, J.~A., \& Ruffini, R. 2018, Physics of the
+  Dark Universe, 21
+
+\bibitem[{{Astropy Collaboration} {et~al.}(2022){Astropy Collaboration},
+  {Price-Whelan}, {Lim}, {Earl}, {Starkman}, {Bradley}, {Shupe}, {Patil},
+  {Corrales}, {Brasseur}, {N{"o}the}, {Donath}, {Tollerud}, {Morris},
+  {Ginsburg}, {Vaher}, {Weaver}, {Tocknell}, {Jamieson}, {van Kerkwijk},
+  {Robitaille}, {Merry}, {Bachetti}, {G{"u}nther}, {Aldcroft},
+  {Alvarado-Montes}, {Archibald}, {B{'o}di}, {Bapat}, {Barentsen}, {Baz{'a}n},
+  {Biswas}, {Boquien}, {Burke}, {Cara}, {Cara}, {Conroy}, {Conseil}, {Craig},
+  {Cross}, {Cruz}, {D'Eugenio}, {Dencheva}, {Devillepoix}, {Dietrich},
+  {Eigenbrot}, {Erben}, {Ferreira}, {Foreman-Mackey}, {Fox}, {Freij}, {Garg},
+  {Geda}, {Glattly}, {Gondhalekar}, {Gordon}, {Grant}, {Greenfield}, {Groener},
+  {Guest}, {Gurovich}, {Handberg}, {Hart}, {Hatfield-Dodds}, {Homeier},
+  {Hosseinzadeh}, {Jenness}, {Jones}, {Joseph}, {Kalmbach}, {Karamehmetoglu},
+  {Ka{l}uszy{'n}ski}, {Kelley}, {Kern}, {Kerzendorf}, {Koch}, {Kulumani},
+  {Lee}, {Ly}, {Ma}, {MacBride}, {Maljaars}, {Muna}, {Murphy}, {Norman},
+  {O'Steen}, {Oman}, {Pacifici}, {Pascual}, {Pascual-Granado}, {Patil},
+  {Perren}, {Pickering}, {Rastogi}, {Roulston}, {Ryan}, {Rykoff}, {Sabater},
+  {Sakurikar}, {Salgado}, {Sanghi}, {Saunders}, {Savchenko}, {Schwardt},
+  {Seifert-Eckert}, {Shih}, {Jain}, {Shukla}, {Sick}, {Simpson},
+  {Singanamalla}, {Singer}, {Singhal}, {Sinha}, {Sip{H{o}}cz}, {Spitler},
+  {Stansby}, {Streicher}, {{{S}}umak}, {Swinbank}, {Taranu}, {Tewary},
+  {Tremblay}, {Val-Borro}, {Van Kooten}, {Vasovi{'c}}, {Verma}, {de Miranda
+  Cardoso}, {Williams}, {Wilson}, {Winkel}, {Wood-Vasey}, {Xue}, {Yoachim},
+  {Zhang}, {Zonca}, \& {Astropy Project Contributors}}]{astropy:2022}
+{Astropy Collaboration}, {Price-Whelan}, A.~M., {Lim}, P.~L., {et~al.} 2022,
+  apj, 935, 167
+
+\bibitem[{{Astropy Collaboration} {et~al.}(2018){Astropy Collaboration},
+  {Price-Whelan}, {Sip{\H{o}}cz}, {G{\"u}nther}, {Lim}, {Crawford}, {Conseil},
+  {Shupe}, {Craig}, {Dencheva}, {Ginsburg}, {Vand erPlas}, {Bradley},
+  {P{\'e}rez-Su{\'a}rez}, {de Val-Borro}, {Aldcroft}, {Cruz}, {Robitaille},
+  {Tollerud}, {Ardelean}, {Babej}, {Bach}, {Bachetti}, {Bakanov}, {Bamford},
+  {Barentsen}, {Barmby}, {Baumbach}, {Berry}, {Biscani}, {Boquien}, {Bostroem},
+  {Bouma}, {Brammer}, {Bray}, {Breytenbach}, {Buddelmeijer}, {Burke},
+  {Calderone}, {Cano Rodr{\'\i}guez}, {Cara}, {Cardoso}, {Cheedella}, {Copin},
+  {Corrales}, {Crichton}, {D'Avella}, {Deil}, {Depagne}, {Dietrich}, {Donath},
+  {Droettboom}, {Earl}, {Erben}, {Fabbro}, {Ferreira}, {Finethy}, {Fox},
+  {Garrison}, {Gibbons}, {Goldstein}, {Gommers}, {Greco}, {Greenfield},
+  {Groener}, {Grollier}, {Hagen}, {Hirst}, {Homeier}, {Horton}, {Hosseinzadeh},
+  {Hu}, {Hunkeler}, {Ivezi{\'c}}, {Jain}, {Jenness}, {Kanarek}, {Kendrew},
+  {Kern}, {Kerzendorf}, {Khvalko}, {King}, {Kirkby}, {Kulkarni}, {Kumar},
+  {Lee}, {Lenz}, {Littlefair}, {Ma}, {Macleod}, {Mastropietro}, {McCully},
+  {Montagnac}, {Morris}, {Mueller}, {Mumford}, {Muna}, {Murphy}, {Nelson},
+  {Nguyen}, {Ninan}, {N{\"o}the}, {Ogaz}, {Oh}, {Parejko}, {Parley}, {Pascual},
+  {Patil}, {Patil}, {Plunkett}, {Prochaska}, {Rastogi}, {Reddy Janga},
+  {Sabater}, {Sakurikar}, {Seifert}, {Sherbert}, {Sherwood-Taylor}, {Shih},
+  {Sick}, {Silbiger}, {Singanamalla}, {Singer}, {Sladen}, {Sooley},
+  {Sornarajah}, {Streicher}, {Teuben}, {Thomas}, {Tremblay}, {Turner},
+  {Terr{\'o}n}, {van Kerkwijk}, {de la Vega}, {Watkins}, {Weaver}, {Whitmore},
+  {Woillez}, {Zabalza}, \& {Astropy Contributors}}]{astropy:2018}
+{Astropy Collaboration}, {Price-Whelan}, A.~M., {Sip{\H{o}}cz}, B.~M., {et~al.}
+  2018, \aj, 156, 123
+
+\bibitem[{{Astropy Collaboration} {et~al.}(2013){Astropy Collaboration},
+  {Robitaille}, {Tollerud}, {Greenfield}, {Droettboom}, {Bray}, {Aldcroft},
+  {Davis}, {Ginsburg}, {Price-Whelan}, {Kerzendorf}, {Conley}, {Crighton},
+  {Barbary}, {Muna}, {Ferguson}, {Grollier}, {Parikh}, {Nair}, {Unther},
+  {Deil}, {Woillez}, {Conseil}, {Kramer}, {Turner}, {Singer}, {Fox}, {Weaver},
+  {Zabalza}, {Edwards}, {Azalee Bostroem}, {Burke}, {Casey}, {Crawford},
+  {Dencheva}, {Ely}, {Jenness}, {Labrie}, {Lim}, {Pierfederici}, {Pontzen},
+  {Ptak}, {Refsdal}, {Servillat}, \& {Streicher}}]{astropy:2013}
+{Astropy Collaboration}, {Robitaille}, T.~P., {Tollerud}, E.~J., {et~al.} 2013,
+  \aap, 558, A33
+
+\bibitem[{Audet {et~al.}(2021)Audet, Digabel, Montplaisir, \&
+  Tribes}]{audet2021nomad}
+Audet, C., Digabel, S.~L., Montplaisir, V.~R., \& Tribes, C. 2021, NOMAD
+  version 4: Nonlinear optimization with the MADS algorithm
+
+\bibitem[{{Becerra-Vergara} {et~al.}(2020){Becerra-Vergara}, {Arg{\"u}elles},
+  {Krut}, {Rueda}, \& {Ruffini}}]{2020A&A...641A..34B}
+{Becerra-Vergara}, E.~A., {Arg{\"u}elles}, C.~R., {Krut}, A., {Rueda}, J.~A.,
+  \& {Ruffini}, R. 2020, \aap, 641, A34
+
+\bibitem[{{Becerra-Vergara} {et~al.}(2021){Becerra-Vergara}, {Arg{\"u}elles},
+  {Krut}, {Rueda}, \& {Ruffini}}]{2021MNRAS.505L..64B}
+{Becerra-Vergara}, E.~A., {Arg{\"u}elles}, C.~R., {Krut}, A., {Rueda}, J.~A.,
+  \& {Ruffini}, R. 2021, \mnras, 505, L64
+
+\bibitem[{Bezanson {et~al.}(2017)Bezanson, Edelman, Karpinski, \&
+  Shah}]{bezanson2017julia}
+Bezanson, J., Edelman, A., Karpinski, S., \& Shah, V.~B. 2017, SIAM review, 59,
+  65
+
+\bibitem[{{Bovy}(2020)}]{2020arXiv201202169B}
+{Bovy}, J. 2020, arXiv e-prints, arXiv:2012.02169
+
+\bibitem[{Box(1965)}]{10.1093/comjnl/8.1.42}
+Box, M.~J. 1965, The Computer Journal, 8, 42
+
+\bibitem[{{Carlberg}(2018)}]{2018ApJ...861...69C}
+{Carlberg}, R.~G. 2018, \apj, 861, 69
+
+\bibitem[{{Chavanis}(2004)}]{2004PhyA..332...89C}
+{Chavanis}, P.-H. 2004, Physica A Statistical Mechanics and its Applications,
+  332, 89
+
+\bibitem[{{Chavanis}(2022{\natexlab{a}})}]{2022PhyA..60628089C}
+{Chavanis}, P.-H. 2022{\natexlab{a}}, Physica A Statistical Mechanics and its
+  Applications, 606, 128089
+
+\bibitem[{{Chavanis}(2022{\natexlab{b}})}]{2022PhRvD.106d3538C}
+{Chavanis}, P.-H. 2022{\natexlab{b}}, \prd, 106, 043538
+
+\bibitem[{{Chavanis} {et~al.}(2015){Chavanis}, {Lemou}, \&
+  {M{\'e}hats}}]{2015PhRvD..92l3527C}
+{Chavanis}, P.-H., {Lemou}, M., \& {M{\'e}hats}, F. 2015, \prd, 92, 123527
+
+\bibitem[{Collaboration(2022)}]{EHT_image}
+Collaboration, T. E. H.~T. 2022, The Astrophysical Journal Letters, 930
+
+\bibitem[{{Craig} {et~al.}(2023){Craig}, {Chakrabarti}, {Sanderson}, \&
+  {Nikakhtar}}]{2023ApJ...945L..32C}
+{Craig}, P., {Chakrabarti}, S., {Sanderson}, R.~E., \& {Nikakhtar}, F. 2023,
+  \apjl, 945, L32
+
+\bibitem[{{Cunningham} {et~al.}(2023){Cunningham}, {Hunt}, {Price-Whelan},
+  {Johnston}, {Ness}, {Lu}, {Escala}, \& {Stelea}}]{2023arXiv230708730C}
+{Cunningham}, E.~C., {Hunt}, J. A.~S., {Price-Whelan}, A.~M., {et~al.} 2023,
+  arXiv e-prints, arXiv:2307.08730
+
+\bibitem[{Danisch \& Krumbiegel(2021)}]{DanischKrumbiegel2021}
+Danisch, S. \& Krumbiegel, J. 2021, Journal of Open Source Software, 6, 3349
+
+\bibitem[{de~Boer {et~al.}(2018)de~Boer, Belokurov, Koposov, Ferrarese, Erkal,
+  Côté, \& Navarro}]{10.1093/mnras/sty677}
+de~Boer, T. J.~L., Belokurov, V., Koposov, S.~E., {et~al.} 2018, Monthly
+  Notices of the Royal Astronomical Society, 477, 1893
+
+\bibitem[{{Do} {et~al.}(2019){Do}, {Hees}, {Ghez}, {Martinez}, {Chu}, {Jia},
+  {Sakai}, {Lu}, {Gautam}, {O'Neil}, {Becklin}, {Morris}, {Matthews},
+  {Nishiyama}, {Campbell}, {Chappell}, {Chen}, {Ciurlo}, {Dehghanfar},
+  {Gallego-Cano}, {Kerzendorf}, {Lyke}, {Naoz}, {Saida}, {Sch{\"o}del},
+  {Takahashi}, {Takamori}, {Witzel}, \& {Wizinowich}}]{2019Sci...365..664D}
+{Do}, T., {Hees}, A., {Ghez}, A., {et~al.} 2019, Science, 365, 664
+
+\bibitem[{Eilers {et~al.}(2019)Eilers, Hogg, Rix, \& Ness}]{Eilers_2019}
+Eilers, A.-C., Hogg, D.~W., Rix, H.-W., \& Ness, M.~K. 2019, The Astrophysical
+  Journal, 871, 120
+
+\bibitem[{{Gialluca} {et~al.}(2021){Gialluca}, {Naidu}, \&
+  {Bonaca}}]{2021ApJ...911L..32G}
+{Gialluca}, M.~T., {Naidu}, R.~P., \& {Bonaca}, A. 2021, \apjl, 911, L32
+
+\bibitem[{{Gibbons} {et~al.}(2014){Gibbons}, {Belokurov}, \&
+  {Evans}}]{2014MNRAS.445.3788G}
+{Gibbons}, S.~L.~J., {Belokurov}, V., \& {Evans}, N.~W. 2014, \mnras, 445, 3788
+
+\bibitem[{{GRAVITY Collaboration} {et~al.}(2018){GRAVITY Collaboration},
+  {Abuter}, {Amorim}, {Anugu}, {Baub{\"o}ck}, {Benisty}, {Berger}, {Blind},
+  {Bonnet}, {Brandner}, {Buron}, {Collin}, {Chapron}, {Cl{\'e}net}, {Coud{\'e}
+  Du Foresto}, {de Zeeuw}, {Deen}, {Delplancke-Str{\"o}bele}, {Dembet},
+  {Dexter}, {Duvert}, {Eckart}, {Eisenhauer}, {Finger}, {F{\"o}rster
+  Schreiber}, {F{\'e}dou}, {Garcia}, {Garcia Lopez}, {Gao}, {Gendron},
+  {Genzel}, {Gillessen}, {Gordo}, {Habibi}, {Haubois}, {Haug}, {Hau{\ss}mann},
+  {Henning}, {Hippler}, {Horrobin}, {Hubert}, {Hubin}, {Jimenez Rosales},
+  {Jochum}, {Jocou}, {Kaufer}, {Kellner}, {Kendrew}, {Kervella}, {Kok},
+  {Kulas}, {Lacour}, {Lapeyr{\`e}re}, {Lazareff}, {Le Bouquin}, {L{\'e}na},
+  {Lippa}, {Lenzen}, {M{\'e}rand}, {M{\"u}ler}, {Neumann}, {Ott}, {Palanca},
+  {Paumard}, {Pasquini}, {Perraut}, {Perrin}, {Pfuhl}, {Plewa}, {Rabien},
+  {Ram{\'\i}rez}, {Ramos}, {Rau}, {Rodr{\'\i}guez-Coira}, {Rohloff}, {Rousset},
+  {Sanchez-Bermudez}, {Scheithauer}, {Sch{\"o}ller}, {Schuler}, {Spyromilio},
+  {Straub}, {Straubmeier}, {Sturm}, {Tacconi}, {Tristram}, {Vincent}, {von
+  Fellenberg}, {Wank}, {Waisberg}, {Widmann}, {Wieprecht}, {Wiest},
+  {Wiezorrek}, {Woillez}, {Yazici}, {Ziegler}, \& {Zins}}]{2018A&A...615L..15G}
+{GRAVITY Collaboration}, {Abuter}, R., {Amorim}, A., {et~al.} 2018, \aap, 615,
+  L15
+
+\bibitem[{Harris {et~al.}(2020)Harris, Millman, van~der Walt, Gommers,
+  Virtanen, Cournapeau, Wieser, Taylor, Berg, Smith, Kern, Picus, Hoyer, van
+  Kerkwijk, Brett, Haldane, del R{\'{i}}o, Wiebe, Peterson,
+  G{\'{e}}rard-Marchant, Sheppard, Reddy, Weckesser, Abbasi, Gohlke, \&
+  Oliphant}]{harris2020array}
+Harris, C.~R., Millman, K.~J., van~der Walt, S.~J., {et~al.} 2020, Nature, 585,
+  357
+
+\bibitem[{{Helmi}(2020)}]{2020ARA&A..58..205H}
+{Helmi}, A. 2020, \araa, 58, 205
+
+\bibitem[{{Helmi} {et~al.}(1999){Helmi}, {White}, {de Zeeuw}, \&
+  {Zhao}}]{1999Natur.402...53H}
+{Helmi}, A., {White}, S. D.~M., {de Zeeuw}, P.~T., \& {Zhao}, H. 1999, \nat,
+  402, 53
+
+\bibitem[{Hunter(2007)}]{Hunter:2007}
+Hunter, J.~D. 2007, Computing in Science \& Engineering, 9, 90
+
+\bibitem[{Ibata {et~al.}(2020)Ibata, Thomas, Famaey, Malhan, Martin, \&
+  Monari}]{Ibata_2020}
+Ibata, R., Thomas, G., Famaey, B., {et~al.} 2020, The Astrophysical Journal,
+  891, 161
+
+\bibitem[{Ibata {et~al.}(2016)Ibata, Lewis, \& Martin}]{Ibata_2016}
+Ibata, R.~A., Lewis, G.~F., \& Martin, N.~F. 2016, The Astrophysical Journal,
+  819, 1
+
+\bibitem[{{Ibata} {et~al.}(2017){Ibata}, {Lewis}, {Thomas}, {Martin}, \&
+  {Chapman}}]{2017ApJ...842..120I}
+{Ibata}, R.~A., {Lewis}, G.~F., {Thomas}, G., {Martin}, N.~F., \& {Chapman}, S.
+  2017, \apj, 842, 120
+
+\bibitem[{{Jiao} {et~al.}(2023){Jiao}, {Hammer}, {Wang}, {Wang}, {Amram},
+  {Chemin}, \& {Yang}}]{Jiao2023}
+{Jiao}, Y., {Hammer}, F., {Wang}, H., {et~al.} 2023, arXiv e-prints,
+  arXiv:2309.00048
+
+\bibitem[{Johnson(2007)}]{NLopt}
+Johnson, S.~G. 2007, The {NLopt} nonlinear-optimization package,
+  \url{https://github.com/stevengj/nlopt}
+
+\bibitem[{{Johnston} \& {Carlberg}(2016)}]{2016ASSL..420..169J}
+{Johnston}, K.~V. \& {Carlberg}, R.~G. 2016, in Astrophysics and Space Science
+  Library, Vol. 420, Tidal Streams in the Local Group and Beyond, ed. H.~J.
+  {Newberg} \& J.~L. {Carlin}, 169
+
+\bibitem[{{Johnston} {et~al.}(1999){Johnston}, {Zhao}, {Spergel}, \&
+  {Hernquist}}]{1999ApJ...512L.109J}
+{Johnston}, K.~V., {Zhao}, H., {Spergel}, D.~N., \& {Hernquist}, L. 1999,
+  \apjl, 512, L109
+
+\bibitem[{Klein(1949)}]{RevModPhys.21.531}
+Klein, O. 1949, Rev. Mod. Phys., 21, 531
+
+\bibitem[{Koposov {et~al.}(2010)Koposov, Rix, \& Hogg}]{Koposov_2010}
+Koposov, S.~E., Rix, H.-W., \& Hogg, D.~W. 2010, The Astrophysical Journal,
+  712, 260
+
+\bibitem[{{Krut} {et~al.}(2023){Krut}, {Arg{\"u}elles}, {Chavanis}, {Rueda}, \&
+  {Ruffini}}]{2023ApJ...945....1K}
+{Krut}, A., {Arg{\"u}elles}, C.~R., {Chavanis}, P.~H., {Rueda}, J.~A., \&
+  {Ruffini}, R. 2023, \apj, 945, 1
+
+\bibitem[{{Law} {et~al.}(2009){Law}, {Majewski}, \&
+  {Johnston}}]{2009ApJ...703L..67L}
+{Law}, D.~R., {Majewski}, S.~R., \& {Johnston}, K.~V. 2009, \apjl, 703, L67
+
+\bibitem[{{Lux} {et~al.}(2013){Lux}, {Read}, {Lake}, \&
+  {Johnston}}]{2013MNRAS.436.2386L}
+{Lux}, H., {Read}, J.~I., {Lake}, G., \& {Johnston}, K.~V. 2013, \mnras, 436,
+  2386
+
+\bibitem[{{Malhan} \& {Ibata}(2019)}]{2019MNRAS.486.2995M}
+{Malhan}, K. \& {Ibata}, R.~A. 2019, \mnras, 486, 2995
+
+\bibitem[{{Malhan} {et~al.}(2019){Malhan}, {Ibata}, {Carlberg}, {Valluri}, \&
+  {Freese}}]{2019ApJ...881..106M}
+{Malhan}, K., {Ibata}, R.~A., {Carlberg}, R.~G., {Valluri}, M., \& {Freese}, K.
+  2019, \apj, 881, 106
+
+\bibitem[{Malhan {et~al.}(2018)Malhan, Ibata, Goldman, Martin, Magnier, \&
+  Chambers}]{10.1093/mnras/sty1338}
+Malhan, K., Ibata, R.~A., Goldman, B., {et~al.} 2018, Monthly Notices of the
+  Royal Astronomical Society, 478, 3862
+
+\bibitem[{{Malhan} {et~al.}(2021){Malhan}, {Valluri}, \&
+  {Freese}}]{2021MNRAS.501..179M}
+{Malhan}, K., {Valluri}, M., \& {Freese}, K. 2021, \mnras, 501, 179
+
+\bibitem[{{Merafina} \& {Ruffini}(1989)}]{1989A&A...221....4M}
+{Merafina}, M. \& {Ruffini}, R. 1989, \aap, 221, 4
+
+\bibitem[{{Mestre} {et~al.}(2020){Mestre}, {Llinares}, \&
+  {Carpintero}}]{2020MNRAS.492.4398M}
+{Mestre}, M., {Llinares}, C., \& {Carpintero}, D.~D. 2020, \mnras, 492, 4398
+
+\bibitem[{Nelder \& Mead(1965)}]{NELDERMEAD}
+Nelder, J.~A. \& Mead, R. 1965, The Computer Journal, 7, 308
+
+\bibitem[{{Nibauer} {et~al.}(2022){Nibauer}, {Belokurov}, {Cranmer}, {Goodman},
+  \& {Ho}}]{2022ApJ...940...22N}
+{Nibauer}, J., {Belokurov}, V., {Cranmer}, M., {Goodman}, J., \& {Ho}, S. 2022,
+  \apj, 940, 22
+
+\bibitem[{{Ou} {et~al.}(2023){Ou}, {Eilers}, {Necib}, \& {Frebel}}]{Ou2023}
+{Ou}, X., {Eilers}, A.-C., {Necib}, L., \& {Frebel}, A. 2023, arXiv e-prints,
+  arXiv:2303.12838
+
+\bibitem[{{Palau} \& {Miralda-Escud{\'e}}(2023)}]{2023MNRAS.524.2124P}
+{Palau}, C.~G. \& {Miralda-Escud{\'e}}, J. 2023, \mnras, 524, 2124
+
+\bibitem[{{Pouliasis} {et~al.}(2017){Pouliasis}, {Di Matteo}, \&
+  {Haywood}}]{2017A&A...598A..66P}
+{Pouliasis}, E., {Di Matteo}, P., \& {Haywood}, M. 2017, \aap, 598, A66
+
+\bibitem[{Price-Whelan {et~al.}(2020)Price-Whelan, Sipőcz, Lenz, Greco,
+  Starkman, Foreman-Mackey, Lim, Oh, Koposov, \&
+  Major}]{adrian_price_whelan_2020_4159870}
+Price-Whelan, A., Sipőcz, B., Lenz, D., {et~al.} 2020, adrn/gala: v1.3
+
+\bibitem[{Price-Whelan(2017)}]{gala}
+Price-Whelan, A.~M. 2017, The Journal of Open Source Software, 2
+
+\bibitem[{Price-Whelan \& Bonaca(2018)}]{Price-Whelan_2018}
+Price-Whelan, A.~M. \& Bonaca, A. 2018, The Astrophysical Journal Letters, 863,
+  L20
+
+\bibitem[{{Price-Whelan} {et~al.}(2016){Price-Whelan}, {Johnston}, {Valluri},
+  {Pearson}, {K{\"u}pper}, \& {Hogg}}]{2016MNRAS.455.1079P}
+{Price-Whelan}, A.~M., {Johnston}, K.~V., {Valluri}, M., {et~al.} 2016, \mnras,
+  455, 1079
+
+\bibitem[{{Qian} {et~al.}(2022){Qian}, {Arshad}, \&
+  {Bovy}}]{2022MNRAS.511.2339Q}
+{Qian}, Y., {Arshad}, Y., \& {Bovy}, J. 2022, \mnras, 511, 2339
+
+\bibitem[{{Ramos} {et~al.}(2022){Ramos}, {Antoja}, {Yuan}, {Arentsen}, {Oria},
+  {Famaey}, {Ibata}, {Mateu}, \& {Carballo-Bello}}]{2022A&A...666A..64R}
+{Ramos}, P., {Antoja}, T., {Yuan}, Z., {et~al.} 2022, \aap, 666, A64
+
+\bibitem[{{Reino} {et~al.}(2021){Reino}, {Rossi}, {Sanderson}, {Sellentin},
+  {Helmi}, {Koppelman}, \& {Sharma}}]{2021MNRAS.502.4170R}
+{Reino}, S., {Rossi}, E.~M., {Sanderson}, R.~E., {et~al.} 2021, \mnras, 502,
+  4170
+
+\bibitem[{{Ruffini} {et~al.}(2015){Ruffini}, {Arg{\"u}elles}, \&
+  {Rueda}}]{2015MNRAS.451..622R}
+{Ruffini}, R., {Arg{\"u}elles}, C.~R., \& {Rueda}, J.~A. 2015, \mnras, 451, 622
+
+\bibitem[{{Salucci, P.} {et~al.}(2010){Salucci, P.}, {Nesti, F.}, {Gentile,
+  G.}, \& {Frigerio Martins, C.}}]{Salucci2010}
+{Salucci, P.}, {Nesti, F.}, {Gentile, G.}, \& {Frigerio Martins, C.} 2010,
+  A\&A, 523, A83
+
+\bibitem[{{Schive} {et~al.}(2014){Schive}, {Chiueh}, \&
+  {Broadhurst}}]{2014NatPh..10..496S}
+{Schive}, H.-Y., {Chiueh}, T., \& {Broadhurst}, T. 2014, Nature Physics, 10,
+  496
+
+\bibitem[{Schönrich {et~al.}(2010)Schönrich, Binney, \& Dehnen}]{Shonrich}
+Schönrich, R., Binney, J., \& Dehnen, W. 2010, Monthly Notices of the Royal
+  Astronomical Society, 403, 1829
+
+\bibitem[{Shere(1974)}]{shere}
+Shere, K. 1974, Commun. ACM, 17, 471
+
+\bibitem[{Sofue(2013)}]{sofue_rotation_2013}
+Sofue, Y. 2013, Publications of the Astronomical Society of Japan, 65, 118
+
+\bibitem[{Sofue(2020)}]{sofue_2020}
+Sofue, Y. 2020, Galaxies, 8
+
+\bibitem[{{Thomas} {et~al.}(2017){Thomas}, {Famaey}, {Ibata}, {L{\"u}ghausen},
+  \& {Kroupa}}]{2017A&A...603A..65T}
+{Thomas}, G.~F., {Famaey}, B., {Ibata}, R., {L{\"u}ghausen}, F., \& {Kroupa},
+  P. 2017, \aap, 603, A65
+
+\bibitem[{Tolman(1930)}]{PhysRev.35.904}
+Tolman, R.~C. 1930, Phys. Rev., 35, 904
+
+\bibitem[{Van~Rossum \& Drake~Jr(1995)}]{van1995python}
+Van~Rossum, G. \& Drake~Jr, F.~L. 1995, Python tutorial (Centrum voor Wiskunde
+  en Informatica Amsterdam, The Netherlands)
+
+\bibitem[{{Vera-Ciro} \& {Helmi}(2013)}]{2013ApJ...773L...4V}
+{Vera-Ciro}, C. \& {Helmi}, A. 2013, \apjl, 773, L4
+
+\bibitem[{Virtanen {et~al.}(2020)Virtanen, Gommers, Oliphant, Haberland, Reddy,
+  Cournapeau, Burovski, Peterson, Weckesser, Bright, {van der Walt}, Brett,
+  Wilson, Millman, Mayorov, Nelson, Jones, Kern, Larson, Carey, Polat, Feng,
+  Moore, {VanderPlas}, Laxalde, Perktold, Cimrman, Henriksen, Quintero, Harris,
+  Archibald, Ribeiro, Pedregosa, {van Mulbregt}, \& {SciPy 1.0
+  Contributors}}]{2020SciPy-NMeth}
+Virtanen, P., Gommers, R., Oliphant, T.~E., {et~al.} 2020, Nature Methods, 17,
+  261
+
+\bibitem[{{Zhao} {et~al.}(1999){Zhao}, {Johnston}, {Hernquist}, \&
+  {Spergel}}]{1999A&A...348L..49Z}
+{Zhao}, H., {Johnston}, K.~V., {Hernquist}, L., \& {Spergel}, D.~N. 1999, \aap,
+  348, L49
+
+\end{thebibliography}

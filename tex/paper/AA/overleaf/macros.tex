@@ -1,0 +1,68 @@
+% ------------------------------------------------------------------
+% sets
+% ------------------------------------------------------------------
+
+\def \L {\mathbb{L}}
+\def \N {\mathbb{N}} % natural numbers
+\def \Z {\mathbb{Z}} % integer numbers
+\def \Q {\mathbb{Q}} % rational numbers
+\def \R {\mathbb{R}} % real numbers
+\def \C {\mathbb{C}} % complex numbers
+
+% ------------------------------------------------------------------
+% common symbols
+% ------------------------------------------------------------------
+
+\def \e         {\mathrm{e}} % euler number
+\def \d         {\mathrm{d}} % differential
+\def \i         {\mathfrak{i}} % imaginary unit
+\def \const     {\mathrm{const}} % constant expression
+\def \other     {\mathrm{else}} % else expression
+\def \um        {\text{-}} % small minus sign (useful for exponential or index notation)
+
+% ------------------------------------------------------------------
+% operators and functions
+% ------------------------------------------------------------------
+
+\def \var		{\mathrm{\delta}}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\diag}{diag}
+
+% ------------------------------------------------------------------
+% fractions
+% ------------------------------------------------------------------
+
+\newcommand\FRAC[2]{\frac{\displaystyle #1}{\displaystyle #2}} % large frac
+
+% ------------------------------------------------------------------
+% brackets
+% ------------------------------------------------------------------
+
+\newcommand \brackets[2][]{\left[\vphantom{#1}#2\right]} % [...]
+\def \parantheses  #1{\left(#1\right)} % (...)
+\def \braces       #1{\left\{#1\right\}} % {...}
+\def \angles       #1{\left\langle#1\right\rangle} % <...>
+\def \pipes        #1{\left|#1\right|} % |...|
+\def \doublepipes  #1{\left\|#1\right\|} % ||...||
+
+% ------------------------------------------------------------------
+% derivatives
+% ------------------------------------------------------------------
+
+\def \diff				#1#2{\frac{\d#1}{\d#2}}
+\def \ddiff				#1#2{\frac{\d^2#1}{\d#2^2}}
+\def \ndiff				#1#2#3{\frac{\d^{#3}#1}{\d#2^{#3}}}
+
+\def \diffat			#1#2#3{\at{\diff{#1}{#2}}{#3}}
+\def \ddiffat			#1#2#3{\at{\ddiff{#1}{#2}}{#3}}
+\def \ndiffat			#1#2#3#4{\at{\ndiff{#1}{#2}{#3}}{#4}}
+
+\def \diffpart		#1#2{\frac{\partial #1}{\partial #2}}
+\def \ddiffpart		#1#2{\frac{\partial^2 #1}{\partial #2^2}}
+\def \ndiffpart		#1#2#3{\frac{\partial^{#3}#1}{\partial#2^{#3}}}
+
+\def \diffpartat	#1#2#3{\at{\diffpart{#1}{#2}}{#3}}
+\def \ddiffpartat	#1#2#3{\at{\ddiffpart{#1}{#2}}{#3}}
+\def \ndiffpartat	#1#2#3#4{\at{\ndiffpart{#1}{#2}{#3}}{#4}}
+
+\def \todiffpart	#1#2{\frac{\partial #1}{\partial #2}\d#2}

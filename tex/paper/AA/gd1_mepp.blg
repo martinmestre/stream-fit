@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2020/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: gd1_mepp.aux
+The style file: aa.bst
+Database file #1: refs.bib
+Warning--entry type for "adrian_price_whelan_2020_4159870" isn't style-file defined
+--line 614 of file refs.bib
+Warning--I didn't find a database entry for "Martínez-Delgado_2010"
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 76 entries,
+            3039 wiz_defined-function locations,
+            1201 strings with 30357 characters,
+and the built_in function-call counts, 58255 in all, are:
+= -- 4425
+> -- 6939
+< -- 27
++ -- 2321
+- -- 2234
+* -- 5384
+:= -- 10914
+add.period$ -- 76
+call.type$ -- 76
+change.case$ -- 1048
+chr.to.int$ -- 75
+cite$ -- 76
+duplicate$ -- 1400
+empty$ -- 2029
+format.name$ -- 2430
+if$ -- 11370
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 72
+newline$ -- 232
+num.names$ -- 305
+pop$ -- 1054
+preamble$ -- 1
+purify$ -- 1048
+quote$ -- 0
+skip$ -- 1256
+stack$ -- 0
+substring$ -- 1714
+swap$ -- 10
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 681
+warning$ -- 0
+while$ -- 297
+width$ -- 0
+write$ -- 757
+(There were 2 warnings)
