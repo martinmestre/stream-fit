@@ -3,6 +3,17 @@ thank you very much for your clear corrections and comments.
 It took me some time to read the language A&A guide and to find the right tool to do the corrections (latexdiff). I would like to know if you have any suggestion of spellchecker plugin for vs-code (me),
 and for Overleaf (co-authors).
 Sincerely we intended to present the paper in British english language, but it seems that we misspelled some words at the beginning making the confusion towards American english.
+
 I have uploaded a revised version of the manuscript named "approved.tex" as well as a "diff.pdf" file that contains the differences between the present revised version and your original file named "48626corr.tex".
+We would really appreciate if you could make a final revision of our new manuscript.
+
+Additionally of the modifications shown in the difference file, below I write some comments:
+
+- In the introduction I changed some recent (<10 years) results form other authors to present tense. Ok?
+- We noticed that when referring to the MW, it is not correct to say "Galactocentric", instead of "galactocentric". Is it a rule from A&A?
+- In the introduction: method -> methods.  Ok?
+- Most of the your text says "a MW" but one case said "an MW". Which is the right way? I allways read MW as Milky Way, not as "Em-DoubleU", but I am not sure what is the typical situation.
+
+...Voy por inicio de seccion 2.3...
 
 
