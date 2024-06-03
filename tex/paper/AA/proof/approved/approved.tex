@@ -247,7 +247,7 @@ In addition to this model and for qualitative comparative purposes, we used the 
 
 GD-1 is a dynamically cold stream, and its stars are highly correlated, although
 its progenitor has not been detected with certainty~\citep{10.1093/mnras/sty677,Price-Whelan_2018,10.1093/mnras/sty1338}.
-Its almost one-dimensional distribution in phase-space could be well approximated with the orbit of a theoretical progenitor, however, as previously reported by~\cite{2019MNRAS.486.2995M,Price-Whelan_2018} and \cite{2010ApJ...712..260K}.
+Its almost one-dimensional distribution in phase space could be well approximated with the orbit of a theoretical progenitor, however, as previously reported by~\cite{2019MNRAS.486.2995M,Price-Whelan_2018} and \cite{2010ApJ...712..260K}.
 
 The initial conditions of the orbit were given in the spherical equatorial coordinates of the ICRS frame: right ascension $\alpha$, declination $\delta$, $D$, $\tilde{\mu}_\alpha$, $\mu_\delta$, and $v_h$. The code uses the {\it Astropy} ecosystem~\citep{astropy:2022, astropy:2018, astropy:2013} in order to transform these initial conditions to galactocentric coordinates assuming a galactocentric reference frame with the Sun at the position $\vec{x}_\odot=(-R_\odot,0,0)$ and the solar velocity given by the sum of the circular velocity at the position of the Sun and the peculiar solar velocity: $\vec{v}_\odot = \vec{v}_{\odot p} + (0, v_{\rm{c}}(R_\odot), 0)$. The circular velocity depends on the model and position and is given by \begin{equation}
 \label{circ_vel}
@@ -377,7 +377,7 @@ For completeness, in Fig.~\ref{fig:obs_radial} we plot the heliocentric distance
       &\phantom{=} + 8.595\phi_1+10.36.
     \end{split}
 \end{align}
-The two theoretical $D(\phi_1)$ curves agree with each other, but they both differ considerably with respect to the observed curve (i.e., the polynomial). Because the polynomial presents a suspicious constant value for $\phi_1 \in [-70,-30]$, we plotted the galactocentric distance versus $\phi_1$ (not shown), and we found that this latter curve presents an unphysical wobbling behavior. We therefore did not include the photometric distance as a fitting observable, as is usually done in the literature.
+The two theoretical $D(\phi_1)$ curves agree with each other, but they both differ considerably with respect to the observed curve (i.e., the polynomial). Because the polynomial presents a suspicious constant value for $\phi_1 \in [-70,-30]$, we plotted the galactocentric distance versus $\phi_1$ (not shown), and we found that this latter curve presents an unphysical wobbling behavior. We therefore did not include the photometric distance as a fitting observable.
 
 
 It is instructive to see how the value of $\chi^2_{\rm{stream}}$ is modified when the parameters $\theta_0$ and $\omega_0$ (i.e., those that control the halo) are varied. To this end, we fixed $(m, \beta_0)=(56~\rm{keV}~c^{-2}, 1.2527\times10^{-5})$ and varied $(\theta_0, \omega_0)$ in a grid spanning the rectangle $[34, 38]\times[25, 30]$.
