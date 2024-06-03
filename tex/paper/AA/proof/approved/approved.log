@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2023.11.6)  3 JUN 2024 09:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2023.11.6)  3 JUN 2024 17:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.tex
-(/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.tex
+**/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.tex
+(/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.tex
 LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-01-09> xparse <2020-03-03> (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/aa.cls
+L3 programming layer <2021-01-09> xparse <2020-03-03> (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/aa.cls
 Document Class: aa 2016/09/01{} v9.1{} Class for AA journal
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
@@ -207,19 +207,23 @@ Package: babel 2021/01/26 3.53 The Babel package
 File: babel.def 2021/01/26 3.53 Babel common definitions
 \babel@savecnt=\count288
 \U@D=\dimen160
-\l@babelnohyphens=\language86
+\l@babelnohyphens=\language6
  (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
 )
 \bbl@dirlevel=\count289
  (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: \l@british = using hyphenrules for english
+(babel)             (\language0) on input line 82.
+Package babel Info: \l@UKenglish = using hyphenrules for english
+(babel)             (\language0) on input line 83.
 Package babel Info: \l@canadian = using hyphenrules for english
 (babel)             (\language0) on input line 102.
-Package babel Info: \l@australian = using hyphenrules for ukenglish
-(babel)             (\language80) on input line 105.
-Package babel Info: \l@newzealand = using hyphenrules for ukenglish
-(babel)             (\language80) on input line 108.
+Package babel Info: \l@australian = using hyphenrules for english
+(babel)             (\language0) on input line 105.
+Package babel Info: \l@newzealand = using hyphenrules for english
+(babel)             (\language0) on input line 108.
 )) (/usr/share/texlive/texmf-dist/tex/latex/graphics/rotating.sty
 Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
  (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
@@ -528,7 +532,7 @@ LaTeX Info: Redefining \labelcref on input line 2370.
 LaTeX Info: Redefining \labelcpageref on input line 2370.
 Package cleveref Info: always capitalise cross-reference names on input line 7825.
 Package cleveref Info: always capitalise cross-reference names on input line 7852.
-) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/siunitx.sty (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/siunitx.sty (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
 Package: expl3 2021-01-09 L3 programming layer (loader) 
  (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2020-01-29 L3 backend support: PDF output (pdfTeX)
@@ -592,7 +596,7 @@ Package: l3keys2e 2020-10-27 LaTeX2e option processing using LaTeX3 keys
 \l__siunitx_table_text_align_skip=\skip135
  (/usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty
 Package: translator 2020-08-03 v1.12c Easy translation of strings in LaTeX
-)) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/orcidlink.sty
+)) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/orcidlink.sty
 Package: orcidlink 2023/12/30 v1.0.5 Linked ORCiD logo macro package
  (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks36
@@ -789,13 +793,13 @@ File: pgfmoduleparser.code.tex 2020/12/27 v3.1.8b (3.1.8b)
 \pgf@lib@svg@max@num=\count351
 ))
 \@curXheight=\skip136
-) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/macros.tex) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/style.tex
+) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/macros.tex) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/style.tex
 Package hyperref Info: Option `colorlinks' set `true' on input line 13.
 )
 LaTeX Font Info:    Trying to load font information for T1+txr on input line 30.
  (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txr.fd
 File: t1txr.fd 2000/12/15 v3.1
-) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.aux)
+) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.aux)
 \openout1 = `approved.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 30.
@@ -896,11 +900,11 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 30.
 LaTeX Info: Redefining \pageref on input line 30.
 LaTeX Info: Redefining \nameref on input line 30.
- (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.out) (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.out)
+ (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.out) (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.out)
 \@outlinefile=\write4
 \openout4 = `approved.out'.
 
- (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/siunitx-abbreviations.cfg
+ (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/siunitx-abbreviations.cfg
 File: siunitx-abbreviations.cfg 2021-04-17 v2.8e siunitx: Abbreviated units
 ) (/usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
@@ -943,7 +947,7 @@ File: ot1txtt.fd 2000/12/15 v3.1
 
 IMPORTANT
 
-Class aa Warning: Around 366 words in the abstract instead of 300 (max). You should rewrite your abstract on input line 81.
+Class aa Warning: Around 368 words in the abstract instead of 300 (max). You should rewrite your abstract on input line 81.
 
 IMPORTANT 
 
@@ -1053,94 +1057,94 @@ Package hyperref Warning: Suppressing link with empty target on input line 354.
 
 Package hyperref Warning: Suppressing link with empty target on input line 383.
 
-[5 </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_position.pdf> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmra.pdf
+[5 </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_position.pdf> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmra.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmra.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmdec.pdf
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmra.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmdec.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmdec.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_helvel.pdf
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_pmdec.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_helvel.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_helvel.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_heldist.pdf
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_helvel.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_heldist.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_heldist.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/observables_heldist.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-<figures/chi2stream_contourf.pdf, id=523, 803.0pt x 602.25pt>
+<figures/chi2stream_contourf.pdf, id=525, 803.0pt x 602.25pt>
 File: figures/chi2stream_contourf.pdf Graphic file (type pdf)
 <use figures/chi2stream_contourf.pdf>
-Package pdftex.def Info: figures/chi2stream_contourf.pdf  used on input line 392.
+Package pdftex.def Info: figures/chi2stream_contourf.pdf  used on input line 391.
 (pdftex.def)             Requested size: 256.0748pt x 192.06229pt.
-<figures/chi2stream_tilted_contourf.pdf, id=524, 803.0pt x 602.25pt>
+<figures/chi2stream_tilted_contourf.pdf, id=526, 803.0pt x 602.25pt>
 File: figures/chi2stream_tilted_contourf.pdf Graphic file (type pdf)
 <use figures/chi2stream_tilted_contourf.pdf>
-Package pdftex.def Info: figures/chi2stream_tilted_contourf.pdf  used on input line 398.
+Package pdftex.def Info: figures/chi2stream_tilted_contourf.pdf  used on input line 397.
 (pdftex.def)             Requested size: 256.0748pt x 192.06229pt.
-<figures/rotation_curves.pdf, id=526, 896.34875pt x 578.16pt>
+<figures/rotation_curves.pdf, id=528, 896.34875pt x 578.16pt>
 File: figures/rotation_curves.pdf Graphic file (type pdf)
 <use figures/rotation_curves.pdf>
-Package pdftex.def Info: figures/rotation_curves.pdf  used on input line 409.
+Package pdftex.def Info: figures/rotation_curves.pdf  used on input line 408.
 (pdftex.def)             Requested size: 256.0748pt x 165.16548pt.
 
 Underfull \vbox (badness 1533) has occurred while \output is active []
 
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 432.
+Package hyperref Warning: Suppressing link with empty target on input line 431.
 
-[6 </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_contourf.pdf> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_tilted_contourf.pdf
+[6 </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_contourf.pdf> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_tilted_contourf.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_tilted_contourf.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/rotation_curves.pdf
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/chi2stream_tilted_contourf.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/rotation_curves.pdf
 
-pdfTeX warning: pdflatex (file /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/rotation_curves.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+pdfTeX warning: pdflatex (file /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/rotation_curves.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-<figures/S2_Orbit_stream.pdf, id=690, 397.485pt x 505.89pt>
+<figures/S2_Orbit_stream.pdf, id=692, 397.485pt x 505.89pt>
 File: figures/S2_Orbit_stream.pdf Graphic file (type pdf)
 <use figures/S2_Orbit_stream.pdf>
-Package pdftex.def Info: figures/S2_Orbit_stream.pdf  used on input line 478.
+Package pdftex.def Info: figures/S2_Orbit_stream.pdf  used on input line 477.
 (pdftex.def)             Requested size: 256.0748pt x 325.92215pt.
-<figures/S2_Z_Ra_Dec_2.pdf, id=691, 505.89pt x 650.43pt>
+<figures/S2_Z_Ra_Dec_2.pdf, id=693, 505.89pt x 650.43pt>
 File: figures/S2_Z_Ra_Dec_2.pdf Graphic file (type pdf)
 <use figures/S2_Z_Ra_Dec_2.pdf>
-Package pdftex.def Info: figures/S2_Z_Ra_Dec_2.pdf  used on input line 484.
+Package pdftex.def Info: figures/S2_Z_Ra_Dec_2.pdf  used on input line 483.
 (pdftex.def)             Requested size: 256.0748pt x 329.24364pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 531.
+Package hyperref Warning: Suppressing link with empty target on input line 535.
 
 [7]
-<figures/density_profiles.pdf, id=725, 751.80875pt x 505.89pt>
+<figures/density_profiles.pdf, id=727, 751.80875pt x 505.89pt>
 File: figures/density_profiles.pdf Graphic file (type pdf)
 <use figures/density_profiles.pdf>
-Package pdftex.def Info: figures/density_profiles.pdf  used on input line 534.
+Package pdftex.def Info: figures/density_profiles.pdf  used on input line 538.
 (pdftex.def)             Requested size: 256.0748pt x 172.3168pt.
 
-Overfull \hbox (4.7923pt too wide) in paragraph at lines 543--553
+Overfull \hbox (4.7923pt too wide) in paragraph at lines 547--557
  [][] 
  []
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 559.
+Package hyperref Warning: Suppressing link with empty target on input line 563.
 
-[8 </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/S2_Orbit_stream.pdf> </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/S2_Z_Ra_Dec_2.pdf>] (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.bbl
+[8 </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/S2_Orbit_stream.pdf> </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/S2_Z_Ra_Dec_2.pdf>] (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.bbl
 
 Package hyperref Warning: Suppressing link with empty target on input line 87.
 
-[9 </home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/density_profiles.pdf>])
+[9 </mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/figures/density_profiles.pdf>])
 
-Package hyperref Warning: Suppressing link with empty target on input line 626.
+Package hyperref Warning: Suppressing link with empty target on input line 630.
 
 [10]
 
-Package hyperref Warning: Suppressing link with empty target on input line 734.
+Package hyperref Warning: Suppressing link with empty target on input line 738.
 
 [11
 
-] (/home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.aux
+] (/mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.aux
 
 Package natbib Warning: Citation `2015MNRAS.450..575A' multiply defined.
 
@@ -1401,18 +1405,18 @@ Package natbib Warning: Citation `1999A&A...348L..49Z' multiply defined.
 
 ) ) 
 Here is how much of TeX's memory you used:
- 25937 strings out of 479304
- 504666 string characters out of 5869779
- 845592 words of memory out of 5000000
- 42384 multiletter control sequences out of 15000+600000
+ 25939 strings out of 481190
+ 504632 string characters out of 5913950
+ 840874 words of memory out of 5000000
+ 42142 multiletter control sequences out of 15000+600000
  523947 words of font info for 222 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 102i,17n,102p,2059b,1091s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 40 hyphenation exceptions out of 8191
+ 102i,17n,102p,2057b,1091s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtcxr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxsc.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txex.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txsya.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on /home/mmestre/casa/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.pdf (11 pages, 714169 bytes).
+Output written on /mnt/md1/mmestre/work/2020/halostream/sources/stream_fit/tex/paper/AA/proof/approved/approved.pdf (11 pages, 714315 bytes).
 PDF statistics:
- 1070 PDF objects out of 1200 (max. 8388607)
- 881 compressed objects within 9 object streams
+ 1071 PDF objects out of 1200 (max. 8388607)
+ 882 compressed objects within 9 object streams
  177 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 

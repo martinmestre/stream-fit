@@ -7,17 +7,21 @@ Sincerely we intended to present the paper in British english language, but it s
 I have uploaded a revised version of the manuscript named "approved.tex" as well as a "diff.pdf" file that contains the differences between the present revised version and your original file named "48626corr.tex".
 We would really appreciate if you could make a final revision of our new manuscript.
 
-Additionally of the modifications shown in the difference file, below I write some comments:
+Additionally of the modifications shown in the difference file, below I write some doubts and comments. I thank you a lot in advance.
 
-- In the introduction I changed some recent (<10 years) results form other authors to present tense. Ok?
+- In the introduction I changed some recent (age <10 years) results form other authors to present tense. Ok?
 - We noticed that when referring to the MW, it is not correct to say "Galactocentric", instead of "galactocentric". Is it a rule from A&A?
 - In the introduction: Method -> Methods.  Is Ok?
 - Most of the your text says "a MW" but one case said "an MW". Which is the right way? I allways read MW as Milky Way, not as "Em-DoubleU", but I am not sure what is the typical situation.
 - At the beginnin of section 2.3, when you corrected "... used the Galactic model fit by ...",
-fit is a noun? Because I would think that should go "... fitted by ..." as verb in past. No?
+Is fit a noun? Because I had thought that it should be "... fitted by ..." as verb in past. Wrong?
 - In this sentence:
 "The Fermionic-MW and NFW-MW models both fit the GD-1 stream very well."
 Why is needed the word "both"? Is it redundant or needed for reinforcement?
+- What is the difference between "stream-fit" and "stream-fitting", when using both as adjectives of the noun "procedure" ?
+- Which is correct: "distribution of the fit parameters" or "distribution of the fitted parameters"
+If the word is acting as an adjective, shouldn't it be "fitted"? Or it is acting as verb in past, with passive voice implicit ? In that case it is "fit" in american as far as I understand.
+- I use the single tilde to mean "of the same order of magnitude" and the double tilde to mean "approximately". Is that right?
 
 
 

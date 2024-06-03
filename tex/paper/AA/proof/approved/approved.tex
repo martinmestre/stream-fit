@@ -73,11 +73,11 @@
 }
 {
     % results heading (mandatory)
-    We were able to find good fits for both the GD-1 stream and the S-stars for a family of fermionic core-halo profiles parameterized by the fermion mass. The particle masses are constrained in the range $\SI{56}{\kilo\eV\per c^2}$, with a corresponding DM core of $\sim \num{E3}$ Schwarzschild radii, to $\SI{360}{\kilo\eV\per c^2}$, which corresponds to the most compact core of $5$ Schwarzschild radii prior to the gravitational collapse into a BH of about $\SI{4E6}{\Msun}$.
+    We were able to find good fits for both the GD-1 stream and the S-stars for a family of fermionic core-halo profiles parameterized by the fermion mass. The particle masses are constrained in the range $56~\mathrm{keV}~c^{-2}$, with a corresponding DM core of $\sim \num{E3}$ Schwarzschild radii, to $360~\mathrm{keV}~c^{-2}$ which corresponds to the most compact core of $5$ Schwarzschild radii prior to the gravitational collapse into a BH of about $\SI{4E6}{\Msun}$.
 }
 {
     % conclusions heading (optional), leave it empty if necessary
-    This work provides evidence that the fermionic profile is a reliable model for the massive central object and for the DM of the Galaxy. Remarkably, this model predicts a total MW mass of $2.3\times10^{11} M_{\odot}$, which agrees with recent mass estimates obtained from Gaia DR3 rotation curves (Gaia RC). In summary, with one single fermionic model for the DM distribution of the MW, we obtain a good fit on three totally different distance scales of the Galaxy: $\sim 10^{-6}$ kpc (central, S-stars), $\sim14$ kpc~(middle, GD-1), and $\sim 30$ kpc~(boundary, Gaia RC mass estimate).
+    This work provides evidence that the fermionic profile is a reliable model for the massive central object and for the DM of the Galaxy. Remarkably, this model predicts a total Milky Way mass of $2.3\times10^{11} M_{\odot}$, which agrees with recent mass estimates obtained from Gaia DR3 rotation curves (Gaia RC). In summary, with one single fermionic model for the DM distribution of the Milky Way, we obtain a good fit on three totally different distance scales of the Galaxy: $\sim 10^{-6}$ kpc (central, S-stars), $\sim14$ kpc~(middle, GD-1), and $\sim 30$ kpc~(boundary, Gaia RC mass estimate).
 }
 
    \keywords{Galaxy: kinematics and dynamics --
@@ -352,8 +352,8 @@ On the other hand, for the same type of fermionic core-halo solutions with a pos
 %degeneracy between these two parameters because it is the combination
 %$\omega_0 = W_0-\theta_0$ which mainly controls the halo profile, as will be shown in this paper.
 
-As a starting point for the fitting of the Fermionic-MW parameters (second step), we took the values obtained by \citet{2020A&A...641A..34B}: $(m, \beta_0, \theta_0, W_0)=(56~\rm{keV}~c^{-2}, 1.1977\times10^{-5}, 37.765, 66.3407)$, which allowed their MW model (DM+barions) to satisfy the geodesic motions of both S2 and G2 at Sagittarius~A* and the rotation curve from~\citet{sofue_rotation_2013}.
-From these values, fixing $m=56~\rm{keV}~c^{-2}$ and taking the already fitted IC of the stream progenitor for the NFW-MW model, we performed a differential evolution minimization of the
+As a starting point for the fitting of the Fermionic-MW parameters (second step), we took the values obtained by \citet{2020A&A...641A..34B}: $(m, \beta_0, \theta_0, W_0)=(56~\mathrm{keV}~c^{-2}, 1.1977\times10^{-5}, 37.765, 66.3407)$, which allowed their MW model (DM plus baryons) to satisfy the geodesic motions of both S2 and G2 at Sagittarius~A*, and the rotation curve from~\citet{sofue_rotation_2013}.
+From these values, fixing $m=56~{\rm{keV}}~c^{-2}$ and taking the already fitted IC of the stream progenitor for the NFW-MW model, we performed a differential evolution minimization of the
 $\chi^2_{\rm{full}}$ function in the window
 $(\theta_0,\omega_0, \beta_0)\in [35, 40]\times[25, 30]\times[10^{-5}, 1.5\times10^{-5}]$. Using metaparameter values \texttt{maxiter}$~=~$\texttt{popsize}$~=~$300, the algorithm converged to
 $(\theta_0, \omega_0, \beta_0)= (36.094, 27.368 , 1.252\times10^{-5})$, giving
@@ -380,17 +380,16 @@ For completeness, in Fig.~\ref{fig:obs_radial} we plot the heliocentric distance
 The two theoretical $D(\phi_1)$ curves agree with each other, but they both differ considerably with respect to the observed curve (i.e., the polynomial). Because the polynomial presents a suspicious constant value for $\phi_1 \in [-70,-30]$, we plotted the galactocentric distance versus $\phi_1$ (not shown), and we found that this latter curve presents an unphysical wobbling behavior. We therefore did not include the photometric distance as a fitting observable.
 
 
-It is instructive to see how the value of $\chi^2_{\rm{stream}}$ is modified when the parameters $\theta_0$ and $\omega_0$ (i.e., those that control the halo) are varied. To this end, we fixed $(m, \beta_0)=(56~\rm{keV}~c^{-2}, 1.2527\times10^{-5})$ and varied $(\theta_0, \omega_0)$ in a grid spanning the rectangle $[34, 38]\times[25, 30]$.
+It is instructive to see how the value of $\chi^2_{\rm{stream}}$ is modified when the parameters $\theta_0$ and $\omega_0$ (i.e., those that control the halo) are varied. To this end, we fixed $(m, \beta_0)=(56~\mathrm{keV}~c^{-2}, 1.2527\times10^{-5})$ and varied $(\theta_0, \omega_0)$ in a grid spanning the rectangle $[34, 38]\times[25, 30]$.
 Fig.~\ref{fig:chi2stream} shows a contour plot of this grid, colored by the value of their corresponding $\chi^2_{\rm{stream}}$; the black point corresponds to our fit solution.
-The minima of the function are located in a thin valley, which shows that the solution of the fitting problem is locally degenerate along a straight line in the $(\theta_0, \omega_0)$ plane.
+The lowest values of the function are located in a thin valley, which shows that the solution of the fitting problem is locally degenerate along a straight line in the $(\theta_0, \omega_0)$ plane.
 To show the behavior of $\chi^2_{\rm{stream}}$ around the solution, we first fit a line to the points that satisfied $\chi^2_{\rm{stream}}<50$. We
-obtained $h(x)= 0.7939+0.7362x$. We then subtracted this line from $\omega_0$, and finally remade a plot of $\chi^2_{\rm{stream}}$ in the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.011,0.011]$. The result is shown in Fig.~\ref{fig:chi2stream_tilted}. It is noticeable that a minimum (nondegenerate problem) indeed exists and that
-the variance along $\omega_0-h(\theta_0)$ is two orders of magnitude smaller than the variance along $\theta_0$.
+obtained $h(x)= 0.7939+0.7362x$. We then subtracted this line from $\omega_0$, and finally remade a plot of $\chi^2_{\rm{stream}}$ in the window $(\theta_0, \omega_0-h(\theta_0))\in[35, 37]\times[-0.011,0.011]$. The result is shown in Fig.~\ref{fig:chi2stream_tilted}. It is noticeable that an absolute minimum indeed exists (nondegenerate problem) and that the variance along $\omega_0-h(\theta_0)$ is two orders of magnitude smaller than the variance along $\theta_0$.
 %
 \begin{figure}
    \centering
    \includegraphics[width=\hsize]{figures/chi2stream_contourf.pdf}
-   \caption{Values of $\chi^2_{\rm{stream}}$ for $(m, \beta_0)=(56~\mathrm{keV}~c^{-2}, 1.254\times10^{-5})$ in the window $(\theta_0, \omega_0)\in[34, 38]\times[25.5,28.2]$. The black point corresponds to our solution, and the gray region corresponds to $\chi^2_{\rm{stream}} >10^4$. The minima of the function are located along a thin valley.}
+   \caption{Values of $\chi^2_{\rm{stream}}$ for $(m, \beta_0)=(56~\mathrm{keV}~c^{-2}, 1.254\times10^{-5})$ in the window $(\theta_0, \omega_0)\in[34, 38]\times[25.5,28.2]$. The black point corresponds to our solution, and the gray region corresponds to $\chi^2_{\rm{stream}} >10^4$. The lowest values of the function are located along a thin valley.}
    \label{fig:chi2stream}
 \end{figure}
 \begin{figure}
@@ -426,9 +425,9 @@ that according to Table 1 in \citet{sofue_2020}, our computed velocity is not an
 Our solution has a an average slope $s=-4.15\pm0.015~\rm{km~s}^{-1}~kpc^{-1}$, fit for $14.5~\rm{kpc} < r < 26.5~\rm{kpc}$, which is
 comparable to the corresponding value of $s=-3.93\pm0.15~\rm{km~s}^{-1}~kpc^{-1}$ measured from the rotation curve of~\citet{Jiao2023}, and agrees better than the corresponding slope of the NFW-MW model (see also \cref{fig:rotcurve} for comparison).
 
-Using the GD-1 observables, we computed our galactocentric distance projected onto the plane $z=0$ and found that it lies inside the interval 11.5 kpc $\lesssim r \lesssim 16.4$ kpc, which is displayed as a vertical shaded (gray) band in the Galaxy RC of Fig.~\ref{fig:rotcurve}. The location of the GD-1 stream orbit corresponds to $z\in [2.6, 9.7]$ kpc and thus explores the nonsphericality of the full MW models (due to the axisymmetry of baryons and NFW).
+We computed the galactocentric distance, of the GD-1 observables, projected onto the plane $z=0$ and found that it lies inside the interval 11.5 kpc $\lesssim r \lesssim 16.4$ kpc, which is displayed as a vertical shaded (gray) band in the Galaxy RC of Fig.~\ref{fig:rotcurve}. The location of the GD-1 stream orbit corresponds to $z\in [2.6, 9.7]$ kpc and thus explores the nonsphericality of the full MW models (due to the axisymmetry of baryons and NFW).
 It is noticeable that both models approximately agree in their circular velocity in the GD-1 region.
-Our galactocentric distance (not projected) corresponds to the interval $13.9~\textrm{kpc} \lesssim r \lesssim 16.6~\rm{kpc}$ (subject to errors in the photometric distance, as commented in Section \ref{sec:fitting}). The theoretical orbit of the stream in the Fermionic-MW has a pericenter of $14.3$~kpc and an apocenter of $24.5$~kpc, and it is currently in its pericentric passage.
+The galactocentric distance (not projected) of the stream corresponds to the interval $13.9~\textrm{kpc} \lesssim r \lesssim 16.6~\rm{kpc}$ (subject to errors in the photometric distance, as commented in Section \ref{sec:fitting}). The theoretical orbit of the stream in the Fermionic-MW has a pericenter of $14.3$~kpc and an apocenter of $24.5$~kpc, and it is currently in its pericentric passage.
 
 % It is interesting to display the values of the acceleration vector as a function of the position along the stream.
 % In Fig.~\ref{fig:acceleration} we have computed the cylindrical components of the acceleration, $a_r$ and $a_z$,
@@ -476,7 +475,7 @@ For the exemplified case of the S2 star, the models differ in the predicted valu
 %
 \begin{figure}
    \includegraphics[width=1.0\hsize]{figures/S2_Orbit_stream.pdf}
-\caption{Modeled and observed projected orbit in the sky for a Fermionic-MW DM model in a solid (amber) line and a BH of $M_{\rm bh}=4.075\times 10^6 M_\odot$ as a dotted (green) line.}
+\caption{Modeled and observed projected orbit in the sky for a Fermionic-MW DM model as a solid (amber) line and a BH of $M_{\rm bh}=4.075\times 10^6 M_\odot$ as a dotted (green) line.}
    \label{fig:S2_fit}
 \end{figure}
 
@@ -513,8 +512,13 @@ $\Delta \phi$ [arcmin rev$^{-1}$] & -6.04 & 11.95 \\
 
 \subsection{Varying the fermion mass to reach more compact cores}
 As already mentioned, we found a fermionic solution that agrees with both GD-1 data and
-the geodesic motion of the best-studied S-cluster star around Sagittarius~A*, the S2 star. This S-stars constraint is also satisfied by any fermionic DM profile
-with a core mass $m_\mathrm{c}\approx M_{\rm{core}}$ and more compact cores than the solution corresponding for $m=56$ keV, however. It is therefore interesting to determine how much compactness can be reached
+the geodesic motion of the best-studied S-cluster star around Sagittarius~A*, the S2 star.
+However, this S-stars constraint is also satisfied by any fermionic DM profile
+with a more compact core than the solution corresponding for $m=56~\mathrm{keV}~c^{-2}$,
+as long as the core mass is $m_\mathrm{c}\approx M_{\rm{core}}$.
+% with a core mass $m_\mathrm{c}\approx M_{\rm{core}}$ and
+% , however.
+It is therefore interesting to determine how much compactness can be reached
 while keeping both the S2 star and \hbox{GD-1} constraints, in the light of the new observations
 of the Event Horizon Telescope, \cite{EHT_image}, where a shadow angular diameter of $48.7\pm7.0~\mu$as
 has been measured. This diameter corresponds to a shadow radius of $\sim 2.46$ Schwarzschild radii assuming
@@ -523,10 +527,10 @@ In order to extend the fermionic solutions to other values of the fermion mass (
 lower $(36, 27, 1.2\times10^{-5})$, $(37, 28, 5\times10^{-5})$, $(38, 29, 3.5\times10^{-4})$, $(40, 29, 1.3\times10^{-3})$ and
 upper $(40, 31, 10^{-4})$, $(41, 32, 10^{-3})$, $(42, 32, 3\times10^{-3})$, $(44, 32, 4\times10^{-3})$ for $m=100$, 200, 300, and 360 keV $c^{-2}$ in $(\theta_0, \omega_0, \beta_0)$ space, respectively.}
 in parameter space in $20^3=8000$ smaller orthoedrons. In each subregion, we performed an independent optimization in a parallel distributed scheme to search for the parameters that minimize $\chi^2_{\rm{full}}$ with the \texttt{NOMAD} algorithm. Afterward, we selected the global minimum by comparing the results of each distributed process.
-The result is that for all the fermion masses, it is possible to find values of the other parameters in such a way that both the GD-1 stream and the core mass constraints  are respected with the same precision as in the initial ($m=56~\rm{keV}/c^2$) case. As shown in Fig.~\ref{fig:going_compact}, all the solutions have the same density profile in the halo region, while their difference is limited to the compactness of the core.
+The result is that for all the fermion masses, it is possible to find values of the other parameters in such a way that both the GD-1 stream and the core mass constraints  are respected with the same precision as in the initial ($m=56~\mathrm{keV}~c^{-2}$) case. As shown in Fig.~\ref{fig:going_compact}, all the solutions have the same density profile in the halo region, while their difference is limited to the compactness of the core.
 In Table~\ref{tab:chi2} we show the values of $\chi^2_{\rm{stream}}$
 for all the fermion masses we studied. We also give the value of $\chi^2_{\rm{S2}}$ for
-the Fermionic-MW and the BH models. All the fermionic models we analyzed are statistically indistinguishable\footnote{These fits were made for the same fixed core mass as in~\cite{2020A&A...641A..34B, 2021MNRAS.505L..64B}, but it can be shown that the value of $\chi^2_{\rm{S2}}$ corresponding to $m=360~\rm{keV}$ can be made as low as in the other cases by increasing the core mass by a few percent.}, and more data (e.g., central shadow feature, or closer or fainter S-stars to SgrA* than S-2) are needed in order to further constrain the particle mass range. Both projects are currently developed within our group.
+the Fermionic-MW and the BH models. All the fermionic models we analyzed are statistically indistinguishable\footnote{These fits were made for the same fixed core mass as in~\cite{2020A&A...641A..34B, 2021MNRAS.505L..64B}, but it can be shown that the value of $\chi^2_{\rm{S2}}$ corresponding to $m=360~\mathrm{keV}~c^{-2}$ can be made as low as in the other cases by increasing the core mass by a few percent.}, and more data (e.g., central shadow feature, or closer or fainter S-stars to SgrA* than S-2) are needed in order to further constrain the particle mass range. Both projects are currently developed within our group.
 The values of the core radii of these solutions are approximately 1097, 232, 35, 10, and 5 Schwarzschild radii for $m=56$, 100, 200, 300, and 360 keV $c^{-2}$, respectively. The last analyzed value of $m=360$ keV $c^{-2}$ corresponds to a DM core very close to the last stable solution according to the stability criterion of \cite{2021MNRAS.502.4227A}, leading to a gravitational core-collapse into a BH of about $4\times 10^6 M_\odot$.
 
 \begin{figure}
@@ -572,7 +576,7 @@ The fermionic DM solution has a finite radius of $r_{\rm{DM,vir}}=27.4$~kpc and 
 $M_{\rm{DM,vir}}=1.4\times10^{11}~M_\odot$, implying a total (DM plus baryons) virial mass of the Galaxy of $M_{\rm{vir}}= 2.4\times10^{11}~M_\odot$, which is at $2\sigma$ from the value reported in Table 3 of
 \citet{2014MNRAS.445.3788G} for a radius of 50~kpc. The value obtained for the DM density in the solar neighborhood is $\rho_{DM,\odot}=1.46\times10^7M_\odot~\mathrm{kpc}^{-3}=0.55~\mathrm{GeV}~\mathrm{cm}^{-3} c^{-2}$, which falls inside the $2\sigma$ region of a previous estimate by \citet{Salucci2010}.
 
-Finally, we showed that it is possible to find a one-dimensional family of solutions parameterized by the fermion mass with the same halo that fits the GD-1 stream, but with a different compactness of the central core. This always reproduces the S2 star orbit (see \cref{fig:S2_fit,fig:S2_fit_b} for the case of $m=56$ keV). For the limiting case studied here ($m=360$~keV), we obtained a core radius of $r_\mathrm{c}\approx5$~Schwarzschild radii.
+Finally, we showed that it is possible to find a one-dimensional family of solutions parameterized by the fermion mass with the same halo that fits the GD-1 stream, but with a different compactness of the central core. This always reproduces the S2 star orbit (see \cref{fig:S2_fit,fig:S2_fit_b} for the case of $m=56$ keV~$c^{-2}$). For the limiting case studied here ($m=360$~keV~$c^{-2}$), we obtained a core radius of $r_\mathrm{c}\approx5$~Schwarzschild radii.
 A precise relativistic ray-tracing study about simulated ring-like images of the central
 cores of fermionic distributions is in progress. We try to place strict constraints on the minimum
 compactness needed for an agreement with the EHT observations.
