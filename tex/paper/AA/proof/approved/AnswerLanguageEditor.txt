@@ -1,7 +1,9 @@
-Dear ...,
+Dear Astrid Peter,
+
 thank you very much for your clear corrections and comments.
-It took me some time to read the language A&A guide and to find the right tool to do the corrections (latexdiff). I would like to know if you have any suggestion of spellchecker plugin for vs-code (me),
-and for Overleaf (co-authors).
+It took me some time to read the language A&A guide and to find the right tool (latexdiff)
+to apply the corrections. I would like to know if you have any suggestion of spellchecker
+plugin for vs-code (me), and for Overleaf (co-authors).
 Sincerely we intended to present the paper in British english language, but it seems that we misspelled some words at the beginning making the confusion towards American english.
 
 I have uploaded a revised version of the manuscript named "approved.tex" as well as a "diff.pdf" file that contains the differences between the present revised version and your original file named "48626corr.tex".
