@@ -6,45 +6,45 @@ Database file #1: refs.bib
 Warning--entry type for "adrian_price_whelan_2020_4159870" isn't style-file defined
 --line 614 of file refs.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 86 entries,
+You've used 87 entries,
             3039 wiz_defined-function locations,
-            1267 strings with 32821 characters,
-and the built_in function-call counts, 64414 in all, are:
-= -- 4913
-> -- 7583
+            1273 strings with 33130 characters,
+and the built_in function-call counts, 65091 in all, are:
+= -- 4967
+> -- 7632
 < -- 31
-+ -- 2535
-- -- 2438
-* -- 5929
-:= -- 12071
-add.period$ -- 86
-call.type$ -- 86
-change.case$ -- 1156
-chr.to.int$ -- 85
-cite$ -- 86
-duplicate$ -- 1585
-empty$ -- 2285
-format.name$ -- 2662
-if$ -- 12573
++ -- 2551
+- -- 2453
+* -- 5991
+:= -- 12183
+add.period$ -- 87
+call.type$ -- 87
+change.case$ -- 1165
+chr.to.int$ -- 86
+cite$ -- 87
+duplicate$ -- 1604
+empty$ -- 2324
+format.name$ -- 2680
+if$ -- 12715
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 82
-newline$ -- 262
-num.names$ -- 345
-pop$ -- 1161
+missing$ -- 83
+newline$ -- 265
+num.names$ -- 349
+pop$ -- 1172
 preamble$ -- 1
-purify$ -- 1156
+purify$ -- 1165
 quote$ -- 0
-skip$ -- 1414
+skip$ -- 1442
 stack$ -- 0
-substring$ -- 1911
+substring$ -- 1971
 swap$ -- 10
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 771
+type$ -- 780
 warning$ -- 0
-while$ -- 336
+while$ -- 340
 width$ -- 0
-write$ -- 857
+write$ -- 866
 (There was 1 warning)

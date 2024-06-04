@@ -302,7 +302,7 @@ where the velocity has components $V^i=dx^i/dt~(i=1,2,3)$ measured in a local fr
 
 Our goal was to fit our Fermionic-MW model by minimizing the full $\chi^2$ function given by \cref{chi2:full} (when fitting the NFW-MW model, we only used the function given by \cref{chi2:stream}). To this end, we used two optimization algorithms that belong to the family of black box algorithms, which perform very well when the function to be minimized presents many relative minimums or when the landscape is complex, as in our case.
 % chi2:stream,chi2:component,chi2:core,
-One algorithm is an implementation of a differential evolution algorithm, which is a metaheuristic algorithm that consists of finding the solution of an optimization problem by iteratively updating generations of candidate solutions until a certain tolerance is met. Generally, a few best candidates from each generation survive in order to create the descendants, that is, the next generation, by making stochastic combinations from them. We used the {\it SciPy} implementation of this algorithm, called \texttt{optimize.differential\_evolution} algorithm, with the metaparemeters given by \texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=200, \texttt{popsize}=200, \texttt{tol}=$\num{5E-8}$ and \texttt{atol}=0, unless otherwise stated. This method can be run in parallel with shared memory.
+One algorithm is an implementation of a differential evolution algorithm, which is a metaheuristic algorithm that finds the solution of an optimization problem by iteratively updating generations of candidate solutions until a certain tolerance is met. Generally, a few best candidates from each generation survive in order to create the descendants, that is, the next generation, by making stochastic combinations from them. We used the {\it SciPy} implementation of this algorithm, called \texttt{optimize.differential\_evolution} algorithm, with the metaparemeters given by \texttt{strategy}=\texttt{"best2bin"}, \texttt{maxiter}=200, \texttt{popsize}=200, \texttt{tol}=$\num{5E-8}$ and \texttt{atol}=0, unless otherwise stated. This method can be run in parallel with shared memory.
 
 
 The other algorithm is an implementation of the mesh adaptive direct search (MADS) algorithm called
@@ -454,7 +454,10 @@ $r_{\rm{DM,vir}}$, while the mass of the model studied by \citet{2014MNRAS.445.3
 high error bounds, for instance, $2\sigma=3\times10^{11} M_\odot$ for $M(200 \hbox{ kpc}) =5.6\times10^{11} M_\odot$.
 
 The most recent MW mass estimates were obtained by
-\citet{Jiao2023} and \citet{Ou2023} from Gaia DR3 data. These authors reported data that are compatible with even lower values of the MW virial mass: $1.99^{+0.09}_{-0.06}\times10^{11} M_\odot$ and $2.13^{+0.17}_{-0.12}\times10^{11} M_\odot$, respectively, in agreement with our fermionic model predictions. These MW mass estimates correspond to a sharp Keplerian decline in the MW rotation that ends at $\approx 26.5$ kpc (with an enclosed dynamical mass at this radius of $\approx 2\times 10^{11} M_\odot$, \citealp{Jiao2023}). This again agrees remarkably well with the virial radius predicted by our Fermionic-MW model of $\approx 27$ kpc.
+\citet{Jiao2023} and \citet{Ou2023} from Gaia DR3 data. These authors reported data that are compatible with even lower values of the MW virial mass of $\approx 2\times10^{11} M_\odot$
+(however, see \citealt{2024arXiv240519028K}),
+%  $1.99^{+0.09}_{-0.06}\times10^{11} M_\odot$ and $2.13^{+0.17}_{-0.12}\times10^{11} M_\odot$, respectively,
+in agreement with our fermionic model predictions. These MW mass estimates correspond to a sharp Keplerian decline in the MW rotation that ends at $\approx 26.5$ kpc. This again agrees remarkably well with the virial radius predicted by our Fermionic-MW model of $\approx 27$ kpc.
 
 The fitted fermionic DM model has a density in the solar neighborhood of
 $\rho_{\mathrm{DM},\odot}=1.46\times10^7~M_\odot~\mathrm{kpc}^{-3}=0.55~\mathrm{GeV~cm}^{-3} c^{-2}$, which falls within the $2\sigma$ region of the estimate made by \citealt{Salucci2010} ($0.43\pm 0.21~\mathrm{GeV~cm}^{-3} c^{-2}$),
@@ -598,8 +601,7 @@ In summary, the findings of this work not only support the idea that cold tidal 
     about the manuscript.
     We thank Juan Ignacio Rodriguez for his great support with hardware and
     software issues regarding the IALP server and personal computers. We thank
-    Federico Bareilles and the informatic support team of the FCAGLP for their help
-    during these years.
+    Federico Bareilles and the informatic support team of the FCAGLP.
     This work used computational resources from CCAD – Universidad
     Nacional de Córdoba (\href{https://ccad.unc.edu.ar/}{https://ccad.unc.edu.ar/}),
     which are part of SNCAD – MinCyT, República Argentina.
