@@ -363,7 +363,7 @@ The third step consisted of polishing the IC of the orbit by using the different
 $\alpha=149\fdg 39$, $\delta=36\fdg 87$, $D=8.02$ kpc,
 $\tilde{\mu}_\alpha=-5.55$ mas yr$^{-1}$, $\mu_\delta=-12.33$ mas yr$^{-1}$ and $v_h=-20.84$ km s$^{-1}$, with an improved value of $\chi^2_{\rm{stream}}= 13.59$.
 
-The last step consisted of polishing the fermionic parameters using the second optimization algorithm described in Sec.~\ref{sec:optimization}, that is, \texttt{NOMAD}. We divided a  macroscopic orthohedron in parameter space, $(\theta_0, \omega_0, \beta_0) \in [35.8, 36.3]\times[27.0, 27.6]\times [1.2\times10^{-5}, 1.3\times10^{-5}]$, into $17^3=4913$ smaller orthoedrons. In each subregion, we performed an independent optimization in a parallel distributed scheme and searched for the parameters that minimized $\chi^2_{\rm{full}}$. Then, we selected the global minimum by comparing the results of each distributed process and obtained the following final fit parameters of the model: $(\theta_0, \omega_0, \beta_0)= (36.0704, 27.3501, 1.2527\times10^{-5})$, giving $\chi^2_{\rm{full}}= 13.53$.
+The last step consisted of polishing the fermionic parameters using the second optimization algorithm described in Sec.~\ref{sec:optimization}, that is, \texttt{NOMAD}. We divided a  macroscopic orthohedron in parameter space, $(\theta_0, \omega_0, \beta_0) \in [35.8, 36.3]\times[27.0, 27.6]\times [1.2\times10^{-5}, 1.3\times10^{-5}]$, into $17^3=4913$ smaller orthohedrons. In each subregion, we performed an independent optimization in a parallel distributed scheme and searched for the parameters that minimized $\chi^2_{\rm{full}}$. Then, we selected the global minimum by comparing the results of each distributed process and obtained the following final fit parameters of the model: $(\theta_0, \omega_0, \beta_0)= (36.0704, 27.3501, 1.2527\times10^{-5})$, giving $\chi^2_{\rm{full}}= 13.53$.
 The corresponding orbit is displayed in the observable space in
 Fig.~\ref{fig:obs_astrometry} with a dashed (amber) line. The Fermionic-MW and NFW-MW models both fit the GD-1 stream very well.
 We did not perform any statistically rigorous comparison of the two models to determine which was more consistent with the data. In a future paper, we will compute the posterior distribution of the fit parameters and will then be able to give error bounds.
@@ -523,14 +523,15 @@ while keeping both the S2 star and \hbox{GD-1} constraints, in the light of the 
 of the Event Horizon Telescope, \cite{EHT_image}, where a shadow angular diameter of $48.7\pm7.0~\mu$as
 has been measured. This diameter corresponds to a shadow radius of $\sim 2.46$ Schwarzschild radii assuming
 a BH mass of $M_{\rm{bh}}=4.075\times10^6~M_\odot$.
-In order to extend the fermionic solutions to other values of the fermion mass ($m$), we used the second optimization algorithm described in Sec.~\ref{sec:optimization} for $m=100$, 200, 300, and 360 keV $c^{-2}$. For each fermion mass, we divided a given macroscopic orthohedron\footnote{The lower and upper bounds of the orthohedrons were given by
-lower $(36, 27, 1.2\times10^{-5})$, $(37, 28, 5\times10^{-5})$, $(38, 29, 3.5\times10^{-4})$, $(40, 29, 1.3\times10^{-3})$ and
-upper $(40, 31, 10^{-4})$, $(41, 32, 10^{-3})$, $(42, 32, 3\times10^{-3})$, $(44, 32, 4\times10^{-3})$ for $m=100$, 200, 300, and 360 keV $c^{-2}$ in $(\theta_0, \omega_0, \beta_0)$ space, respectively.}
-in parameter space in $20^3=8000$ smaller orthoedrons. In each subregion, we performed an independent optimization in a parallel distributed scheme to search for the parameters that minimize $\chi^2_{\rm{full}}$ with the \texttt{NOMAD} algorithm. Afterward, we selected the global minimum by comparing the results of each distributed process.
+In order to extend the fermionic solutions to other values of the fermion mass ($m$), we used the second optimization algorithm described in Sec.~\ref{sec:optimization} for $m=100$, 200, 300, and 360 keV $c^{-2}$. For each fermion mass, we divided a given macroscopic
+orthohedron\footnote{The orthohedrons in $(\theta_0, \omega_0, \beta_0)$ space were defined by the
+lower bounds $(36, 27, 1.2\times10^{-5})$, $(37, 28, 5\times10^{-5})$, $(38, 29, 3.5\times10^{-4})$, $(40, 29, 1.3\times10^{-3})$ and
+upper bounds $(40, 31, 10^{-4})$, $(41, 32, 10^{-3})$, $(42, 32, 3\times10^{-3})$, $(44, 32, 4\times10^{-3})$, for $m=100$, 200, 300, and 360 keV $c^{-2}$, respectively.}
+in parameter space in $20^3=8000$ smaller orthohedrons. In each subregion, we performed an independent optimization in a parallel distributed scheme to search for the parameters that minimize $\chi^2_{\rm{full}}$ with the \texttt{NOMAD} algorithm. Afterward, we selected the global minimum by comparing the results of each distributed process.
 The result is that for all the fermion masses, it is possible to find values of the other parameters in such a way that both the GD-1 stream and the core mass constraints  are respected with the same precision as in the initial ($m=56~\mathrm{keV}~c^{-2}$) case. As shown in Fig.~\ref{fig:going_compact}, all the solutions have the same density profile in the halo region, while their difference is limited to the compactness of the core.
 In Table~\ref{tab:chi2} we show the values of $\chi^2_{\rm{stream}}$
 for all the fermion masses we studied. We also give the value of $\chi^2_{\rm{S2}}$ for
-the Fermionic-MW and the BH models. All the fermionic models we analyzed are statistically indistinguishable\footnote{These fits were made for the same fixed core mass as in~\cite{2020A&A...641A..34B, 2021MNRAS.505L..64B}, but it can be shown that the value of $\chi^2_{\rm{S2}}$ corresponding to $m=360~\mathrm{keV}~c^{-2}$ can be made as low as in the other cases by increasing the core mass by a few percent.}, and more data (e.g., central shadow feature, or closer or fainter S-stars to SgrA* than S-2) are needed in order to further constrain the particle mass range. Both projects are currently developed within our group.
+the Fermionic-MW and the BH models. All the fermionic models we analyzed are statistically indistinguishable\footnote{These fits were made for the same fixed core mass as in~\cite{2020A&A...641A..34B, 2021MNRAS.505L..64B}, but it can be shown that the value of $\chi^2_{\rm{S2}}$ corresponding to $m=360~\mathrm{keV}~c^{-2}$ can be made as low as in the other cases by increasing the core mass by a few percent.}, and more data (e.g., central shadow feature, or fainter S-stars closer to SgrA* than S2) are needed in order to further constrain the particle mass range. Both projects are currently being developed within our group.
 The values of the core radii of these solutions are approximately 1097, 232, 35, 10, and 5 Schwarzschild radii for $m=56$, 100, 200, 300, and 360 keV $c^{-2}$, respectively. The last analyzed value of $m=360$ keV $c^{-2}$ corresponds to a DM core very close to the last stable solution according to the stability criterion of \cite{2021MNRAS.502.4227A}, leading to a gravitational core-collapse into a BH of about $4\times 10^6 M_\odot$.
 
 \begin{figure}
@@ -563,9 +564,9 @@ We have fitted the GD-1 stream located at about $14-15$ kpc from the Galaxy cent
 
 We obtained the free parameters of the fermionic model by fixing the fermion mass and by simultaneously fitting two astrophysical constraints: the stream observables, and a
 DM core mass of $3.5\times10^6M_\odot$, the latter taken from previous fits of the S-stars cluster at
-the center of the Galaxy without a central BH~\citep{2020A&A...641A..34B,2021MNRAS.505L..64B}. We could thus reproduce the polynomials fit by~\citet{Ibata_2020} with a high accuracy and for fermion masses ranging from 56 to 360~keV~$c^{-2}$, which correspond to the observed sky position, the proper motion, the photometric distance and the radial velocity of the stream.
+the center of the Galaxy without a central BH~\citep{2020A&A...641A..34B,2021MNRAS.505L..64B}. We could thus reproduce the polynomials fit by~\citet{Ibata_2020} with a high accuracy and for fermion masses ranging from 56 to 360~keV~$c^{-2}$, which correspond to the observed sky position, the proper motion, and the radial velocity of the stream.
 
-In order to compare our results with other GD-1 fits in the literature, we also fit the initial conditions of the stream progenitor with the  axisymmetric generalization of the NFW distribution from~\citet{2019MNRAS.486.2995M}. We obtained agreement in the GD-1 phase-space track of
+In order to compare our results with other GD-1 fits in the literature, we also fit the stream orbit with the  axisymmetric generalization of the NFW distribution from~\citet{2019MNRAS.486.2995M}. We obtained agreement in the GD-1 phase-space track of
 both the Fermionic-MW and the NFW-MW models. Additionally, we obtained agreement of the two models in the rotation curves at projected ($z=0$) galactocentric distances, $r$, corresponding to the stream observables, that is, $11.5\leq r \leq 16.4$ kpc. The average slope of the rotation curve between $14.5$ and $26.5$ kpc obtained from the Fermionic-MW model was $s=-4.18 \pm 0.02~\rm{km\, s}^{-1} kpc^{-1}$, which agrees much better with the recent observations of \cite{Jiao2023} than the NFW-MW model. We showed for the acceleration field that the two MW models perfectly agree in their acceleration vectors as a function of the position along the stream.
 
 % relativistic fermionic King
@@ -576,13 +577,13 @@ The fermionic DM solution has a finite radius of $r_{\rm{DM,vir}}=27.4$~kpc and 
 $M_{\rm{DM,vir}}=1.4\times10^{11}~M_\odot$, implying a total (DM plus baryons) virial mass of the Galaxy of $M_{\rm{vir}}= 2.4\times10^{11}~M_\odot$, which is at $2\sigma$ from the value reported in Table 3 of
 \citet{2014MNRAS.445.3788G} for a radius of 50~kpc. The value obtained for the DM density in the solar neighborhood is $\rho_{DM,\odot}=1.46\times10^7M_\odot~\mathrm{kpc}^{-3}=0.55~\mathrm{GeV}~\mathrm{cm}^{-3} c^{-2}$, which falls inside the $2\sigma$ region of a previous estimate by \citet{Salucci2010}.
 
-Finally, we showed that it is possible to find a one-dimensional family of solutions parameterized by the fermion mass with the same halo that fits the GD-1 stream, but with a different compactness of the central core. This always reproduces the S2 star orbit (see \cref{fig:S2_fit,fig:S2_fit_b} for the case of $m=56$ keV~$c^{-2}$). For the limiting case studied here ($m=360$~keV~$c^{-2}$), we obtained a core radius of $r_\mathrm{c}\approx5$~Schwarzschild radii.
+Finally, we showed that it is possible to find a 1D family of solutions parameterized by the fermion mass with the same halo that fits the GD-1 stream, but with a different compactness of the central core. This always reproduces the S2 star orbit (see \cref{fig:S2_fit,fig:S2_fit_b} for the case of $m=56$ keV~$c^{-2}$). For the limiting case studied here ($m=360$~keV~$c^{-2}$), we obtained a core radius of $r_\mathrm{c}\approx5$~Schwarzschild radii.
 A precise relativistic ray-tracing study about simulated ring-like images of the central
 cores of fermionic distributions is in progress. We try to place strict constraints on the minimum
 compactness needed for an agreement with the EHT observations.
 
 
-In summary, the findings of this work not only support the idea that cold tidal streams are excellent probes of the acceleration field of the MW, but they show that the (spherical) fermionic model is capable of fitting an independent set of observables covering three totally different Galaxy distance scales: $\sim 10^{-6}$ kpc (S-cluster), $\sim 14$ kpc (GD-1), and $\sim 30$ kpc (Gaia DR3 RC mass estimates).
+In summary, the findings of this work not only support the idea that cold tidal streams are excellent probes of the acceleration field of the MW, but they show that the (spherical) fermionic model is able to agree with a set of independent observables covering three totally different Galaxy distance scales: $\sim 10^{-6}$ kpc (S-cluster), $\sim 14$ kpc (GD-1), and $\sim 30$ kpc (Gaia DR3 RC mass estimates).
 
 %of adequately describing both the halo of the Galaxy and its central mass concentration. In fact, with a single DM model, we were capable to obtain a good fit in three different galactic distance scales: $\sim 10^{-6}$ kpc (S-cluster), $\sim 15$ kpc (GD-1) and $\sim 30$ kpc (rotation curve mass estimates).
 
@@ -639,7 +640,7 @@ We start by defining some constants,
 \end{align}
 and introduce the following changes of variables:
 \begin{align}
-   \zeta &= \ln(r/r_\bullet),\\
+   \zeta(r) &= \ln(r/r_\bullet),\\
    z(\zeta) &=\ln\psi(r(\zeta)),\\
    \tilde{\nu}(\zeta) &=\nu(r(\zeta)),\\
    \beta(\zeta)&=\frac{kT(r(\zeta))}{mc^2},\\
@@ -690,7 +691,7 @@ thus transforming the original system of five differential equations, that is, ~
 It is not possible to integrate these equations from $r=0$ because $\zeta(r)$ diverges at the origin.
 Therefore, the following approximations for the initial conditions at a value $r_{\rm{min}}\gtrsim 0$ were used:
 \begin{align}
-   \nu(r_{\rm{min}}) &= \frac{1}{3}\frac{\rho_0}{\rho_\bullet}\left[\frac{r_{\rm{min}}}{r_b}\right]^2\equiv \tau, \\
+   \nu(r_{\rm{min}}) &= \frac{1}{3}\frac{\rho_0}{\rho_\bullet}\left[\frac{r_{\rm{min}}}{r_\bullet}\right]^2\equiv \tau, \\
    \psi(r_{\rm{min}})&= \frac{1}{3}\frac{\rho_0}{\rho_\bullet}\left[\frac{r_{\rm{min}}}{r_\bullet}\right]^2 = \tau,
 \end{align}
 which implies
@@ -718,9 +719,9 @@ by $\zeta_{\rm{min}}=\zeta(r_{\rm{min}})$,
 $\tilde{\nu}_{\rm{min}}=\tau$, and $z_{\rm{min}}=\ln{\tau}$, and the system parameters to be varied are $m$, $\beta_0$, $\alpha_0$, and $\epsilon_{c0}$.
 In agreement with Eqs.~(\ref{rar_params}), we used as parameters the following normalized quantities: $m$, $\beta_0$, $\theta_0=(\alpha_0-1)/\beta_0$, and $W_0=(\epsilon_{\mathrm{c}0}-1)/\beta_0$, or $\omega_0=W_0-\theta_0$ instead of $W_0$ in some cases.
 
-Equations~(\ref{sode}) and (\ref{sode2}) were solved using
+Equations~(\ref{sode}) and (\ref{sode2}) were solved with the \texttt{LSODA} algorithm using
 a {\sc Python}~\citep{van1995python} script\footnote{\texttt{model\_def.py}}
-that makes use of the {\it NumPy}~\citep{2020SciPy-NMeth} and {\it SciPy}~\citep{harris2020array} libraries, under the \texttt{LSODA} algorithm as solver.  We used relative and absolute tolerance parameters given by \texttt{rtol}$=5\times10^{-14}$ and \texttt{atol}$=0$, respectively.
+that makes use of the {\it NumPy}~\citep{harris2020array} and {\it SciPy}~\citep{2020SciPy-NMeth} libraries.  We used relative and absolute tolerance parameters given by \texttt{rtol}$=5\times10^{-14}$ and \texttt{atol}$=0$, respectively.
 
 After obtaining the numerical solution, since the right sides of Eqns.~(\ref{sode}) and (\ref{sode2}) do not depend on the metric, but only on its radial derivative, we can add
 a constant $\tilde{\nu}_0$ to the solution in order to satisfy the condition of continuity with the Schwarzschild metric at the border of the fermion distribution, obtaining
