@@ -150,15 +150,15 @@ def model(param):
     a = 4.0*rho_rel/np.sqrt(pi)
     b = a*c*c/3.0
     n_eos = 2**10+1
-    tau = 1.0e-15
+    tau = 2.0e-15
     min_r = 1.0e-16  # kpc
     max_r = 1.0e3  # kpc
     machine_eps = np.finfo(float).eps
 
     # Set initial conditions
-    psi_0 = 2.0*tau
+    psi_0 = tau
     z_0 = np.log(psi_0)
-    nu_0 = 2.0*tau
+    nu_0 = tau
     theta_0 = param[1]  # 35.55
     W_0 = param[2]  # 80.0
     beta_0 = param[3]  # 1.0e-5
@@ -166,7 +166,7 @@ def model(param):
     eps_0 = 1.0 + beta_0*W_0
     rho_0 = density(n_eos, alpha_0, beta_0, eps_0)
     u_0 = [z_0, nu_0]
-    t_0 = np.log(np.sqrt(6.0*tau*rho_rel/rho_0))
+    t_0 = np.log(np.sqrt(3.0*tau*rho_rel/rho_0))
     t_f = np.log(max_r/cm2kpc/R)
 
     # Solving the TOV system
